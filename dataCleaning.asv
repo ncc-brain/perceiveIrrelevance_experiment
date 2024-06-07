@@ -115,7 +115,7 @@ end
 %take the data from pre-surprise + add probe order too ! 
 criticalCols= {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
     'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
-    'confidenceDurationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
+    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
     'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
     'CBcriticalOrientation1','CBcriticalOrientation2'};
 
@@ -162,7 +162,7 @@ end
 
 OrientationAccuracy = [];
 
-if strcmp(correctOption,chosenOption)
+if strcmp(correctOptionO,chosenOptionO)
 
     OrientationAccuracy = 1; 
 
@@ -172,6 +172,7 @@ else
 end
 
 %check the participant response to duration
+durationAccuracy = [];
 
 correctOptionD = cleanCritical.stimulusDurationCritical;
 chosenOptionD = {};
@@ -188,15 +189,24 @@ end
 %check whether participant made the right choice 
 
 if strcmp(correctOptionD,chosenOptionD)
+    durationAccuracy = 1;
+else
+    durationAccuracy = 0;
+end
 
-% when it is shown (stim duration) 
+%reaction times 
+
+confidenceRT = cleanCritical.confidenceOrientationRT(1) - cleanCritical.orientationConfidenceOnset(1);
+orientationRT = cleanCritical.orientationRT(1) - cleanCritical.OrientationOnset(1);
+
+
+criticalPerformance = table(OrientationAccuracy,cleanCritical.confidenceOrientationCritical,durationAccuracy,cleanCritical.confidenceDurationCritical...
+    ,cleanCritical.mindWanderingQuestion,orientationRT,confidenceRT,'VariableNames',{'orientationPerformance','orientationConfidence','durationPerformance','durationConfidence','mindwandering','orientationRT','confidenceRT'});
+
+
+
 % which probe came first ( orientation or duration)
-% orientation options & which one is chosen
-% duration options (which one is chosen)
-% mindwandering --> which one is chosen 
-% RT for all 
-% confidence for all 
-%add probe order to the critical stim as well ( same for the
+
 
 %% Post-surprise 
 

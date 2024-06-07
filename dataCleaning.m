@@ -115,7 +115,7 @@ end
 %take the data from pre-surprise + add probe order too ! 
 criticalCols= {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
     'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
-    'confidenceDurationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
+    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
     'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
     'CBcriticalOrientation1','CBcriticalOrientation2'};
 
@@ -162,7 +162,7 @@ end
 
 OrientationAccuracy = [];
 
-if strcmp(correctOption,chosenOption)
+if strcmp(correctOptionO,chosenOptionO)
 
     OrientationAccuracy = 1; 
 
@@ -194,17 +194,19 @@ else
     durationAccuracy = 0;
 end
 
+%reaction times 
 
-% add confidence ratings 
+confidenceRT = cleanCritical.confidenceOrientationRT(1) - cleanCritical.orientationConfidenceOnset(1);
+orientationRT = cleanCritical.orientationRT(1) - cleanCritical.OrientationOnset(1);
 
-% when it is shown (stim duration) 
+
+criticalPerformance = table(OrientationAccuracy,cleanCritical.confidenceOrientationCritical,durationAccuracy,cleanCritical.confidenceDurationCritical...
+    ,cleanCritical.mindWanderingQuestion,orientationRT,confidenceRT,'VariableNames',{'orientationPerformance','orientationConfidence','durationPerformance','durationConfidence','mindwandering','orientationRT','confidenceRT'});
+
+
+
 % which probe came first ( orientation or duration)
-% orientation options & which one is chosen
-% duration options (which one is chosen)
-% mindwandering --> which one is chosen 
-% RT for all 
-% confidence for all 
-%add probe order to the critical stim as well ( same for the
+
 
 %% Post-surprise 
 
@@ -220,3 +222,56 @@ postSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidence
     'stimulusDurationPost','stimulusIDPost','stimulusOnset'};
 
 postSurpriseTable = postSurpriseTask(:,postSurpriseCols);
+
+%post surprise performance 
+
+correctOptionPostO = {};
+chosenOptionPostO= {};
+OrientationAccuracyPost = [];
+durationAccuracyPost = [];
+
+Stim1 = cleanCritical.criticalOrientation1Stim;
+Stim2 = cleanCritical.criticalOrientation2Stim; 
+optionStim1 = cleanCritical.CBcriticalOrientation1;
+optionStim2 = cleanCritical.CBcriticalOrientation2;
+
+
+for i = 1:height(postSurpriseTable)
+    
+    postStim = postSurpriseTable.stimulusIDPost{i};
+    postStim1 = postSurpriseTable.postOrientation1Stim{i};
+    postStim2 = postSurpriseTable.postOrientation2Stim{i};
+    postOption1 = postSurpriseTable.postOrientation1{i};
+    postOption2 = postSurpriseTable.postOrientation2{i};
+
+    % correct option 
+
+    if strcmp(postStim,postStim1)
+
+        correctOptionPostO = postStim1;
+
+    elseif strcmp(postStim,postStim2)
+
+        correctOptionPostO = postStim2;
+
+    end
+
+    
+    % chosenOrientation
+
+    if iscell(optionStim1(1)) 
+        chosenOptionO = Stim1;
+
+    elseif iscell(optionStim2(1))
+        chosenOptionO = Stim2;
+    end
+
+    if strcmp(correctOptionPostO,chosenOptionPostO)
+
+        OrientationAccuracyPost(i) = 1; 
+
+    else
+        OrientationAccuracyPost(i) = 0;
+
+    end
+end
