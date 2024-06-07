@@ -172,7 +172,6 @@ else
 end
 
 %check the participant response to duration
-durationAccuracy = [];
 
 correctOptionD = cleanCritical.stimulusDurationCritical;
 chosenOptionD = {};
@@ -189,13 +188,6 @@ end
 %check whether participant made the right choice 
 
 if strcmp(correctOptionD,chosenOptionD)
-    durationAccuracy = 1;
-else
-    durationAccuracy = 0;
-end
-
-
-% add confidence ratings 
 
 % when it is shown (stim duration) 
 % which probe came first ( orientation or duration)
