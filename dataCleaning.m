@@ -3,6 +3,7 @@
 
 clear
 clc
+addpath('./')
 cd('/Users/ece.ziya/Documents/GitHub/dissimilarity_experiment');
 
 dataPath = ('/Users/ece.ziya/Desktop/testFiles/examplePilot');
@@ -15,7 +16,7 @@ pilotTrial = readtable(pilotTrial);
 pilotSession = readtable(pilotSession);
 
 
-%% Pre-surprise  
+%% Pre-surprise Face 
 
 % get the data for the pre-surprise
 
@@ -109,7 +110,7 @@ end
 
 
 
-%% Critical Trial 
+%% Critical Trial Face 
 
 % which stimulus (stim ID & orientation) 
 %take the data from pre-surprise + add probe order too ! 
@@ -180,7 +181,7 @@ chosenOptionD = {};
 shortDuration = cleanCritical.criticalDurationShort;
 longDuration = cleanCritical.criticalDurationLong; 
 
-if iscell(shortDuration(1))
+if iscell(shortDuration)
     chosenOptionD = {'short'};
 else
     chosenOptionD = {'long'};
@@ -208,7 +209,7 @@ criticalPerformance = table(OrientationAccuracy,cleanCritical.confidenceOrientat
 % which probe came first ( orientation or duration)
 
 
-%% Post-surprise 
+%% Post-surprise Face
 
 % which stim were shown for 4 trials 
 % how long they were shown 
@@ -227,46 +228,50 @@ postSurpriseTable = postSurpriseTask(:,postSurpriseCols);
 
 correctOptionPostO = {};
 chosenOptionPostO= {};
+correctOptionPostD = {};
+chosenOptionPostD = {};
 OrientationAccuracyPost = [];
 durationAccuracyPost = [];
 
-Stim1 = cleanCritical.criticalOrientation1Stim;
-Stim2 = cleanCritical.criticalOrientation2Stim; 
-optionStim1 = cleanCritical.CBcriticalOrientation1;
-optionStim2 = cleanCritical.CBcriticalOrientation2;
-
-
 for i = 1:height(postSurpriseTable)
-    
-    postStim = postSurpriseTable.stimulusIDPost{i};
-    postStim1 = postSurpriseTable.postOrientation1Stim{i};
-    postStim2 = postSurpriseTable.postOrientation2Stim{i};
-    postOption1 = postSurpriseTable.postOrientation1{i};
-    postOption2 = postSurpriseTable.postOrientation2{i};
 
-    % correct option 
+    %define the stimulus and duration for each trial
+    
+    postStim = postSurpriseTable.stimulusIDPost{i}; % correct orientation
+    postStim1 = postSurpriseTable.postOrientation1Stim{i}; % option on the left
+    postStim2 = postSurpriseTable.postOrientation2Stim{i}; %option on the right
+    postOption1 = postSurpriseTable.postOrientation1{i}; %choose the left one
+    postOption2 = postSurpriseTable.postOrientation2{i}; %choose the right one 
+
+    postShortDuration = postSurpriseTable.postDurationShort{i}; %option short
+    postLongDuration = postSurpriseTable.postDurationLong{i}; %option long
+    correctOptionPostD = cellstr(postSurpriseTable.stimulusDurationPost(i)); %correct duration
+
+    % correct orientation option 
 
     if strcmp(postStim,postStim1)
 
-        correctOptionPostO = postStim1;
+        correctOptionPostO{i} = postStim1;
 
     elseif strcmp(postStim,postStim2)
 
-        correctOptionPostO = postStim2;
+        correctOptionPostO{i} = postStim2;
 
     end
 
     
-    % chosenOrientation
+    % chosen Orientation
 
-    if iscell(optionStim1(1)) 
-        chosenOptionO = Stim1;
+    if ~isnan(postOption1)
+        chosenOptionPostO{i} = postStim1;
 
-    elseif iscell(optionStim2(1))
-        chosenOptionO = Stim2;
+    elseif ~isnan(postOption2)
+        chosenOptionPostO{i} = postStim2;
     end
 
-    if strcmp(correctOptionPostO,chosenOptionPostO)
+    %check whether participant made the right decision
+
+    if strcmp(correctOptionPostO{i},chosenOptionPostO{i})
 
         OrientationAccuracyPost(i) = 1; 
 
@@ -274,4 +279,27 @@ for i = 1:height(postSurpriseTable)
         OrientationAccuracyPost(i) = 0;
 
     end
+
+% check the stimulus in given post trial 
+   
+if ~isnan(postShortDuration)
+        chosenOptionPostD{i} = {'short'};
+    elseif ~isnan(postLongDuration)
+        chosenOptionPostD{i} = {'long'};
+    end
+
+%check whether participant made the right choice 
+
+    if strcmp(correctOptionPostD,chosenOptionPostD{i})
+        durationAccuracyPost(i) = 1;
+    else
+        durationAccuracyPost(i) = 0;
+    end
+
 end
+
+
+
+
+    
+
