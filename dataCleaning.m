@@ -4,7 +4,28 @@
 clear
 clc
 addpath('./')
-cd('/Users/ece.ziya/Documents/GitHub/dissimilarity_experiment');
+configIrrelevant;
+
+cd(rawDataIrrelevant);
+addpath(genpath(rawDataIrrelevant)); 
+
+participantFolders = dir(rawDataIrrelevant); % open participant files
+participantFolders = participantFolders([participantFolders.isdir] & ~startsWith({participantFolders.name}, '.')); % remove hidden files
+
+
+% decide the type of the file (face or object) 
+
+objectFolders = {}; % object folders
+faceFolders = {};  %face folders
+
+facePreSurpriseTrials = {}; %this includes pre-surprise performance 
+objectPreSurpriseTrials = {}; 
+
+faceCriticalTrial = {}; % this includes critical trials
+objectCriticalTrial ={}; 
+
+facePostSurpriseTrials = {}; % this includes post performance 
+objectPostSurpriseTrials = {};
 
 dataPath = ('/Users/ece.ziya/Desktop/testFiles/examplePilot');
 cd(dataPath);
