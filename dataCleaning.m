@@ -27,107 +27,96 @@ objectCriticalTrial ={};
 facePostSurpriseTrials = {}; % this includes post performance 
 objectPostSurpriseTrials = {};
 
-dataPath = ('/Users/ece.ziya/Desktop/testFiles/examplePilot');
-cd(dataPath);
 
-pilotTrial = 'trials.csv';
-pilotSession = 'sessions.csv';
+% define cols for each part (pre-surprise, critical, postSurprise) 
 
-pilotTrial = readtable(pilotTrial);
-pilotSession = readtable(pilotSession);
+FacePreSurpriseCols = {'Trial_Nr','conditionFace','orientationFace','orientationFaceTarget','StimulusID','durationFace',...
+    'JitterTime','fixationOnset','stimulusOnset', 'emptyFramefixationOnset','reactionTime'};
+
+FaceCriticalCols= {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
+    'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
+    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
+    'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
+    'CBcriticalOrientation1','CBcriticalOrientation2'};
 
 
-%% Pre-surprise Face 
+ObjectPreSurpriseCols = {'Trial_Nr','conditionObject','orientationObject','orientationObjectTarget','StimulusID','durationObject',...
+    'JitterTime','fixationOnset','stimulusOnset', 'emptyFramefixationOnset','reactionTime'};
 
-% get the data for the pre-surprise
+ObjectCriticalCols = {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
+    'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
+    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
+    'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
+    'criticalOrientation1','criticalOrientation2'};
 
- preSurpriseTask = pilotTrial(strcmp(pilotTrial.Task_Name,'facePre-surprise'),:);
+PostSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidenceOrientationRT','congruencyCheck','durationConfidenceOnset',...
+    'durationRT','emptyFramefixationOnset','fixationOnset','JitterTime','orientationConfidenceOnset','OrientationOnset',...
+    'orientationRT','postDurationLong','postDurationShort','postOrientation1','postOrientation2','postOrientation1Stim','postOrientation2Stim','probeOrder','reactionTime',...
+    'stimulusDurationPost','stimulusIDPost','stimulusOnset'};
 
-% get the coloumns for the analyis (behavioral performance & reaction times
+%% seperate object and face files
+ 
+for i = 1:numel(participantFolders)
 
-preSurpriseCols = {'Trial_Nr','conditionFace','orientationFace','orientationFaceTarget','StimulusID','durationFace',...
-   'JitterTime','fixationOnset','stimulusOnset', 'emptyFramefixationOnset','reactionTime'};
 
-preSurpriseTable = preSurpriseTask(:,preSurpriseCols);
+    currentSubject = fullfile(rawDataIrrelevant,participantFolders(i).name);
+    subjectFileContent = dir(currentSubject);
+    subjectSessionFile = fullfile(currentSubject,'sessions.csv');
+    sessionData = readtable(subjectSessionFile);
 
-% hit rate (if the stim condition is target and participants pressed space (value in rt)
-% false alarm rate ( if the stim condition is not a target and participants
-% pressed space (value in rt)
-
-numberHits = 0; % nr of times participants pressed space when it is target
-numberFalseAlarms = 0; % nr of times participants pressed space when it is not target
-rtHit = []; % rt hit
-rtFalseAlarm = []; %rt false alarm
-hitsTable = table(); % everything about hits
-falseAlarmTable = table(); %everything about false alarm 
-hitIndex = 1;
-falseAlarmIndex = 1;
-
-for i= 1: height(preSurpriseTable)
-     
-    if ~isnan(preSurpriseTable.reactionTime(i)) % if there is space press, there is a number in RT
-         
-           if strcmp(preSurpriseTable.conditionFace{i},'target')
-              
-              numberHits = numberHits + 1; % if it is a target then it is a hit
-
-              % accurate RT calculations
-
-           if strcmp(preSurpriseTable.durationFace{i},'short') && preSurpriseTable.reactionTime(i) <= 500
-              
-               rtHit(hitIndex) = preSurpriseTable.reactionTime(i)- preSurpriseTable.stimulusOnset(i);
-           
-           elseif strcmp(preSurpriseTable.durationFace{i},'short') && preSurpriseTable.reactionTime(i) > 500
-
-               rtHit(hitIndex) = preSurpriseTable.reactionTime(i) - preSurpriseTable.emptyFramefixationOnset(i);
-           elseif strcmp(preSurpriseTable.durationFace{i},'long') && preSurpriseTable.reactionTime(i) <= 1500 %pressed in the stim frame
-
-               rtHit(hitIndex) = preSurpriseTable.reactionTime(i)- preSurpriseTable.stimulusOnset(i);
-           elseif strcmp(preSurpriseTable.durationFace{i},'long') && preSurpriseTable.reactionTime(i) > 1500 %pressed in the empty frame 
-               rtHit(hitIndex) = preSurpriseTable.reactionTime(i) - preSurpriseTable.emptyFramefixationOnset(i);
-           end
-
-              hitsTable = [hitsTable;table(preSurpriseTable.Trial_Nr(i),{preSurpriseTable.durationFace(i)},{preSurpriseTable.orientationFaceTarget(i)},rtHit(hitIndex),...
-                  'VariableNames',{'TrialNr','stimulusDuration','stimulusOrientation','reactionTime'})];
-              hitIndex = hitIndex + 1;
-              
-           else
-               numberFalseAlarms = numberFalseAlarms +1;
-               
-             
-           if strcmp(preSurpriseTable.durationFace{i},'short') && preSurpriseTable.reactionTime(i) <= 500
-              
-               rtFalseAlarm(falseAlarmIndex) = preSurpriseTable.reactionTime(i)- preSurpriseTable.stimulusOnset(i);
-           
-           elseif strcmp(preSurpriseTable.durationFace{i},'short') && preSurpriseTable.reactionTime(i) > 500
-
-               rtFalseAlarm(falseAlarmIndex) = preSurpriseTable.reactionTime(i) - preSurpriseTable.emptyFramefixationOnset(i);
-           elseif strcmp(preSurpriseTable.durationFace{i},'long') && preSurpriseTable.reactionTime(i) <= 1500
-
-               rtFalseAlarm(falseAlarmIndex) = preSurpriseTable.reactionTime(i)- preSurpriseTable.stimulusOnset(i);
-           elseif strcmp(preSurpriseTable.durationFace{i},'long') && preSurpriseTable.reactionTime(i) > 1500
-               rtFalseAlarm(falseAlarmIndex) = preSurpriseTable.reactionTime(i) - preSurpriseTable.emptyFramefixationOnset(i);
-           end
-
-            falseAlarmTable = [falseAlarmTable;table(preSurpriseTable.Trial_Nr(i),{preSurpriseTable.durationFace(i)},{preSurpriseTable.orientationFace(i)},rtFalseAlarm(falseAlarmIndex),...
-                 'VariableNames',{'TrialNr','stimulusDuration','stimulusOrientation','reactionTime'})];
-            falseAlarmIndex = falseAlarmIndex + 1;
-           end  
+    if sessionData.Group_Name(1) == "GroupFace"
+        faceFolders{end+1} = currentSubject; 
+        faceFolders = faceFolders(~cellfun(@isempty, faceFolders)); 
+    elseif sessionData.Group_Name(1) == "GroupObject"
+        objectFolders{end+1} = currentSubject; 
+        objectFolders = objectFolders(~cellfun(@isempty, objectFolders));
     end
-
 end
 
+%% create seperate pre-surprise, critical and post surprise files
+  
 
-%behavioral performance check : min 80 percent hit rate & max 20 percent false alarm 
+ for j = 1: numel(faceFolders) % iterares over face files
+        
+     faceFolderPath = faceFolders{j}; %open facefolders
+     faceTrialPath = fullfile(faceFolderPath,"trials.csv");
+     currentFaceTrial = readtable(faceTrialPath); % access trial data
+       
+  % Pre-surprise face
+        
+   preSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePre-surprise'),:);
+   facePreSurpriseTrials{j} = preSurpriseTask(:,FacePreSurpriseCols);
+         
+ end
 
-numberTargets = sum(strcmp(preSurpriseTable.conditionFace,'target'));
-numberNonTargets = sum(~strcmp(preSurpriseTable.conditionFace,'target'));
+ % Pre-surprise object
+  for j = 1: numel(objectFolders)
+        
+     objectFolderPath = objectFolders{j}; %open facefolders
+     objectTrialPath = fullfile(objectFolderPath,"trials.csv");
+     currentObjectTrial = readtable(objectTrialPath); % access trial data
 
-if numberHits/numberTargets >=.80 && numberFalseAlarms/numberNonTargets <=.20
-    disp('participant passed');
-else
-    disp('participant failed');
-end
+     preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
+     objectPreSurpriseTrials{j} = preSurpriseTask(:,ObjectPreSurpriseCols);
+
+  end
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -135,11 +124,7 @@ end
 
 % which stimulus (stim ID & orientation) 
 %take the data from pre-surprise + add probe order too ! 
-criticalCols= {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
-    'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
-    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
-    'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
-    'CBcriticalOrientation1','CBcriticalOrientation2'};
+
 
 criticalTable = (preSurpriseTask (:,criticalCols));
 
@@ -238,10 +223,7 @@ criticalPerformance = table(OrientationAccuracy,cleanCritical.confidenceOrientat
 
 postSurpriseTask = pilotTrial(strcmp(pilotTrial.Task_Name,'facePostSurprise'),:);
 
-postSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidenceOrientationRT','congruencyCheck','durationConfidenceOnset',...
-    'durationRT','emptyFramefixationOnset','fixationOnset','JitterTime','orientationConfidenceOnset','OrientationOnset',...
-    'orientationRT','postDurationLong','postDurationShort','postOrientation1','postOrientation2','postOrientation1Stim','postOrientation2Stim','probeOrder','reactionTime',...
-    'stimulusDurationPost','stimulusIDPost','stimulusOnset'};
+
 
 postSurpriseTable = postSurpriseTask(:,postSurpriseCols);
 
