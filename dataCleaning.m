@@ -35,6 +35,14 @@ OrientationAccuracy = []; % for orientation accuracy
 
 durationAccuracy = []; % for duration accuracy
 
+correctOptionPostO = {}; % correct option for post surprise orientation
+chosenOptionPostO= {}; % participant response to post orientation
+correctOptionPostD = {}; % correct option for the duration
+chosenOptionPostD = {}; %participant response to post duration
+OrientationAccuracyPost = [];
+durationAccuracyPost = [];
+
+
 
 
 % define cols for each part (pre-surprise, critical, postSurprise) 
@@ -197,6 +205,78 @@ end
 
     faceCriticalTrial{j} = criticalPerformance; 
 
+
+    %post surprise face 
+
+   postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:);
+   facePostSurpriseTrials{j} = postSurpriseTask(:,PostSurpriseCols);
+
+   for k = 1:height(postSurpriseTask)
+
+    %define the stimulus and duration for each trial
+    
+    postStim = facePostSurpriseTrials{j}.stimulusIDPost{k}; % correct orientation
+    postStim1 = facePostSurpriseTrials{j}.postOrientation1Stim{k}; % option on the left
+    postStim2 = facePostSurpriseTrials{j}.postOrientation2Stim{k}; %option on the right
+    postOption1 = facePostSurpriseTrials{j}.postOrientation1{k}; %choose the left one
+    postOption2 = facePostSurpriseTrials{j}.postOrientation2{k}; %choose the right one 
+
+    postShortDuration = postSurpriseTable.postDurationShort{i}; %option short
+    postLongDuration = postSurpriseTable.postDurationLong{i}; %option long
+    correctOptionPostD = cellstr(postSurpriseTable.stimulusDurationPost(i)); %correct duration
+
+      if strcmp(postStim,postStim1)
+
+        correctOptionPostO{i} = postStim1;
+
+    elseif strcmp(postStim,postStim2)
+
+        correctOptionPostO{i} = postStim2;
+
+    end
+
+    
+    % chosen Orientation
+
+    if ~isnan(postOption1)
+        chosenOptionPostO{i} = postStim1;
+
+    elseif ~isnan(postOption2)
+        chosenOptionPostO{i} = postStim2;
+    end
+
+    %check whether participant made the right decision
+
+    if strcmp(correctOptionPostO{i},chosenOptionPostO{i})
+
+        OrientationAccuracyPost(i) = 1; 
+
+    else
+        OrientationAccuracyPost(i) = 0;
+
+    end
+
+% check the stimulus in given post trial 
+   
+if ~isnan(postShortDuration)
+        chosenOptionPostD{i} = {'short'};
+    elseif ~isnan(postLongDuration)
+        chosenOptionPostD{i} = {'long'};
+    end
+
+%check whether participant made the right choice 
+
+    if strcmp(correctOptionPostD,chosenOptionPostD{i})
+        durationAccuracyPost(i) = 1;
+    else
+        durationAccuracyPost(i) = 0;
+    end
+
+end
+
+
+
+
          
  end
 
@@ -313,6 +393,13 @@ end
 
     objectCriticalTrial{j} = criticalPerformance; 
 
+
+   % post surprise object
+
+
+
+
+
   end        
 
 
@@ -384,86 +471,14 @@ end
 % how long they were shown 
 % options & answers given by participants 
 
-postSurpriseTask = pilotTrial(strcmp(pilotTrial.Task_Name,'facePostSurprise'),:);
-
-
-
-postSurpriseTable = postSurpriseTask(:,postSurpriseCols);
 
 %post surprise performance 
 
-correctOptionPostO = {};
-chosenOptionPostO= {};
-correctOptionPostD = {};
-chosenOptionPostD = {};
-OrientationAccuracyPost = [];
-durationAccuracyPost = [];
 
-for i = 1:height(postSurpriseTable)
-
-    %define the stimulus and duration for each trial
-    
-    postStim = postSurpriseTable.stimulusIDPost{i}; % correct orientation
-    postStim1 = postSurpriseTable.postOrientation1Stim{i}; % option on the left
-    postStim2 = postSurpriseTable.postOrientation2Stim{i}; %option on the right
-    postOption1 = postSurpriseTable.postOrientation1{i}; %choose the left one
-    postOption2 = postSurpriseTable.postOrientation2{i}; %choose the right one 
-
-    postShortDuration = postSurpriseTable.postDurationShort{i}; %option short
-    postLongDuration = postSurpriseTable.postDurationLong{i}; %option long
-    correctOptionPostD = cellstr(postSurpriseTable.stimulusDurationPost(i)); %correct duration
 
     % correct orientation option 
 
-    if strcmp(postStim,postStim1)
-
-        correctOptionPostO{i} = postStim1;
-
-    elseif strcmp(postStim,postStim2)
-
-        correctOptionPostO{i} = postStim2;
-
-    end
-
-    
-    % chosen Orientation
-
-    if ~isnan(postOption1)
-        chosenOptionPostO{i} = postStim1;
-
-    elseif ~isnan(postOption2)
-        chosenOptionPostO{i} = postStim2;
-    end
-
-    %check whether participant made the right decision
-
-    if strcmp(correctOptionPostO{i},chosenOptionPostO{i})
-
-        OrientationAccuracyPost(i) = 1; 
-
-    else
-        OrientationAccuracyPost(i) = 0;
-
-    end
-
-% check the stimulus in given post trial 
-   
-if ~isnan(postShortDuration)
-        chosenOptionPostD{i} = {'short'};
-    elseif ~isnan(postLongDuration)
-        chosenOptionPostD{i} = {'long'};
-    end
-
-%check whether participant made the right choice 
-
-    if strcmp(correctOptionPostD,chosenOptionPostD{i})
-        durationAccuracyPost(i) = 1;
-    else
-        durationAccuracyPost(i) = 0;
-    end
-
-end
-
+  
 
 
 
