@@ -27,6 +27,15 @@ objectCriticalTrial ={};
 facePostSurpriseTrials = {}; % this includes post performance 
 objectPostSurpriseTrials = {};
 
+correctOptionO = {}; % correct option for the critical orientation
+chosenOptionO= {}; % participant response to critical orientation
+chosenOptionD = {}; % participant response for critical duration 
+
+OrientationAccuracy = []; % for orientation accuracy 
+
+durationAccuracy = []; % for duration accuracy
+
+
 
 % define cols for each part (pre-surprise, critical, postSurprise) 
 
@@ -35,7 +44,7 @@ FacePreSurpriseCols = {'Trial_Nr','conditionFace','orientationFace','orientation
 
 FaceCriticalCols= {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
     'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
-    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
+    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','confidenceDurationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
     'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
     'CBcriticalOrientation1','CBcriticalOrientation2'};
 
@@ -45,7 +54,7 @@ ObjectPreSurpriseCols = {'Trial_Nr','conditionObject','orientationObject','orien
 
 ObjectCriticalCols = {'JitterCritical','stimulusOnsetCritical','reactionTimeCritical','stimulusIDCritical',...
     'fixationOnset100ms','criticalOrientation1Stim','criticalOrientation2Stim','criticalDurationShort','criticalDurationLong',...
-    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
+    'confidenceDurationCritical','confidenceOrientationCritical','confidenceOrientationRT','confidenceDurationRT','durationConfidenceOnset','durationRT','mindWanderingQuestion','mindWanderingRT',...
     'orientationConfidenceOnset','OrientationOnset','orientationRT','stimulusDurationCritical',...
     'criticalOrientation1','criticalOrientation2'};
 
@@ -86,6 +95,108 @@ end
         
    preSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePre-surprise'),:);
    facePreSurpriseTrials{j} = preSurpriseTask(:,FacePreSurpriseCols);
+
+
+  %critical face 
+
+  FaceCritical = (preSurpriseTask (:,FaceCriticalCols));
+  nan_rows = all(ismissing(FaceCritical), 2);
+  FaceCritical = FaceCritical(~nan_rows, :);
+
+  % critical orientation 
+
+  % define the critical stimulus and options (there is only 1 value)
+  criticalStim = cellstr(FaceCritical.stimulusIDCritical{1});
+  Stim1 = cellstr(FaceCritical.criticalOrientation1Stim{1}); % stim displayed on the left side
+  Stim2 = cellstr(FaceCritical.criticalOrientation2Stim{1}); % stim displayed on the right side
+  
+  if  isnumeric(FaceCritical.CBcriticalOrientation1) 
+      optionStim1 = num2cell(FaceCritical.CBcriticalOrientation1(1));
+      optionStim2 = cellstr(FaceCritical.CBcriticalOrientation2{1});
+
+  elseif iscell(FaceCritical.CBcriticalOrientation1)
+      optionStim1 = cellstr(FaceCritical.CBcriticalOrientation1{1});
+      optionStim2 = num2cell(FaceCritical.CBcriticalOrientation2(1));
+
+  end
+  % find the correct option for 
+
+        if strcmp(criticalStim,Stim1)
+
+                correctOptionO = Stim1;
+
+        elseif strcmp(criticalStim,Stim2)
+
+                correctOptionO = Stim2;
+
+        end
+
+    %find which stim participant chose 
+
+        if ~isempty(optionStim1) 
+            chosenOptionO = Stim1;
+
+        elseif ~isempty(optionStim2)
+            chosenOptionO = Stim2;
+        end
+
+   % check whether participant chose the correct option 
+
+        if strcmp(correctOptionO,chosenOptionO)
+
+            OrientationAccuracy(j) = 1; 
+
+        else
+            OrientationAccuracy(j) = 0;
+    
+        end
+
+    % critical duration 
+
+    correctOptionD = cellstr(FaceCritical.stimulusDurationCritical(1)); % correct option for given critical trial
+
+        if  isnumeric(FaceCritical.criticalDurationShort) 
+      shortDuration = num2cell(FaceCritical.criticalDurationShort(1));
+      longDuration = cellstr(FaceCritical.criticalDurationLong{1});
+
+        elseif iscell(FaceCritical.criticalDurationShort)
+      shortDuration = cellstr(FaceCritical.criticalDurationShort{1});
+      longDuration = num2cell(FaceCritical.criticalDurationLong(1));
+
+        end
+
+      % check which option participant chose
+        if ~isempty(shortDuration)
+          chosenOptionD = {'short'};
+        elseif ~isempty(longDuration)
+          chosenOptionD = {'long'};
+        end
+
+    %check whether participant made the right choice 
+
+      if strcmp(correctOptionD,chosenOptionD)
+         durationAccuracy(j) = 1;
+     else
+         durationAccuracy(j) = 0;
+      end
+
+   %reaction times 
+
+    orientationRT(j) = FaceCritical.orientationRT(1) - FaceCritical.OrientationOnset(1);
+    OrientationConfidenceRT(j) = FaceCritical.confidenceOrientationRT(1) - FaceCritical.orientationConfidenceOnset(1);
+    durationRT(j)= FaceCritical.durationRT(1);
+    DurationConfidenceRT(j) = FaceCritical.confidenceDurationRT(1)- FaceCritical.durationConfidenceOnset(1);
+    orientationConfidence(j)=FaceCritical.confidenceOrientationCritical(1);
+    durationConfidence(j)= FaceCritical.confidenceDurationCritical(1);
+    mindWanderingQuestion{j} = cellstr(FaceCritical.mindWanderingQuestion{1});
+    mindWanderingRT(j)= FaceCritical.mindWanderingRT(1);
+    
+    criticalPerformance = table(OrientationAccuracy(j),orientationRT(j),orientationConfidence(j),OrientationConfidenceRT(j),durationAccuracy(j),durationRT(j),durationConfidence(j),...
+    DurationConfidenceRT(j),mindWanderingQuestion{j},mindWanderingRT(j),'VariableNames',{'orientationPerformance','orientationRT','orientationConfidence','orientationConfidenceRT','durationPerformance',...
+    'durationRT','durationConfidence','durationConfidenceRT','mindwandering','mindwanderingRT'});
+
+    faceCriticalTrial{j} = criticalPerformance; 
+
          
  end
 
@@ -98,117 +209,169 @@ end
 
      preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
      objectPreSurpriseTrials{j} = preSurpriseTask(:,ObjectPreSurpriseCols);
+ 
+ 
+
+  %critical object
+  
+
+  ObjectCritical = (preSurpriseTask (:,ObjectCriticalCols));
+  nan_rows = all(ismissing(ObjectCritical), 2);
+  ObjectCritical = ObjectCritical(~nan_rows, :);
+
+  % critical orientation 
+
+  % define the critical stimulus and options (there is only 1 value)
+  criticalStim = cellstr(ObjectCritical.stimulusIDCritical{1});
+  Stim1 = cellstr(ObjectCritical.criticalOrientation1Stim{1}); % stim displayed on the left side
+  Stim2 = cellstr(ObjectCritical.criticalOrientation2Stim{1}); % stim displayed on the right side
+  
+  if  isnumeric(ObjectCritical.criticalOrientation1) 
+      optionStim1 = num2cell(ObjectCritical.criticalOrientation1(1));
+      optionStim2 = cellstr(ObjectCritical.criticalOrientation2{1});
+
+  elseif iscell(ObjectCritical.criticalOrientation1)
+      optionStim1 = cellstr(ObjectCritical.criticalOrientation1{1});
+      optionStim2 = num2cell(ObjectCritical.criticalOrientation2(1));
 
   end
- 
+  % find the correct option for 
 
+        if strcmp(criticalStim,Stim1)
 
- 
+                correctOptionO = Stim1;
 
+        elseif strcmp(criticalStim,Stim2)
 
+                correctOptionO = Stim2;
 
+        end
 
+    %find which stim participant chose 
 
+        if ~isempty(optionStim1) 
+            chosenOptionO = Stim1;
 
+        elseif ~isempty(optionStim2)
+            chosenOptionO = Stim2;
+        end
 
+   % check whether participant chose the correct option 
 
+        if strcmp(correctOptionO,chosenOptionO)
 
+            OrientationAccuracy(j) = 1; 
 
-
-
-
-
-
-
-%% Critical Trial Face 
-
-% which stimulus (stim ID & orientation) 
-%take the data from pre-surprise + add probe order too ! 
-
-
-criticalTable = (preSurpriseTask (:,criticalCols));
-
-nan_rows = all(ismissing(criticalTable), 2);
-cleanCritical = criticalTable(~nan_rows, :);
-
-%check accuracy of orientation  
-
-%check the stimulus ID and find its match in one of the criticalOrientation 
-
-correctOptionO = {};
-chosenOptionO= {};
-
-criticalStim = cleanCritical.stimulusIDCritical;
-Stim1 = cleanCritical.criticalOrientation1Stim;
-Stim2 = cleanCritical.criticalOrientation2Stim; 
-optionStim1 = cleanCritical.CBcriticalOrientation1;
-optionStim2 = cleanCritical.CBcriticalOrientation2;
-
-% find the correct option 
-
-if strcmp(criticalStim,Stim1)
-
-    correctOptionO = Stim1;
-
-elseif strcmp(criticalStim,Stim2)
-
-    correctOptionO = Stim2;
-
-end
-
-%find which stim participant chose 
-
-if iscell(optionStim1(1)) 
-    chosenOptionO = Stim1;
-
-elseif iscell(optionStim2(1))
-    chosenOptionO = Stim2;
-end
-
-% check whether participant chose the correct option 
-
-OrientationAccuracy = [];
-
-if strcmp(correctOptionO,chosenOptionO)
-
-    OrientationAccuracy = 1; 
-
-else
-    OrientationAccuracy = 0;
+        else
+            OrientationAccuracy(j) = 0;
     
-end
+        end
 
-%check the participant response to duration
-durationAccuracy = [];
+    % critical duration 
 
-correctOptionD = cleanCritical.stimulusDurationCritical;
-chosenOptionD = {};
+    correctOptionD = cellstr(ObjectCritical.stimulusDurationCritical(1)); % correct option for given critical trial
 
-shortDuration = cleanCritical.criticalDurationShort;
-longDuration = cleanCritical.criticalDurationLong; 
+        if  isnumeric(ObjectCritical.criticalDurationShort) 
+      shortDuration = num2cell(ObjectCritical.criticalDurationShort(1));
+      longDuration = cellstr(ObjectCritical.criticalDurationLong{1});
 
-if iscell(shortDuration)
-    chosenOptionD = {'short'};
-else
-    chosenOptionD = {'long'};
-end
+        elseif iscell(ObjectCritical.criticalDurationShort)
+      shortDuration = cellstr(ObjectCritical.criticalDurationShort{1});
+      longDuration = num2cell(ObjectCritical.criticalDurationLong(1));
 
-%check whether participant made the right choice 
+        end
 
-if strcmp(correctOptionD,chosenOptionD)
-    durationAccuracy = 1;
-else
-    durationAccuracy = 0;
-end
+      % check which option participant chose
+        if ~isempty(shortDuration)
+          chosenOptionD = {'short'};
+        elseif ~isempty(longDuration)
+          chosenOptionD = {'long'};
+        end
 
-%reaction times 
+    %check whether participant made the right choice 
 
-confidenceRT = cleanCritical.confidenceOrientationRT(1) - cleanCritical.orientationConfidenceOnset(1);
-orientationRT = cleanCritical.orientationRT(1) - cleanCritical.OrientationOnset(1);
+      if strcmp(correctOptionD,chosenOptionD)
+         durationAccuracy(j) = 1;
+     else
+         durationAccuracy(j) = 0;
+      end
+
+   %reaction times 
+
+    orientationRT(j) = ObjectCritical.orientationRT(1) - ObjectCritical.OrientationOnset(1);
+    OrientationConfidenceRT(j) = ObjectCritical.confidenceOrientationRT(1) - ObjectCritical.orientationConfidenceOnset(1);
+    durationRT(j)= ObjectCritical.durationRT(1);
+    DurationConfidenceRT(j) = ObjectCritical.confidenceDurationRT(1)- ObjectCritical.durationConfidenceOnset(1);
+    orientationConfidence(j)=ObjectCritical.confidenceOrientationCritical(1);
+    durationConfidence(j)= ObjectCritical.confidenceDurationCritical(1);
+    mindWanderingQuestion{j} = cellstr(ObjectCritical.mindWanderingQuestion{1});
+    mindWanderingRT(j)= ObjectCritical.mindWanderingRT(1);
+    
+    criticalPerformance = table(OrientationAccuracy(j),orientationRT(j),orientationConfidence(j),OrientationConfidenceRT(j),durationAccuracy(j),durationRT(j),durationConfidence(j),...
+    DurationConfidenceRT(j),mindWanderingQuestion{j},mindWanderingRT(j),'VariableNames',{'orientationPerformance','orientationRT','orientationConfidence','orientationConfidenceRT','durationPerformance',...
+    'durationRT','durationConfidence','durationConfidenceRT','mindwandering','mindwanderingRT'});
+
+    objectCriticalTrial{j} = criticalPerformance; 
+
+  end        
 
 
-criticalPerformance = table(OrientationAccuracy,cleanCritical.confidenceOrientationCritical,durationAccuracy,cleanCritical.confidenceDurationCritical...
-    ,cleanCritical.mindWanderingQuestion,orientationRT,confidenceRT,'VariableNames',{'orientationPerformance','orientationConfidence','durationPerformance','durationConfidence','mindwandering','orientationRT','confidenceRT'});
+
+  %Save the files 
+
+  facePreSurprise = 'facePreSurprise.mat';
+  save(fullfile(processedDataIrrelevant,facePreSurprise),'facePreSurpriseTrials');
+  objectPreSurprise = 'objectPreSurprise.mat';
+  save(fullfile(processedDataIrrelevant,objectPreSurprise),'objectPreSurpriseTrials');
+
+  faceCritical ='faceCritical.mat';
+  save(fullfile(processedDataIrrelevant,faceCritical),'faceCriticalTrial');
+  objectCritical = 'objectCritical.mat';
+  save(fullfile(processedDataIrrelevant,objectCritical),'objectCriticalTrial');
+
+ 
+
+
+%%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
