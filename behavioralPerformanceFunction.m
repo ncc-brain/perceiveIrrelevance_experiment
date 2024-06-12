@@ -116,11 +116,11 @@ elseif strcmp(group,'object') % object cells
 
     objectCell = struct2cell(preSurpriseStruct);
     objectCells = objectCell{1};
+    RTpreSurpriseTable = cell(numel(objectCells), 3);
 
   
     for i = 1:numel(objectCells)
-
-     RTpreSurpriseTable = cell(numel(objectCells), 3);
+     
      currentTable = objectCells{1,i}; % get the first cell
      ParticipantID = currentTable.ParticipantID(1);
 
@@ -175,7 +175,7 @@ elseif strcmp(group,'object') % object cells
 
                             rtFalseAlarm(falseAlarmIndex) = currentTable.reactionTime(j)- currentTable.stimulusOnset(j);
                    elseif strcmp(currentTable.durationObject{j},'long') && currentTable.reactionTime(j) > 1500
-                            rtFalseAlarm(falseAlarmIndex) = currentTable.reactionTime(i) - currentTable.emptyFramefixationOnset(i);
+                            rtFalseAlarm(falseAlarmIndex) = currentTable.reactionTime(j) - currentTable.emptyFramefixationOnset(j);
            end
 
             falseAlarmTable = [falseAlarmTable;table(currentTable.Trial_Nr(j),{currentTable.durationObject(j)},{currentTable.orientationObject(j)},rtFalseAlarm(falseAlarmIndex),...

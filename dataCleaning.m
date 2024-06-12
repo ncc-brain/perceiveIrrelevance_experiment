@@ -107,7 +107,7 @@ end
    preSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePre-surprise'),:);
    facePreSurpriseTrials{j} = preSurpriseTask(:,FacePreSurpriseCols);
    facePreSurpriseTrials{j}.ParticipantID = repmat((participantID), height(facePreSurpriseTrials{j}), 1);
-
+ 
 
   %critical face 
 
