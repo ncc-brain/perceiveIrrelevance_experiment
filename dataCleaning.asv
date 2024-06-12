@@ -69,7 +69,7 @@ ObjectCriticalCols = {'JitterCritical','stimulusOnsetCritical','reactionTimeCrit
 PostSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidenceOrientationRT','congruencyCheck','durationConfidenceOnset',...
     'durationRT','emptyFramefixationOnset','fixationOnset','JitterTime','orientationConfidenceOnset','OrientationOnset',...
     'orientationRT','postDurationLong','postDurationShort','postOrientation1','postOrientation2','postOrientation1Stim','postOrientation2Stim','probeOrder','reactionTime',...
-    'stimulusDurationPost','stimulusIDPost','stimulusOnset'};
+    'stimulusDurationPost','stimulusIDPost','stimulusOnset','confidenceOrientationPostt'};
 
 %% seperate object and face files
  
@@ -98,12 +98,16 @@ end
      faceFolderPath = faceFolders{j}; %open facefolders
      faceTrialPath = fullfile(faceFolderPath,"trials.csv");
      currentFaceTrial = readtable(faceTrialPath); % access trial data
+     participantIDPath = fullfile(faceFolderPath,"sessions.csv");
+     participantIDtable = readtable(participantIDPath);
+     participantID = participantIDtable.Subject_Code;
        
   % Pre-surprise face
         
    preSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePre-surprise'),:);
    facePreSurpriseTrials{j} = preSurpriseTask(:,FacePreSurpriseCols);
-
+   facePreSurpriseTrials{j}.ParticipantID = repmat((participantID), height(facePreSurpriseTrials{j}), 1);
+ 
 
   %critical face 
 
@@ -204,79 +208,117 @@ end
     'durationRT','durationConfidence','durationConfidenceRT','mindwandering','mindwanderingRT'});
 
     faceCriticalTrial{j} = criticalPerformance; 
+    faceCriticalTrial{j}.ParticipantID = repmat((participantID), height(faceCriticalTrial{j}), 1);
 
 
     %post surprise face 
 
-  % postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:);
- %  facePostSurpriseTrials{j} = postSurpriseTask(:,PostSurpriseCols);
+     postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:);
+     facePostSurpriseTrials{j} = postSurpriseTask(:,PostSurpriseCols);
 
-   %for k = 1:height(postSurpriseTask)
+    for k = 1:height(postSurpriseTask)
+        
+        postTrialData = postSurpriseTask(k, :);
 
     %define the stimulus and duration for each trial
     
-   % postStim = facePostSurpriseTrials{j}.stimulusIDPost{k}; % correct orientation
-   % postStim1 = facePostSurpriseTrials{j}.postOrientation1Stim{k}; % option on the left
-   % postStim2 = facePostSurpriseTrials{j}.postOrientation2Stim{k}; %option on the right
-   % postOption1 = facePostSurpriseTrials{j}.postOrientation1{k}; %choose the left one
-    %postOption2 = facePostSurpriseTrials{j}.postOrientation2{k}; %choose the right one 
+     postStim = cellstr(postTrialData.stimulusIDPost{1}); % correct orientation
+     postStim1 = cellstr(postTrialData.postOrientation1Stim{1}); % option on the left
+     postStim2 = cellstr(postTrialData.postOrientation2Stim{1}); %option on the right
+     
+      if  isnumeric(postTrialData.postOrientation1) 
+            postOptionStim1 = num2cell(postTrialData.postOrientation1{1});
+            postOptionStim2 = cellstr(postTrialData.postOrientation2{1});
 
-   % postShortDuration = postSurpriseTable.postDurationShort{i}; %option short
-   % postLongDuration = postSurpriseTable.postDurationLong{i}; %option long
-   % correctOptionPostD = cellstr(postSurpriseTable.stimulusDurationPost(i)); %correct duration
+     elseif iscell(postTrialData.postOrientation1)
+            optionStim1 = cellstr();
+            optionStim2 = num2cell(FaceCritical.CBcriticalOrientation2(1));
 
-     % if strcmp(postStim,postStim1)
-
-       % correctOptionPostO{i} = postStim1;
-
-   % elseif strcmp(postStim,postStim2)
-
-       % correctOptionPostO{i} = postStim2;
-
-   % end
+     end
+     
+     
+     
+     postOption1 = cellstr(postTrialData.postOrientation1{1}); %choose the left one
+     postOption2 = cellstr(postTrialData.postOrientation2{1}); %choose the right one 
 
     
-    % chosen Orientation
+     
+         if  isnumeric(postTrialData.postDurationShort) 
+            postShortDuration = num2cell(postTrialData.postDurationShort(1)); %option short
+            postLongDuration = cellstr(postTrialData.postDurationLong{1}); 
 
-   % if ~isnan(postOption1)
-      %  chosenOptionPostO{i} = postStim1;
+        elseif iscell(postTrialData.postDurationShort)
+            postShortDuration = cellstr(postTrialData.postDurationShort{1});
+            postLongDuration = num2cell(postTrialData.postDurationLong(1));
 
-   % elseif ~isnan(postOption2)
-       % chosenOptionPostO{i} = postStim2;
-   % end
+        end
+    
+    
+        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(1)); %correct duration
+
+    % check the correct option for the stimulus orientation in given post
+    % trial
+     
+        if strcmp(postStim,postStim1)
+
+        correctOptionPostO = postStim1;
+
+    elseif strcmp(postStim,postStim2)
+
+        correctOptionPostO = postStim2;
+
+       end
+
+    
+     % chosen Orientation
+
+    if ~isempty(postOption1)
+        chosenOptionPostO = postStim1;
+
+    elseif ~isempty(postOption2)
+        chosenOptionPostO = postStim2;
+    end
 
     %check whether participant made the right decision
 
-   % if strcmp(correctOptionPostO{i},chosenOptionPostO{i})
+    if strcmp(correctOptionPostO,chosenOptionPostO)
 
-      %  OrientationAccuracyPost(i) = 1; 
+       OrientationAccuracyPost = 1; 
 
-    %else
-        OrientationAccuracyPost(i) = 0;
+    else
+       OrientationAccuracyPost = 0;
 
-   % end
+    end
 
 % check the stimulus in given post trial 
    
-%if ~isnan(postShortDuration)
-        chosenOptionPostD{i} = {'short'};
-  %  elseif ~isnan(postLongDuration)
-        chosenOptionPostD{i} = {'long'};
-    %end
+    if ~isempty(postShortDuration)
+       chosenOptionPostD = {'short'};
+    elseif ~isempty(postLongDuration)
+        chosenOptionPostD = {'long'};
+    end
 
 %check whether participant made the right choice 
 
-  %  if strcmp(correctOptionPostD,chosenOptionPostD{i})
-        durationAccuracyPost(i) = 1;
-   % else
-        durationAccuracyPost(i) = 0;
-  %  end
+    if strcmp(correctOptionPostD,chosenOptionPostD)
+        durationAccuracyPost = 1;
+    else
+        durationAccuracyPost = 0;
+    end
 
-%end
+    postOrientationRT = postTrialData.orientationRT - postTrialData.OrientationOnset;
+    postOrientationConfidence = postTrialData.confidenceOrientationPostt;
+    postOrientationConfRT = postTrialData.confidenceOrientationRT - postTrialData.orientationConfidenceOnset;
+    postDurationRT = postTrialData.durationRT; 
+    postDurationConfidence = postTrialData.confidenceDurationPostt;
+    postDurationConfRT = postTrialData.confidenceDurationRT - postTrialData.durationConfidenceOnset;
+    probeOrder = postTrialData.probeOrder;
 
+    trialTable = table(OrientationAccuracyPost,postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost,postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
+       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
+    facePostSurpriseTrials{k} = trialTable;
 
-
-
+    end
          
  end
 
@@ -286,11 +328,17 @@ end
      objectFolderPath = objectFolders{j}; %open facefolders
      objectTrialPath = fullfile(objectFolderPath,"trials.csv");
      currentObjectTrial = readtable(objectTrialPath); % access trial data
+     participantIDPath = fullfile(objectFolderPath,"sessions.csv");
+     participantIDtable = readtable(participantIDPath);
+     participantID = participantIDtable.Subject_Code;
+       
 
      preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
      objectPreSurpriseTrials{j} = preSurpriseTask(:,ObjectPreSurpriseCols);
+     objectPreSurpriseTrials{j}.ParticipantID = repmat((participantID), height(objectPreSurpriseTrials{j}), 1);
+
  
- 
+    
 
   %critical object
   
