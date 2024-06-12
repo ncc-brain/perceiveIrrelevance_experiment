@@ -98,9 +98,9 @@ if strcmp(group,'face') % face cells
 
           end
     end
-            RTpresurpiseTable{i,1} = hitsTable;
-            RTpresurpiseTable{i,2} = falseAlarmTable;
-            RTpresurpriseTable{i,3} = ParticipantID;
+            RTpreSurpriseTable{i,1} = hitsTable;
+            RTpreSurpriseTable{i,2} = falseAlarmTable;
+            RTpreSurpriseTable{i,3} = ParticipantID;
 
         if numberHits/numberTargets >= 0.80 && numberFalseAlarms/numberNonTargets <= 0.20
          disp(['Participant ' ,num2str(ParticipantID), ' passed']);
@@ -188,9 +188,9 @@ elseif strcmp(group,'object') % object cells
 
         end
 
-            RTpresurpiseTable{i,1} = hitsTable;
-            RTpresurpiseTable{i,2} = falseAlarmTable;
-            RTpresurpriseTable{i,3} = ParticipantID;
+            RTpreSurpriseTable{i,1} = hitsTable;
+            RTpreSurpriseTable{i,2} = falseAlarmTable;
+            RTpreSurpriseTable{i,3} = ParticipantID;
 
         if numberHits/numberTargets >= 0.80 && numberFalseAlarms/numberNonTargets <= 0.20
             disp(['Participant ', num2str(ParticipantID), ' passed']);
