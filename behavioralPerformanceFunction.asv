@@ -31,7 +31,7 @@ if strcmp(group,'face') % face cells
 
     faceCell = struct2cell(preSurpriseStruct);
     faceCells = faceCell{1};
-    RTpreSurpriseTable = cell(numel(faceCells), 3);
+    RTpreSurprisetable = cell(numel(faceCells), 3);
 
     
     for i = 1:numel(faceCells)
@@ -98,9 +98,9 @@ if strcmp(group,'face') % face cells
 
           end
     end
-            RTpresurpiseTable{i,1} = hitsTable;
-            RTpresurpiseTable{i,2} = falseAlarmTable;
-            RTpresurpriseTable{i,3} = ParticipantID;
+            RTpresurpisetable{i,1} = hitsTable;
+            RTpresurpisetable{i,2} = falseAlarmTable;
+            RTpresurprisetable{i,3} = ParticipantID;
 
         if numberHits/numberTargets >= 0.80 && numberFalseAlarms/numberNonTargets <= 0.20
          disp(['Participant ' ,num2str(ParticipantID), ' passed']);
@@ -120,14 +120,14 @@ elseif strcmp(group,'object') % object cells
   
     for i = 1:numel(objectCells)
 
-     RTpreSurpriseTable = cell(numel(objectCells), 3);
+     RTpreSurprisetable = cell(numel(objectCells), 3);
      currentTable = objectCells{1,i}; % get the first cell
      ParticipantID = currentTable.ParticipantID(1);
 
          numberHits = 0;
          numberFalseAlarms = 0;
          hitsTable = [];
-         falseAlarmTable = [];
+         CurrentfalseAlarmTable = [];
         
 
         for j= 1: height(currentTable)
@@ -155,9 +155,9 @@ elseif strcmp(group,'object') % object cells
                               rtHit(hitIndex) = currentTable.reactionTime(j) - currentTable.emptyFramefixationOnset(j);
                       end
 
-              hitsTable = [hitsTable;table(currentTable.Trial_Nr(j),{currentTable.durationObject(j)},{currentTable.orientationObjectTarget(j)},rtHit(hitIndex),...
+              CurrenthitsTable = [CurrenthitsTable;table(currentTable.Trial_Nr(j),{currentTable.durationObject(j)},{currentTable.orientationObjectTarget(j)},rtHit(hitIndex),...
                   'VariableNames',{'TrialNr','stimulusDuration','stimulusOrientation','reactionTime'})];
-         
+              hitsTable{i} = CurrenthitsTable;
               hitIndex = hitIndex + 1;
               
            else
@@ -178,8 +178,9 @@ elseif strcmp(group,'object') % object cells
                             rtFalseAlarm(falseAlarmIndex) = currentTable.reactionTime(i) - currentTable.emptyFramefixationOnset(i);
            end
 
-            falseAlarmTable = [falseAlarmTable;table(currentTable.Trial_Nr(j),{currentTable.durationObject(j)},{currentTable.orientationObject(j)},rtFalseAlarm(falseAlarmIndex),...
+            CurrentfalseAlarmTable = [CurrentfalseAlarmTable;table(currentTable.Trial_Nr(j),{currentTable.durationObject(j)},{currentTable.orientationObject(j)},rtFalseAlarm(falseAlarmIndex),...
                  'VariableNames',{'TrialNr','stimulusDuration','stimulusOrientation','reactionTime'})];
+            falseAlarmTable{i}=CurrentfalseAlarmTable;
             falseAlarmIndex = falseAlarmIndex + 1;
           
         
@@ -188,9 +189,9 @@ elseif strcmp(group,'object') % object cells
 
         end
 
-            RTpresurpiseTable{i,1} = hitsTable;
-            RTpresurpiseTable{i,2} = falseAlarmTable;
-            RTpresurpriseTable{i,3} = ParticipantID;
+            RTpresurpisetable{i,1} = hitsTable{i};
+            RTpresurpisetable{i,2} = falseAlarmTable{i};
+            RTpresurprisetable{i,3} = ParticipantID;
 
         if numberHits/numberTargets >= 0.80 && numberFalseAlarms/numberNonTargets <= 0.20
             disp(['Participant ', num2str(ParticipantID), ' passed']);

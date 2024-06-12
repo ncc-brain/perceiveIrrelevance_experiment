@@ -98,11 +98,15 @@ end
      faceFolderPath = faceFolders{j}; %open facefolders
      faceTrialPath = fullfile(faceFolderPath,"trials.csv");
      currentFaceTrial = readtable(faceTrialPath); % access trial data
+     participantIDPath = fullfile(faceFolderPath,"sessions.csv");
+     participantIDtable = readtable(participantIDPath);
+     participantID = participantIDtable.Subject_Code;
        
   % Pre-surprise face
         
    preSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePre-surprise'),:);
    facePreSurpriseTrials{j} = preSurpriseTask(:,FacePreSurpriseCols);
+   facePreSurpriseTrials{j}.ParticipantID = repmat((participantID), height(facePreSurpriseTrials{j}), 1);
 
 
   %critical face 
@@ -208,71 +212,71 @@ end
 
     %post surprise face 
 
-   postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:);
-   facePostSurpriseTrials{j} = postSurpriseTask(:,PostSurpriseCols);
+  % postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:);
+ %  facePostSurpriseTrials{j} = postSurpriseTask(:,PostSurpriseCols);
 
-   for k = 1:height(postSurpriseTask)
+   %for k = 1:height(postSurpriseTask)
 
     %define the stimulus and duration for each trial
     
-    postStim = facePostSurpriseTrials{j}.stimulusIDPost{k}; % correct orientation
-    postStim1 = facePostSurpriseTrials{j}.postOrientation1Stim{k}; % option on the left
-    postStim2 = facePostSurpriseTrials{j}.postOrientation2Stim{k}; %option on the right
-    postOption1 = facePostSurpriseTrials{j}.postOrientation1{k}; %choose the left one
-    postOption2 = facePostSurpriseTrials{j}.postOrientation2{k}; %choose the right one 
+   % postStim = facePostSurpriseTrials{j}.stimulusIDPost{k}; % correct orientation
+   % postStim1 = facePostSurpriseTrials{j}.postOrientation1Stim{k}; % option on the left
+   % postStim2 = facePostSurpriseTrials{j}.postOrientation2Stim{k}; %option on the right
+   % postOption1 = facePostSurpriseTrials{j}.postOrientation1{k}; %choose the left one
+    %postOption2 = facePostSurpriseTrials{j}.postOrientation2{k}; %choose the right one 
 
-    postShortDuration = postSurpriseTable.postDurationShort{i}; %option short
-    postLongDuration = postSurpriseTable.postDurationLong{i}; %option long
-    correctOptionPostD = cellstr(postSurpriseTable.stimulusDurationPost(i)); %correct duration
+   % postShortDuration = postSurpriseTable.postDurationShort{i}; %option short
+   % postLongDuration = postSurpriseTable.postDurationLong{i}; %option long
+   % correctOptionPostD = cellstr(postSurpriseTable.stimulusDurationPost(i)); %correct duration
 
-      if strcmp(postStim,postStim1)
+     % if strcmp(postStim,postStim1)
 
-        correctOptionPostO{i} = postStim1;
+       % correctOptionPostO{i} = postStim1;
 
-    elseif strcmp(postStim,postStim2)
+   % elseif strcmp(postStim,postStim2)
 
-        correctOptionPostO{i} = postStim2;
+       % correctOptionPostO{i} = postStim2;
 
-    end
+   % end
 
     
     % chosen Orientation
 
-    if ~isnan(postOption1)
-        chosenOptionPostO{i} = postStim1;
+   % if ~isnan(postOption1)
+      %  chosenOptionPostO{i} = postStim1;
 
-    elseif ~isnan(postOption2)
-        chosenOptionPostO{i} = postStim2;
-    end
+   % elseif ~isnan(postOption2)
+       % chosenOptionPostO{i} = postStim2;
+   % end
 
     %check whether participant made the right decision
 
-    if strcmp(correctOptionPostO{i},chosenOptionPostO{i})
+   % if strcmp(correctOptionPostO{i},chosenOptionPostO{i})
 
-        OrientationAccuracyPost(i) = 1; 
+      %  OrientationAccuracyPost(i) = 1; 
 
-    else
-        OrientationAccuracyPost(i) = 0;
+    %else
+       % OrientationAccuracyPost(i) = 0;
 
-    end
+   % end
 
 % check the stimulus in given post trial 
    
-if ~isnan(postShortDuration)
-        chosenOptionPostD{i} = {'short'};
-    elseif ~isnan(postLongDuration)
-        chosenOptionPostD{i} = {'long'};
-    end
+%if ~isnan(postShortDuration)
+       % chosenOptionPostD{i} = {'short'};
+  %  elseif ~isnan(postLongDuration)
+       % chosenOptionPostD{i} = {'long'};
+    %end
 
 %check whether participant made the right choice 
 
-    if strcmp(correctOptionPostD,chosenOptionPostD{i})
-        durationAccuracyPost(i) = 1;
-    else
-        durationAccuracyPost(i) = 0;
-    end
+  %  if strcmp(correctOptionPostD,chosenOptionPostD{i})
+      %  durationAccuracyPost(i) = 1;
+   % else
+       % durationAccuracyPost(i) = 0;
+  %  end
 
-end
+%end
 
 
 
@@ -286,11 +290,17 @@ end
      objectFolderPath = objectFolders{j}; %open facefolders
      objectTrialPath = fullfile(objectFolderPath,"trials.csv");
      currentObjectTrial = readtable(objectTrialPath); % access trial data
+     participantIDPath = fullfile(objectFolderPath,"sessions.csv");
+     participantIDtable = readtable(participantIDPath);
+     participantID = participantIDtable.Subject_Code;
+       
 
      preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
      objectPreSurpriseTrials{j} = preSurpriseTask(:,ObjectPreSurpriseCols);
+     objectPreSurpriseTrials{j}.ParticipantID = repmat((participantID), height(objectPreSurpriseTrials{j}), 1);
+
  
- 
+    
 
   %critical object
   
