@@ -112,8 +112,8 @@ end
   %critical face 
 
   FaceCritical = (preSurpriseTask (:,FaceCriticalCols));
-  nan_rows = all(ismissing(FaceCritical), 2);
-  FaceCritical = FaceCritical(~nan_rows, :);
+  %nan_rows = all(ismissing(FaceCritical), 2);
+  %FaceCritical = FaceCritical(~nan_rows, :);
 
   % critical orientation 
 
@@ -165,7 +165,7 @@ end
 
     % critical duration 
 
-    correctOptionD = cellstr(FaceCritical.stimulusDurationCritical(42)); % correct option for given critical trial
+    correctOptionD = cellstr(FaceCritical.stimulusDurationCritical{42}); % correct option for given critical trial
 
         if  isnumeric(FaceCritical.criticalDurationShort) 
       shortDuration = num2cell(FaceCritical.criticalDurationShort(42));
@@ -218,22 +218,23 @@ end
      onePostSurpriseTrial = table();
 
     for k = 1:height(postSurpriseTask)
-        
+
+        trialTable = table();
         postTrialData = postSurpriseTask(k, :);
 
     %define the stimulus and duration for each trial
     
-     postStim = cellstr(postTrialData.stimulusIDPost{k}); % correct orientation
-     postStim1 = cellstr(postTrialData.postOrientation1Stim{k}); % option on the left
-     postStim2 = cellstr(postTrialData.postOrientation2Stim{k}); %option on the right
+     postStim = cellstr(postTrialData.stimulusIDPost{1}); % correct orientation
+     postStim1 = cellstr(postTrialData.postOrientation1Stim{1}); % option on the left
+     postStim2 = cellstr(postTrialData.postOrientation2Stim{1}); %option on the right
      
       if  isnumeric(postTrialData.postOrientation1) 
-            postOption1 = num2cell(postTrialData.postOrientation1(k));
-            postOption2 = cellstr(postTrialData.postOrientation2{k});
+            postOption1 = num2cell(postTrialData.postOrientation1(1));
+            postOption2 = cellstr(postTrialData.postOrientation2{1});
 
      elseif iscell(postTrialData.postOrientation1)
-            postOption1 = cellstr(postTrialData.postOrientation1{k});
-            postOption2 = num2cell(postTrialData.postOrientation2(k));
+            postOption1 = cellstr(postTrialData.postOrientation1{1});
+            postOption2 = num2cell(postTrialData.postOrientation2(1));
 
       end
      
@@ -241,17 +242,17 @@ end
     
      
          if  isnumeric(postTrialData.postDurationShort) 
-            postShortDuration = num2cell(postTrialData.postDurationShort(k)); %option short
-            postLongDuration = cellstr(postTrialData.postDurationLong{k}); 
+            postShortDuration = num2cell(postTrialData.postDurationShort(1)); %option short
+            postLongDuration = cellstr(postTrialData.postDurationLong{1}); 
 
         elseif iscell(postTrialData.postDurationShort)
-            postShortDuration = cellstr(postTrialData.postDurationShort{k});
-            postLongDuration = num2cell(postTrialData.postDurationLong(k));
+            postShortDuration = cellstr(postTrialData.postDurationShort{1});
+            postLongDuration = num2cell(postTrialData.postDurationLong(1));
 
         end
     
     
-        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(k)); %correct duration
+        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost{1}); %correct duration
 
     % check the correct option for the stimulus orientation in given post
     % trial
@@ -340,8 +341,8 @@ end
   
 
   ObjectCritical = (preSurpriseTask (:,ObjectCriticalCols));
-  nan_rows = all(ismissing(ObjectCritical), 2);
-  ObjectCritical = ObjectCritical(~nan_rows, :);
+  %nan_rows = all(ismissing(ObjectCritical), 2);
+  %ObjectCritical = ObjectCritical(~nan_rows, :);
 
   % critical orientation 
 
@@ -447,38 +448,38 @@ end
      onePostSurpriseTrial = table();
 
     for k = 1:height(postSurpriseTask)
-        
+        trialTable = table();
         postTrialData = postSurpriseTask(k, :);
 
     %define the stimulus and duration for each trial
     
-     postStim = cellstr(postTrialData.stimulusIDPost{k}); % correct orientation
-     postStim1 = cellstr(postTrialData.postOrientation1Stim{k}); % option on the left
-     postStim2 = cellstr(postTrialData.postOrientation2Stim{k}); %option on the right
+     postStim = cellstr(postTrialData.stimulusIDPost{1}); % correct orientation
+     postStim1 = cellstr(postTrialData.postOrientation1Stim{1}); % option on the left
+     postStim2 = cellstr(postTrialData.postOrientation2Stim{1}); %option on the right
      
       if  isnumeric(postTrialData.postOrientation1) 
-            postOption1 = num2cell(postTrialData.postOrientation1(k));
-            postOption2 = cellstr(postTrialData.postOrientation2{k});
+            postOption1 = num2cell(postTrialData.postOrientation1(1));
+            postOption2 = cellstr(postTrialData.postOrientation2{1});
 
      elseif iscell(postTrialData.postOrientation1)
-            postOption1 = cellstr(postTrialData.postOrientation1{k});
-            postOption2 = num2cell(postTrialData.postOrientation2(k));
+            postOption1 = cellstr(postTrialData.postOrientation1{1});
+            postOption2 = num2cell(postTrialData.postOrientation2(1));
 
       end
      
      
       if  isnumeric(postTrialData.postDurationShort) 
-            postShortDuration = num2cell(postTrialData.postDurationShort(k)); %option short
-            postLongDuration = cellstr(postTrialData.postDurationLong{k}); 
+            postShortDuration = num2cell(postTrialData.postDurationShort(1)); %option short
+            postLongDuration = cellstr(postTrialData.postDurationLong{1}); 
 
       elseif iscell(postTrialData.postDurationShort)
-            postShortDuration = cellstr(postTrialData.postDurationShort{k});
-            postLongDuration = num2cell(postTrialData.postDurationLong(k));
+            postShortDuration = cellstr(postTrialData.postDurationShort{1});
+            postLongDuration = num2cell(postTrialData.postDurationLong(1));
 
       end
     
     
-        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(k)); %correct duration
+        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost{1}); %correct duration
 
     % check the correct option for the stimulus orientation in given post
     % trial
