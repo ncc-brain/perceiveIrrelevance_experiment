@@ -27,13 +27,12 @@ objectCriticalTrial ={};
 facePostSurpriseTrials = {}; % this includes post performance 
 objectPostSurpriseTrials = {};
 
-correctOptionO = {}; % correct option for the critical orientation
-chosenOptionO= {}; % participant response to critical orientation
-chosenOptionD = {}; % participant response for critical duration 
 
-OrientationAccuracy = []; % for orientation accuracy 
+OrientationAccuracyFace = []; % for orientation accuracy 
+OrientationAccuracyObject =[];
 
-durationAccuracy = []; % for duration accuracy
+durationAccuracyFace = []; % for duration accuracy
+durationAccuracyObject = [];
 
 correctOptionPostO = {}; % correct option for post surprise orientation
 chosenOptionPostO= {}; % participant response to post orientation
@@ -91,9 +90,9 @@ for i = 1:numel(participantFolders)
 end
 
 %% create seperate pre-surprise, critical and post surprise files
-  
 
- for j = 1: numel(faceFolders) % iterares over face files
+
+ for j = 1: numel(faceFolders) % iterares over face files 
         
      faceFolderPath = faceFolders{j}; %open facefolders
      faceTrialPath = fullfile(faceFolderPath,"trials.csv");
@@ -111,6 +110,11 @@ end
 
   %critical face 
 
+  correctOptionOFace = {}; % correct option for the critical orientation
+  chosenOptionOFace= {}; % participant response to critical orientation
+  chosenOptionDFace = {}; % participant response for critical duration 
+  correctOptionDFace = {}; % correct critical duration
+
   FaceCritical = (preSurpriseTask (:,FaceCriticalCols));
   %nan_rows = all(ismissing(FaceCritical), 2);
   %FaceCritical = FaceCritical(~nan_rows, :);
@@ -118,78 +122,80 @@ end
   % critical orientation 
 
   % define the critical stimulus and options (there is only 1 value)
-  criticalStim = cellstr(FaceCritical.stimulusIDCritical{42});
-  Stim1 = cellstr(FaceCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
-  Stim2 = cellstr(FaceCritical.criticalOrientation2Stim{42}); % stim displayed on the right side
+
+  
+       criticalStimFace = cellstr(FaceCritical.stimulusIDCritical{42});
+       Stim1Face = cellstr(FaceCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
+       Stim2Face = cellstr(FaceCritical.criticalOrientation2Stim{42}); % stim displayed on the right side
   
   if  isnumeric(FaceCritical.CBcriticalOrientation1) 
-      optionStim1 = num2cell(FaceCritical.CBcriticalOrientation1(42));
-      optionStim2 = cellstr(FaceCritical.CBcriticalOrientation2{42});
+      optionStim1Face = num2cell(FaceCritical.CBcriticalOrientation1(42));
+      optionStim2Face = cellstr(FaceCritical.CBcriticalOrientation2{42});
 
   elseif iscell(FaceCritical.CBcriticalOrientation1)
-      optionStim1 = cellstr(FaceCritical.CBcriticalOrientation1{42});
-      optionStim2 = num2cell(FaceCritical.CBcriticalOrientation2(42));
+      optionStim1Face = cellstr(FaceCritical.CBcriticalOrientation1{42});
+      optionStim2Face = num2cell(FaceCritical.CBcriticalOrientation2(42));
 
   end
   % find the correct option for 
 
-        if strcmp(criticalStim,Stim1)
+        if strcmp(criticalStimFace,Stim1Face)
 
-                correctOptionO = Stim1;
+                correctOptionOFace = Stim1Face;
 
-        elseif strcmp(criticalStim,Stim2)
+        elseif strcmp(criticalStimFace,Stim2Face)
 
-                correctOptionO = Stim2;
+                correctOptionOFace = Stim2Face;
 
         end
 
     %find which stim participant chose 
 
-        if ~isempty(optionStim1) 
-            chosenOptionO = Stim1;
+        if strcmp(optionStim1Face,'true')
+            chosenOptionOFace = Stim1Face;
 
-        elseif ~isempty(optionStim2)
-            chosenOptionO = Stim2;
+        elseif strcmp(optionStim2Face,'true')
+            chosenOptionOFace = Stim2Face;
         end
 
    % check whether participant chose the correct option 
 
-        if strcmp(correctOptionO,chosenOptionO)
+        if strcmp(correctOptionOFace,chosenOptionOFace)
 
-            OrientationAccuracy(j) = 1; 
+            OrientationAccuracyFace(j) = 1; 
 
         else
-            OrientationAccuracy(j) = 0;
+            OrientationAccuracyFace(j) = 0;
     
         end
 
     % critical duration 
 
-    correctOptionD = cellstr(FaceCritical.stimulusDurationCritical{42}); % correct option for given critical trial
+    correctOptionDFace = cellstr(FaceCritical.stimulusDurationCritical{42}); % correct option for given critical trial
 
         if  isnumeric(FaceCritical.criticalDurationShort) 
-      shortDuration = num2cell(FaceCritical.criticalDurationShort(42));
-      longDuration = cellstr(FaceCritical.criticalDurationLong{42});
+      shortDurationFace = num2cell(FaceCritical.criticalDurationShort(42));
+      longDurationFace = cellstr(FaceCritical.criticalDurationLong{42});
 
         elseif iscell(FaceCritical.criticalDurationShort)
-      shortDuration = cellstr(FaceCritical.criticalDurationShort{42});
-      longDuration = num2cell(FaceCritical.criticalDurationLong(42));
+      shortDurationFace = cellstr(FaceCritical.criticalDurationShort{42});
+      longDurationFace = num2cell(FaceCritical.criticalDurationLong(42));
 
         end
 
       % check which option participant chose
-        if ~isempty(shortDuration)
-          chosenOptionD = {'short'};
-        elseif ~isempty(longDuration)
-          chosenOptionD = {'long'};
+        if strcmp(shortDurationFace,'true')
+          chosenOptionDFace = {'short'};
+        elseif strcmp(longDurationFace,'true')
+          chosenOptionDFace{j} = {'long'};
         end
 
     %check whether participant made the right choice 
 
-      if strcmp(correctOptionD,chosenOptionD)
-         durationAccuracy(j) = 1;
+      if strcmp(correctOptionDFace,chosenOptionDFace)
+         durationAccuracyFace(j) = 1;
      else
-         durationAccuracy(j) = 0;
+         durationAccuracyFace(j) = 0;
       end
 
    %reaction times 
@@ -203,7 +209,7 @@ end
     mindWanderingQuestion{j} = cellstr(FaceCritical.mindWanderingQuestion{42});
     mindWanderingRT(j)= FaceCritical.mindWanderingRT(42);
     
-    criticalPerformance = table(OrientationAccuracy(j),orientationRT(j),orientationConfidence(j),OrientationConfidenceRT(j),durationAccuracy(j),durationRT(j),durationConfidence(j),...
+    criticalPerformance = table(OrientationAccuracyFace(j),orientationRT(j),orientationConfidence(j),OrientationConfidenceRT(j),durationAccuracyFace(j),durationRT(j),durationConfidence(j),...
     DurationConfidenceRT(j),mindWanderingQuestion{j},mindWanderingRT(j),'VariableNames',{'orientationPerformance','orientationRT','orientationConfidence','orientationConfidenceRT','durationPerformance',...
     'durationRT','durationConfidence','durationConfidenceRT','mindwandering','mindwanderingRT'});
 
@@ -238,9 +244,7 @@ end
 
       end
      
-     
-    
-     
+       
          if  isnumeric(postTrialData.postDurationShort) 
             postShortDuration = num2cell(postTrialData.postDurationShort(1)); %option short
             postLongDuration = cellstr(postTrialData.postDurationLong{1}); 
@@ -270,10 +274,10 @@ end
     
      % chosen Orientation
 
-    if ~isempty(postOption1)
+    if strcmp(postOption1,'true')
         chosenOptionPostO = postStim1;
 
-    elseif ~isempty(postOption2)
+    elseif strcmp(postOption2,'true')
         chosenOptionPostO = postStim2;
     end
 
@@ -290,9 +294,9 @@ end
 
 % check the stimulus in given post trial 
    
-    if ~isempty(postShortDuration)
+    if strcmp(postShortDuration,'true')
        chosenOptionPostD = {'short'};
-    elseif ~isempty(postLongDuration)
+    elseif strcmp(postLongDuration,'true')
         chosenOptionPostD = {'long'};
     end
 
@@ -346,6 +350,12 @@ end
 
   % critical orientation 
 
+  correctOptionO = {}; % correct option for the critical orientation
+  chosenOptionO= {}; % participant response to critical orientation
+  chosenOptionD = {}; % participant response for critical duration 
+  correctOptionD = {}; % correct critical duration
+
+
   % define the critical stimulus and options (there is only 1 value)
   criticalStim = cellstr(ObjectCritical.stimulusIDCritical{42});
   Stim1 = cellstr(ObjectCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
@@ -375,10 +385,10 @@ end
 
     %find which stim participant chose 
 
-        if ~isempty(optionStim1) 
+        if strcmp(optionStim1,'true') 
             chosenOptionO = Stim1;
 
-        elseif ~isempty(optionStim2)
+        elseif strcmp(optionStim2,'true')
             chosenOptionO = Stim2;
         end
 
@@ -408,9 +418,9 @@ end
         end
 
       % check which option participant chose
-        if ~isempty(shortDuration)
+        if strcmp(shortDuration,'true')
           chosenOptionD = {'short'};
-        elseif ~isempty(longDuration)
+        elseif strcmp(longDuration,'true')
           chosenOptionD = {'long'};
         end
 
@@ -497,10 +507,10 @@ end
     
      % chosen Orientation
 
-    if ~isempty(postOption1)
+    if strcmp(postOption1,'true')
         chosenOptionPostO = postStim1;
 
-    elseif ~isempty(postOption2)
+    elseif strcmp(postOption2,'true')
         chosenOptionPostO = postStim2;
     end
 
@@ -517,9 +527,9 @@ end
 
 % check the stimulus in given post trial 
    
-    if ~isempty(postShortDuration)
+    if strcmp(postShortDuration,'true')
        chosenOptionPostD = {'short'};
-    elseif ~isempty(postLongDuration)
+    elseif strcmp(postLongDuration,'true')
         chosenOptionPostD = {'long'};
     end
 
