@@ -116,8 +116,6 @@ end
   correctOptionDFace = {}; % correct critical duration
 
   FaceCritical = (preSurpriseTask (:,FaceCriticalCols));
-  %nan_rows = all(ismissing(FaceCritical), 2);
-  %FaceCritical = FaceCritical(~nan_rows, :);
 
   % critical orientation 
 
@@ -187,7 +185,7 @@ end
         if strcmp(shortDurationFace,'true')
           chosenOptionDFace = {'short'};
         elseif strcmp(longDurationFace,'true')
-          chosenOptionDFace{j} = {'long'};
+          chosenOptionDFace = {'long'};
         end
 
     %check whether participant made the right choice 
@@ -285,10 +283,10 @@ end
 
     if strcmp(correctOptionPostO,chosenOptionPostO)
 
-       OrientationAccuracyPost = 1; 
+       OrientationAccuracyPost(k) = 1; 
 
     else
-       OrientationAccuracyPost = 0;
+       OrientationAccuracyPost(k) = 0;
 
     end
 
@@ -303,9 +301,9 @@ end
 %check whether participant made the right choice 
 
     if strcmp(correctOptionPostD,chosenOptionPostD)
-        durationAccuracyPost = 1;
+        durationAccuracyPost(k) = 1;
     else
-        durationAccuracyPost = 0;
+        durationAccuracyPost(k) = 0;
     end
 
     postOrientationRT = postTrialData.orientationRT - postTrialData.OrientationOnset;
@@ -316,7 +314,7 @@ end
     postDurationConfRT = postTrialData.confidenceDurationRT - postTrialData.durationConfidenceOnset;
     probeOrder = postTrialData.probeOrder;
 
-    trialTable = table(OrientationAccuracyPost,postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost,postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
+    trialTable = table(OrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
        'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
     
     onePostSurpriseTrial = [onePostSurpriseTrial;trialTable];
@@ -518,10 +516,10 @@ end
 
     if strcmp(correctOptionPostO,chosenOptionPostO)
 
-       OrientationAccuracyPost = 1; 
+       OrientationAccuracyPost(k) = 1; 
 
     else
-       OrientationAccuracyPost = 0;
+       OrientationAccuracyPost(k) = 0;
 
     end
 
