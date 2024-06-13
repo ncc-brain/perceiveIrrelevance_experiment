@@ -110,6 +110,7 @@ end
   chosenOptionDFace = {}; % participant response for critical duration 
   correctOptionDFace = {}; % correct critical duration
 
+  FaceCritical = table();
   FaceCritical = (preSurpriseTask (:,FaceCriticalCols));
 
   % critical orientation 
@@ -121,15 +122,23 @@ end
        Stim1Face = cellstr(FaceCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
        Stim2Face = cellstr(FaceCritical.criticalOrientation2Stim{42}); % stim displayed on the right side
   
-  if  isnumeric(FaceCritical.CBcriticalOrientation1) 
-      optionStim1Face = num2cell(FaceCritical.CBcriticalOrientation1(42));
-      optionStim2Face = cellstr(FaceCritical.CBcriticalOrientation2{42});
+        if  iscell(FaceCritical.CBcriticalOrientation1) 
+            optionStim1Face = cellstr(FaceCritical.CBcriticalOrientation1{42});
 
-  elseif iscell(FaceCritical.CBcriticalOrientation1)
-      optionStim1Face = cellstr(FaceCritical.CBcriticalOrientation1{42});
-      optionStim2Face = num2cell(FaceCritical.CBcriticalOrientation2(42));
+        else
+            optionStim1Face = cellstr(num2str(FaceCritical.CBcriticalOrientation1(42)));
 
-  end
+        end
+      
+        if iscell(FaceCritical.CBcriticalOrientation2) 
+          optionStim2Face = cellstr(FaceCritical.CBcriticalOrientation2{42});
+        else 
+         optionStim2Face = cellstr(num2str(FaceCritical.CBcriticalOrientation2(42)));
+        end
+
+ 
+
+ 
   % find the correct option for 
 
         if strcmp(criticalStimFace,Stim1Face)
@@ -166,15 +175,22 @@ end
 
     correctOptionDFace = cellstr(FaceCritical.stimulusDurationCritical{42}); % correct option for given critical trial
 
-        if  isnumeric(FaceCritical.criticalDurationShort) 
-      shortDurationFace = num2cell(FaceCritical.criticalDurationShort(42));
-      longDurationFace = cellstr(FaceCritical.criticalDurationLong{42});
-
-        elseif iscell(FaceCritical.criticalDurationShort)
-      shortDurationFace = cellstr(FaceCritical.criticalDurationShort{42});
-      longDurationFace = num2cell(FaceCritical.criticalDurationLong(42));
-
+        if  iscell(FaceCritical.criticalDurationShort) 
+      
+            shortDurationFace = cellstr(FaceCritical.criticalDurationShort{42});
+      
+        elseif ~iscell (FaceCritical.criticalDurationShort)
+            shortDurationFace = cellstr(num2str(FaceCritical.criticalDurationShort(42)));
         end
+      
+        if iscell(FaceCritical.criticalDurationLong) 
+        
+            longDurationFace = cellstr(FaceCritical.criticalDurationLong{42});
+        else
+            longDurationFace = cellstr(num2str(FaceCritical.criticalDurationLong(42)));
+        end
+
+      
 
       % check which option participant chose
         if strcmp(shortDurationFace,'true')
@@ -246,26 +262,38 @@ end
      FacepostStim1 = cellstr(postTrialData.postOrientation1Stim); % option on the left
      FacepostStim2 = cellstr(postTrialData.postOrientation2Stim); %option on the right
      
-      if  isnumeric(postTrialData.postOrientation1) 
-            FacepostOption1 = num2cell(postTrialData.postOrientation1);
-            FacepostOption2 = cellstr(postTrialData.postOrientation2);
-
-     elseif iscell(postTrialData.postOrientation1)
+      if  iscell(postTrialData.postOrientation1) 
             FacepostOption1 = cellstr(postTrialData.postOrientation1);
-            FacepostOption2 = num2cell(postTrialData.postOrientation2);
+
+      else
+           FacepostOption1 = num2str(postTrialData.postOrientation1);
 
       end
-     
-       
-         if  isnumeric(postTrialData.postDurationShort) 
-            FacepostShortDuration = num2cell(postTrialData.postDurationShort); %option short
-            FacepostLongDuration = cellstr(postTrialData.postDurationLong); 
 
-        elseif iscell(postTrialData.postDurationShort)
+      
+      if iscell(postTrialData.postOrientation2)
+         FacepostOption2 = cellstr(postTrialData.postOrientation2);
+      else
+         FacepostOption2 = num2str(postTrialData.postOrientation2);
+      end
+
+       
+         if  iscell(postTrialData.postDurationShort) 
+
             FacepostShortDuration = cellstr(postTrialData.postDurationShort);
-            FacepostLongDuration = num2cell(postTrialData.postDurationLong);
+        else
+            FacepostShortDuration = num2str(postTrialData.postDurationShort);
 
         end
+
+        if iscell(postTrialData.postDurationLong)
+
+            FacepostLongDuration = cellstr(postTrialData.postDurationLong);
+       else
+
+            FacepostLongDuration = num2str(postTrialData.postDurationLong);
+       end
+    
     
     
         FacecorrectOptionPostD = cellstr(postTrialData.stimulusDurationPost); %correct duration
@@ -371,15 +399,25 @@ end
   Stim1 = cellstr(ObjectCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
   Stim2 = cellstr(ObjectCritical.criticalOrientation2Stim{42}); % stim displayed on the right side
   
-  if  isnumeric(ObjectCritical.criticalOrientation1) 
-      optionStim1 = num2cell(ObjectCritical.criticalOrientation1(42));
-      optionStim2 = cellstr(ObjectCritical.criticalOrientation2{42});
+        if  iscell(ObjectCritical.criticalOrientation1) 
 
-  elseif iscell(ObjectCritical.criticalOrientation1)
-      optionStim1 = cellstr(ObjectCritical.criticalOrientation1{42});
-      optionStim2 = num2cell(ObjectCritical.criticalOrientation2(42));
+            optionStim1 = cellstr(ObjectCritical.criticalOrientation1{42});
 
-  end
+        else
+            optionStim1 = cellstr(num2str(ObjectCritical.criticalOrientation1(42)));
+
+        end
+      
+        if iscell(ObjectCritical.CBcriticalOrientation2) 
+
+          optionStim2 = cellstr(ObjectCritical.CBcriticalOrientation2{42});
+        else 
+
+          optionStim2 = cellstr(num2str(ObjectCritical.CBcriticalOrientation2(42)));
+        end
+
+
+ 
   
   % find the correct option for 
 
@@ -417,14 +455,19 @@ end
 
     correctOptionD = cellstr(ObjectCritical.stimulusDurationCritical{42}); % correct option for given critical trial
 
-        if  isnumeric(ObjectCritical.criticalDurationShort) 
-      shortDuration = num2cell(ObjectCritical.criticalDurationShort(42));
-      longDuration = cellstr(ObjectCritical.criticalDurationLong{42});
-
-        elseif iscell(ObjectCritical.criticalDurationShort)
-      shortDuration = cellstr(ObjectCritical.criticalDurationShort{42});
-      longDuration = num2cell(ObjectCritical.criticalDurationLong(42));
-
+        if  iscell(ObjectCritical.criticalDurationShort) 
+      
+            shortDuration = cellstr(ObjectCritical.criticalDurationShort{42});
+      
+        else
+            shortDuration = cellstr(numstr(ObjectCritical.criticalDurationShort(42)));
+        end
+      
+        if iscell(ObjectCritical.criticalDurationLong) 
+        
+            longDuration = cellstr(ObjectCritical.criticalDurationLong{42});
+        else
+            longDuration = cellstr(num2str(ObjectCritical.criticalDurationLong(42)));
         end
 
       % check which option participant chose
@@ -511,14 +554,13 @@ end
 
       
       if iscell(postTrialData.postOrientation2)
-            postOption2 = num2str(postTrialData.postOrientation2)
-
-
-     elseif iscell(postTrialData.postOrientation1)
-            postOption1 = cellstr(postTrialData.postOrientation1);
-            postOption2 = num2str(postTrialData.postOrientation2);
-
+         postOption2 = cellstr(postTrialData.postOrientation2);
+      else
+         postOption2 = num2str(postTrialData.postOrientation2);
       end
+
+         
+
      
      
       if  iscell(postTrialData.postDurationShort) 
