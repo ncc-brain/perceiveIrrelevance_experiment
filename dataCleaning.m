@@ -118,17 +118,17 @@ end
   % critical orientation 
 
   % define the critical stimulus and options (there is only 1 value)
-  criticalStim = cellstr(FaceCritical.stimulusIDCritical{1});
-  Stim1 = cellstr(FaceCritical.criticalOrientation1Stim{1}); % stim displayed on the left side
-  Stim2 = cellstr(FaceCritical.criticalOrientation2Stim{1}); % stim displayed on the right side
+  criticalStim = cellstr(FaceCritical.stimulusIDCritical{42});
+  Stim1 = cellstr(FaceCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
+  Stim2 = cellstr(FaceCritical.criticalOrientation2Stim{42}); % stim displayed on the right side
   
   if  isnumeric(FaceCritical.CBcriticalOrientation1) 
-      optionStim1 = num2cell(FaceCritical.CBcriticalOrientation1(1));
-      optionStim2 = cellstr(FaceCritical.CBcriticalOrientation2{1});
+      optionStim1 = num2cell(FaceCritical.CBcriticalOrientation1(42));
+      optionStim2 = cellstr(FaceCritical.CBcriticalOrientation2{42});
 
   elseif iscell(FaceCritical.CBcriticalOrientation1)
-      optionStim1 = cellstr(FaceCritical.CBcriticalOrientation1{1});
-      optionStim2 = num2cell(FaceCritical.CBcriticalOrientation2(1));
+      optionStim1 = cellstr(FaceCritical.CBcriticalOrientation1{42});
+      optionStim2 = num2cell(FaceCritical.CBcriticalOrientation2(42));
 
   end
   % find the correct option for 
@@ -165,15 +165,15 @@ end
 
     % critical duration 
 
-    correctOptionD = cellstr(FaceCritical.stimulusDurationCritical(1)); % correct option for given critical trial
+    correctOptionD = cellstr(FaceCritical.stimulusDurationCritical(42)); % correct option for given critical trial
 
         if  isnumeric(FaceCritical.criticalDurationShort) 
-      shortDuration = num2cell(FaceCritical.criticalDurationShort(1));
-      longDuration = cellstr(FaceCritical.criticalDurationLong{1});
+      shortDuration = num2cell(FaceCritical.criticalDurationShort(42));
+      longDuration = cellstr(FaceCritical.criticalDurationLong{42});
 
         elseif iscell(FaceCritical.criticalDurationShort)
-      shortDuration = cellstr(FaceCritical.criticalDurationShort{1});
-      longDuration = num2cell(FaceCritical.criticalDurationLong(1));
+      shortDuration = cellstr(FaceCritical.criticalDurationShort{42});
+      longDuration = num2cell(FaceCritical.criticalDurationLong(42));
 
         end
 
@@ -194,14 +194,14 @@ end
 
    %reaction times 
 
-    orientationRT(j) = FaceCritical.orientationRT(1) - FaceCritical.OrientationOnset(1);
-    OrientationConfidenceRT(j) = FaceCritical.confidenceOrientationRT(1) - FaceCritical.orientationConfidenceOnset(1);
-    durationRT(j)= FaceCritical.durationRT(1);
-    DurationConfidenceRT(j) = FaceCritical.confidenceDurationRT(1)- FaceCritical.durationConfidenceOnset(1);
-    orientationConfidence(j)=FaceCritical.confidenceOrientationCritical(1);
-    durationConfidence(j)= FaceCritical.confidenceDurationCritical(1);
-    mindWanderingQuestion{j} = cellstr(FaceCritical.mindWanderingQuestion{1});
-    mindWanderingRT(j)= FaceCritical.mindWanderingRT(1);
+    orientationRT(j) = FaceCritical.orientationRT(42) - FaceCritical.OrientationOnset(42);
+    OrientationConfidenceRT(j) = FaceCritical.confidenceOrientationRT(42) - FaceCritical.orientationConfidenceOnset(42);
+    durationRT(j)= FaceCritical.durationRT(42);
+    DurationConfidenceRT(j) = FaceCritical.confidenceDurationRT(42)- FaceCritical.durationConfidenceOnset(42);
+    orientationConfidence(j)=FaceCritical.confidenceOrientationCritical(42);
+    durationConfidence(j)= FaceCritical.confidenceDurationCritical(42);
+    mindWanderingQuestion{j} = cellstr(FaceCritical.mindWanderingQuestion{42});
+    mindWanderingRT(j)= FaceCritical.mindWanderingRT(42);
     
     criticalPerformance = table(OrientationAccuracy(j),orientationRT(j),orientationConfidence(j),OrientationConfidenceRT(j),durationAccuracy(j),durationRT(j),durationConfidence(j),...
     DurationConfidenceRT(j),mindWanderingQuestion{j},mindWanderingRT(j),'VariableNames',{'orientationPerformance','orientationRT','orientationConfidence','orientationConfidenceRT','durationPerformance',...
@@ -223,17 +223,17 @@ end
 
     %define the stimulus and duration for each trial
     
-     postStim = cellstr(postTrialData.stimulusIDPost{1}); % correct orientation
-     postStim1 = cellstr(postTrialData.postOrientation1Stim{1}); % option on the left
-     postStim2 = cellstr(postTrialData.postOrientation2Stim{1}); %option on the right
+     postStim = cellstr(postTrialData.stimulusIDPost{k}); % correct orientation
+     postStim1 = cellstr(postTrialData.postOrientation1Stim{k}); % option on the left
+     postStim2 = cellstr(postTrialData.postOrientation2Stim{k}); %option on the right
      
       if  isnumeric(postTrialData.postOrientation1) 
-            postOption1 = num2cell(postTrialData.postOrientation1(1));
-            postOption2 = cellstr(postTrialData.postOrientation2{1});
+            postOption1 = num2cell(postTrialData.postOrientation1(k));
+            postOption2 = cellstr(postTrialData.postOrientation2{k});
 
      elseif iscell(postTrialData.postOrientation1)
-            postOption1 = cellstr(postTrialData.postOrientation1{1});
-            postOption2 = num2cell(postTrialData.postOrientation2(1));
+            postOption1 = cellstr(postTrialData.postOrientation1{k});
+            postOption2 = num2cell(postTrialData.postOrientation2(k));
 
       end
      
@@ -241,17 +241,17 @@ end
     
      
          if  isnumeric(postTrialData.postDurationShort) 
-            postShortDuration = num2cell(postTrialData.postDurationShort(1)); %option short
-            postLongDuration = cellstr(postTrialData.postDurationLong{1}); 
+            postShortDuration = num2cell(postTrialData.postDurationShort(k)); %option short
+            postLongDuration = cellstr(postTrialData.postDurationLong{k}); 
 
         elseif iscell(postTrialData.postDurationShort)
-            postShortDuration = cellstr(postTrialData.postDurationShort{1});
-            postLongDuration = num2cell(postTrialData.postDurationLong(1));
+            postShortDuration = cellstr(postTrialData.postDurationShort{k});
+            postLongDuration = num2cell(postTrialData.postDurationLong(k));
 
         end
     
     
-        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(1)); %correct duration
+        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(k)); %correct duration
 
     % check the correct option for the stimulus orientation in given post
     % trial
@@ -346,17 +346,17 @@ end
   % critical orientation 
 
   % define the critical stimulus and options (there is only 1 value)
-  criticalStim = cellstr(ObjectCritical.stimulusIDCritical{1});
-  Stim1 = cellstr(ObjectCritical.criticalOrientation1Stim{1}); % stim displayed on the left side
-  Stim2 = cellstr(ObjectCritical.criticalOrientation2Stim{1}); % stim displayed on the right side
+  criticalStim = cellstr(ObjectCritical.stimulusIDCritical{42});
+  Stim1 = cellstr(ObjectCritical.criticalOrientation1Stim{42}); % stim displayed on the left side
+  Stim2 = cellstr(ObjectCritical.criticalOrientation2Stim{42}); % stim displayed on the right side
   
   if  isnumeric(ObjectCritical.criticalOrientation1) 
-      optionStim1 = num2cell(ObjectCritical.criticalOrientation1(1));
-      optionStim2 = cellstr(ObjectCritical.criticalOrientation2{1});
+      optionStim1 = num2cell(ObjectCritical.criticalOrientation1(42));
+      optionStim2 = cellstr(ObjectCritical.criticalOrientation2{42});
 
   elseif iscell(ObjectCritical.criticalOrientation1)
-      optionStim1 = cellstr(ObjectCritical.criticalOrientation1{1});
-      optionStim2 = num2cell(ObjectCritical.criticalOrientation2(1));
+      optionStim1 = cellstr(ObjectCritical.criticalOrientation1{42});
+      optionStim2 = num2cell(ObjectCritical.criticalOrientation2(42));
 
   end
   
@@ -394,15 +394,15 @@ end
 
     % critical duration 
 
-    correctOptionD = cellstr(ObjectCritical.stimulusDurationCritical(1)); % correct option for given critical trial
+    correctOptionD = cellstr(ObjectCritical.stimulusDurationCritical{42}); % correct option for given critical trial
 
         if  isnumeric(ObjectCritical.criticalDurationShort) 
-      shortDuration = num2cell(ObjectCritical.criticalDurationShort(1));
-      longDuration = cellstr(ObjectCritical.criticalDurationLong{1});
+      shortDuration = num2cell(ObjectCritical.criticalDurationShort(42));
+      longDuration = cellstr(ObjectCritical.criticalDurationLong{42});
 
         elseif iscell(ObjectCritical.criticalDurationShort)
-      shortDuration = cellstr(ObjectCritical.criticalDurationShort{1});
-      longDuration = num2cell(ObjectCritical.criticalDurationLong(1));
+      shortDuration = cellstr(ObjectCritical.criticalDurationShort{42});
+      longDuration = num2cell(ObjectCritical.criticalDurationLong(42));
 
         end
 
@@ -423,14 +423,14 @@ end
 
    %reaction times 
 
-    orientationRT(j) = ObjectCritical.orientationRT(1) - ObjectCritical.OrientationOnset(1);
-    OrientationConfidenceRT(j) = ObjectCritical.confidenceOrientationRT(1) - ObjectCritical.orientationConfidenceOnset(1);
-    durationRT(j)= ObjectCritical.durationRT(1);
-    DurationConfidenceRT(j) = ObjectCritical.confidenceDurationRT(1)- ObjectCritical.durationConfidenceOnset(1);
-    orientationConfidence(j)=ObjectCritical.confidenceOrientationCritical(1);
-    durationConfidence(j)= ObjectCritical.confidenceDurationCritical(1);
-    mindWanderingQuestion{j} = cellstr(ObjectCritical.mindWanderingQuestion{1});
-    mindWanderingRT(j)= ObjectCritical.mindWanderingRT(1);
+    orientationRT(j) = ObjectCritical.orientationRT(42) - ObjectCritical.OrientationOnset(42);
+    OrientationConfidenceRT(j) = ObjectCritical.confidenceOrientationRT(42) - ObjectCritical.orientationConfidenceOnset(42);
+    durationRT(j)= ObjectCritical.durationRT(42);
+    DurationConfidenceRT(j) = ObjectCritical.confidenceDurationRT(42)- ObjectCritical.durationConfidenceOnset(42);
+    orientationConfidence(j)=ObjectCritical.confidenceOrientationCritical(42);
+    durationConfidence(j)= ObjectCritical.confidenceDurationCritical(42);
+    mindWanderingQuestion{j} = cellstr(ObjectCritical.mindWanderingQuestion{42});
+    mindWanderingRT(j)= ObjectCritical.mindWanderingRT(42);
     
     criticalPerformance = table(OrientationAccuracy(j),orientationRT(j),orientationConfidence(j),OrientationConfidenceRT(j),durationAccuracy(j),durationRT(j),durationConfidence(j),...
     DurationConfidenceRT(j),mindWanderingQuestion{j},mindWanderingRT(j),'VariableNames',{'orientationPerformance','orientationRT','orientationConfidence','orientationConfidenceRT','durationPerformance',...
@@ -452,33 +452,33 @@ end
 
     %define the stimulus and duration for each trial
     
-     postStim = cellstr(postTrialData.stimulusIDPost{1}); % correct orientation
-     postStim1 = cellstr(postTrialData.postOrientation1Stim{1}); % option on the left
-     postStim2 = cellstr(postTrialData.postOrientation2Stim{1}); %option on the right
+     postStim = cellstr(postTrialData.stimulusIDPost{k}); % correct orientation
+     postStim1 = cellstr(postTrialData.postOrientation1Stim{k}); % option on the left
+     postStim2 = cellstr(postTrialData.postOrientation2Stim{k}); %option on the right
      
       if  isnumeric(postTrialData.postOrientation1) 
-            postOption1 = num2cell(postTrialData.postOrientation1(1));
-            postOption2 = cellstr(postTrialData.postOrientation2{1});
+            postOption1 = num2cell(postTrialData.postOrientation1(k));
+            postOption2 = cellstr(postTrialData.postOrientation2{k});
 
      elseif iscell(postTrialData.postOrientation1)
-            postOption1 = cellstr(postTrialData.postOrientation1{1});
-            postOption2 = num2cell(postTrialData.postOrientation2(1));
+            postOption1 = cellstr(postTrialData.postOrientation1{k});
+            postOption2 = num2cell(postTrialData.postOrientation2(k));
 
       end
      
      
       if  isnumeric(postTrialData.postDurationShort) 
-            postShortDuration = num2cell(postTrialData.postDurationShort(1)); %option short
-            postLongDuration = cellstr(postTrialData.postDurationLong{1}); 
+            postShortDuration = num2cell(postTrialData.postDurationShort(k)); %option short
+            postLongDuration = cellstr(postTrialData.postDurationLong{k}); 
 
       elseif iscell(postTrialData.postDurationShort)
-            postShortDuration = cellstr(postTrialData.postDurationShort{1});
-            postLongDuration = num2cell(postTrialData.postDurationLong(1));
+            postShortDuration = cellstr(postTrialData.postDurationShort{k});
+            postLongDuration = num2cell(postTrialData.postDurationLong(k));
 
       end
     
     
-        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(1)); %correct duration
+        correctOptionPostD = cellstr(postTrialData.stimulusDurationPost(k)); %correct duration
 
     % check the correct option for the stimulus orientation in given post
     % trial
