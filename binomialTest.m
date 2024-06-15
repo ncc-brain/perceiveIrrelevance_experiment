@@ -77,7 +77,8 @@ TotalCorrectObject = correctOrientationObject + correctDurationObject;
 
 % binomial test 
 
-% proportion of success 
+% proportion of success (%binofit --> to infer variability and reliability
+% [through confidence ratings] of the data. 
 
 proportionOfSuccess = TotalCorrect / TotalProbes; % phat calculates this anyway 
 
@@ -89,7 +90,7 @@ alpha = 0.05;
 
 [phat, pci] = binofit(TotalCorrect,TotalProbes , alpha);
 
-% phat estimated proportion of succeses
+% phat: estimated proportion of succeses
 % pci : confidence intervals 
 
 successProbAll = table([phat; pci(1); pci(2)], 'VariableNames', {'All'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
@@ -116,8 +117,16 @@ binomialTablesFilename = 'binomialTables.mat';
 save(fullfile(processedDataIrrelevant,binomialTablesFilename),'binomialTables');
 
 % hypothesis testing ( whether success rate is better than chance, 50%) 
+%binocdf
 
-chanceLevel = 0.5;
+p0 = 0.5; %null hypothesis chance level p 
 
-[h, p] = binotest(TotalCorrect, TotalProbes, chanceLevel, 'Tail', 'both');
+%binocdf gives the probability of gettin up to certain number of success
+%(total correct number-1). To find the probability of getting certain
+%number or more success ( in my case getting 37 correct values if
+%participants are showing chance level performance  is 1- pValue 
+
+AllPValue = 1-binocdf(TotalCorrect-1,TotalProbes,p0); % reject the null for the whole test 
+
+
 

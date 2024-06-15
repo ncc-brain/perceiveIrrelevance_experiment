@@ -77,7 +77,8 @@ TotalCorrectObject = correctOrientationObject + correctDurationObject;
 
 % binomial test 
 
-% proportion of success 
+% proportion of success (%binofit --> to infer variability and reliability
+% [through confidence ratings] of the data. 
 
 proportionOfSuccess = TotalCorrect / TotalProbes; % phat calculates this anyway 
 
@@ -89,28 +90,38 @@ alpha = 0.05;
 
 [phat, pci] = binofit(TotalCorrect,TotalProbes , alpha);
 
-% phat estimated proportion of succeses
+% phat: estimated proportion of succeses
 % pci : confidence intervals 
 
-successProbAll = table([phat; pci(1); pci(2)], 'VariableNames', {'Value'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
+successProbAll = table([phat; pci(1); pci(2)], 'VariableNames', {'All'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
 
 [phat,pci] = binofit(TotalCorrectFace,TotalFaceProbes , alpha); 
 
-successFace = table([phat; pci(1); pci(2)], 'VariableNames', {'Value'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
+successFace = table([phat; pci(1); pci(2)], 'VariableNames', {'Face'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
 
 [phat,pci] = binofit(TotalCorrectObject,TotalObjectProbes , alpha); 
 
-successObject = table([phat; pci(1); pci(2)], 'VariableNames', {'Value'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
+successObject = table([phat; pci(1); pci(2)], 'VariableNames', {'Object'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
 
 [phat,pci] = binofit(TotalCorrectOrientation,TotalSpecificProbes , alpha); 
 
-successOrientation = table([phat; pci(1); pci(2)], 'VariableNames', {'Value'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
+successOrientation = table([phat; pci(1); pci(2)], 'VariableNames', {'Orientation'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
 
 [phat,pci] = binofit(TotalCorrectDuration,TotalSpecificProbes , alpha); 
 
-successDuration = table([phat; pci(1); pci(2)], 'VariableNames', {'Value'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
+successDuration = table([phat; pci(1); pci(2)], 'VariableNames', {'Duration'}, 'RowNames', {'phat', 'LowerBound', 'UpperBound'});
+
+binomialTables = [successProbAll, successFace, successObject, successOrientation, successDuration];
+
+binomialTablesFilename = 'binomialTables.mat';
+save(fullfile(processedDataIrrelevant,binomialTablesFilename),'binomialTables');
+
+% hypothesis testing ( whether success rate is better than chance, 50%) 
+%binocdf
+
+p0 = 0.5; %null hypothesis chance level p 
+
+pValue = binocdf(TotalCorrect-1,TotalProbes,p0); % P(X<= totalcorrect-1) 
 
 
-Succ
-
-
+1-pValue

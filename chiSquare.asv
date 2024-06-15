@@ -1,0 +1,41 @@
+
+% in this script I will do 
+
+% 1- create contingency tables for orientation & duration 
+
+% 2- run chi square test for independence 
+
+
+clear
+clc
+addpath('./')
+configIrrelevant;
+
+cd(processedDataIrrelevant)
+addpath(genpath(processedDataIrrelevant)); 
+
+faceCritical = load("faceCritical.mat");
+faceCritical = faceCritical.faceCriticalTrial;
+
+objectCritical = load('objectCritical.mat');
+objectCritical = objectCritical.objectCriticalTrial;
+
+
+%% Contingency tables 
+
+orientationAllFace = [];
+durationAllFace = [];
+orientationAllObject =[];
+durationAllObject = [];
+
+
+for i = 1:numel(faceCritical)
+
+    currentCell = faceCritical{i};
+    currentOrientation = currentCell.orientationPerformance;
+    currentDuration = currentCell.durationPerformance;
+    orientationAllFace(i) = currentOrientation;
+    durationAllFace (i) = curre
+    
+
+end
