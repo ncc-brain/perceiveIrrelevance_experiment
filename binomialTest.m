@@ -1,5 +1,4 @@
 
-
 % this script is preparing the critical trial and post-surprise data for binomial test. 
 
 clear
@@ -14,11 +13,14 @@ faceCritical = load("faceCritical.mat"); % load the critical and post data
 facePost = load ('facePostSurprise.mat');
 
 objectCritical = load('objectCritical.mat');
-objectPost = load('ob')
+objectPost = load('objectPostSurprise.mat');
 
 
 faceCriticalTrials = faceCritical.faceCriticalTrial; 
 objectCriticalTrials = objectCritical.objectCriticalTrial;
+
+facePostTrials = facePost.facePostSurpriseTrials;
+objectPostTrials = objectPost.objectPostSurpriseTrials;
 
 % performance in orientation & duration for faces 
 
@@ -26,6 +28,8 @@ correctOrientationFace = 0; % nr of correct orientation face
 correctDurationFace = 0; % nr of correct duration for face
 correctOrientationObject = 0; % nr of correct orientation object
 correctDurationObject = 0; % nr of duration object 
+
+%face critical trial accuracy tables
 
 for i = 1:numel(faceCriticalTrials)
 
@@ -45,6 +49,7 @@ for i = 1:numel(faceCriticalTrials)
 
 end
 
+%object critical trial accuracy table 
 
 for i = 1: numel(objectCriticalTrials)
 
@@ -63,8 +68,11 @@ for i = 1: numel(objectCriticalTrials)
 
 end
 
+% nr of corrects for the critical 
+
 TotalFaceProbes = 2*(numel(faceCriticalTrials));
 TotalObjectProbes = 2*(numel(objectCriticalTrials));
+
 TotalSpecificProbes = numel(faceCriticalTrials) + numel(objectCriticalTrials);
 
 TotalProbes = TotalFaceProbes + TotalObjectProbes; % nr of orientation and duration are same 
@@ -77,6 +85,9 @@ TotalCorrect = TotalCorrectOrientation + TotalCorrectDuration;
 TotalCorrectFace = correctOrientationFace + correctDurationFace;
 TotalCorrectObject = correctOrientationObject + correctDurationObject;
 
+CriticalAccuracyTable = table(TotalFaceProbes,TotalObjectProbes,TotalSpecificProbes,TotalProbes,TotalCorrectOrientation,...
+    TotalCorrectDuration,TotalCorrect,TotalCorrectFace,TotalCorrectObject,'VariableNames',{'NrFaceProbes','NrObjectProbes','Nr1IrrelevantProbe',...
+    'NrAllirrelevantProbes','totalCorrectOrientation','totalCorrectDuration','TotalCorrectResponse','totalCorrectFace','totalCorrectObject'});
 
 % binomial test 
 
@@ -134,4 +145,5 @@ AllPValue = 1-binocdf(TotalCorrect-1,TotalProbes,p0); % reject the null for the 
 OrientationPValue = 1-binocdf(TotalCorrectOrientation-1,TotalSpecificProbes,p0);
 
 DurationPValue = 1- binocdf(TotalCorrectDuration-1,TotalSpecificProbes,p0);
+
 
