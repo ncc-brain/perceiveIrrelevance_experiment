@@ -1,7 +1,6 @@
 
 
-% this script is for calculating the accuracy of the responses given by the
-% participants for orientation and duration 
+% this script is preparing the critical data for binomial test. 
 
 clear
 clc
@@ -11,10 +10,10 @@ configIrrelevant;
 cd(processedDataIrrelevant)
 addpath(genpath(processedDataIrrelevant)); 
 
-faceCritical = load("faceCritical.mat");
+faceCritical = load("faceCritical.mat"); 
 objectCritical = load('objectCritical.mat');
 
-faceCriticalTrials = faceCritical.faceCriticalTrial;
+faceCriticalTrials = faceCritical.faceCriticalTrial; 
 objectCriticalTrials = objectCritical.objectCriticalTrial;
 
 % performance in orientation & duration for faces 
@@ -121,7 +120,14 @@ save(fullfile(processedDataIrrelevant,binomialTablesFilename),'binomialTables');
 
 p0 = 0.5; %null hypothesis chance level p 
 
-pValue = binocdf(TotalCorrect-1,TotalProbes,p0); % P(X<= totalcorrect-1) 
+%binocdf gives the probability of gettin up to certain number of success
+%(total correct number-1). To find the probability of getting certain
+%number or more success ( in my case getting 37 correct values if
+%participants are showing chance level performance  is 1- pValue 
 
+AllPValue = 1-binocdf(TotalCorrect-1,TotalProbes,p0); % reject the null for the whole test 
 
-1-pValue
+OrientationPValue = 1-binocdf(TotalCorrectOrientation-1,TotalSpecificProbes,p0);
+
+DurationPValue = 1- binocdf(TotalCorrectDuration-1,TotalSpecificProbes,p0);
+

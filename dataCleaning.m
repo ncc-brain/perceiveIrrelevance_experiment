@@ -670,7 +670,7 @@ end
   facePostSurprise = 'facePostSurprise.mat';
   save(fullfile(processedDataIrrelevant,facePostSurprise),'facePostSurpriseTrials');
   objectPostSurprise ='objectPostSurprise.mat';
-  save(fullfile(processedDataIrrelevant,facePostSurprise),'objectPostSurpriseTrials');            
+  save(fullfile(processedDataIrrelevant,objectPostSurprise),'objectPostSurpriseTrials');            
  
 
 

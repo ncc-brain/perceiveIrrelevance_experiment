@@ -1,7 +1,6 @@
 
 
-% this script is for calculating the accuracy of the responses given by the
-% participants for orientation and duration 
+% this script is preparing the critical trial and post-surprise data for binomial test. 
 
 clear
 clc
@@ -11,10 +10,14 @@ configIrrelevant;
 cd(processedDataIrrelevant)
 addpath(genpath(processedDataIrrelevant)); 
 
-faceCritical = load("faceCritical.mat");
-objectCritical = load('objectCritical.mat');
+faceCritical = load("faceCritical.mat"); % load the critical and post data
+facePost = load ('facePostSurprise.mat');
 
-faceCriticalTrials = faceCritical.faceCriticalTrial;
+objectCritical = load('objectCritical.mat');
+objectPost = load('ob')
+
+
+faceCriticalTrials = faceCritical.faceCriticalTrial; 
 objectCriticalTrials = objectCritical.objectCriticalTrial;
 
 % performance in orientation & duration for faces 
@@ -128,5 +131,7 @@ p0 = 0.5; %null hypothesis chance level p
 
 AllPValue = 1-binocdf(TotalCorrect-1,TotalProbes,p0); % reject the null for the whole test 
 
+OrientationPValue = 1-binocdf(TotalCorrectOrientation-1,TotalSpecificProbes,p0);
 
+DurationPValue = 1- binocdf(TotalCorrectDuration-1,TotalSpecificProbes,p0);
 

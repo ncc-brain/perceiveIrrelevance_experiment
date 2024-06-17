@@ -29,13 +29,94 @@ orientationAllObject =[];
 durationAllObject = [];
 
 
-for i = 1:numel(faceCritical)
+for i = 1:numel(faceCritical) 
 
-    currentCell = faceCritical{i};
-    currentOrientation = currentCell.orientationPerformance;
-    currentDuration = currentCell.durationPerformance;
-    orientationAllFace(i) = currentOrientation;
-    durationAllFace (i) = curre
+    currentCellFace = faceCritical{i};
+    currentOrientationFace = currentCellFace.orientationPerformance;
+    currentDurationFace = currentCellFace.durationPerformance;
+    orientationAllFace(i) = currentOrientationFace;
+    durationAllFace (i) = currentDurationFace;
     
 
 end
+
+
+
+for j = 1:numel(objectCritical)
+
+
+    currentCell = objectCritical{j};
+    currentOrientation = currentCell.orientationPerformance;
+    currentDuration = currentCell.durationPerformance;
+    orientationAllObject(j) = currentOrientation;
+    durationAllObject(j) = currentDuration;
+    
+end
+
+%generate contingency tables 
+
+AllOrientation = [orientationAllFace,orientationAllObject];
+AllDuration = [durationAllFace,durationAllObject];
+
+
+categoryNames = {'wrong', 'correct'}; 
+
+
+AllOrientation = categorical(AllOrientation, [0, 1], categoryNames);
+AllDuration = categorical(AllDuration,[0, 1], categoryNames);
+
+[contTable, ~, ~, labels] = crosstab(AllOrientation, AllDuration);
+
+% Manually create unique row and column labels
+orientationLabels = {'OrientationWrong', 'OrientationCorrect'};
+durationLabels = {'DurationWrong', 'DurationCorrect'};
+
+contingencyTable = array2table(contTable, 'VariableNames', durationLabels, 'RowNames', orientationLabels);
+
+contingencyTableFile = 'contingencyTable.mat'; %save processed data
+save(fullfile(processedDataIrrelevant,contingencyTableFile),'contingencyTable');
+
+
+% chi square for independence
+
+% null hypothsis : orientation and duration are not related
+% h1 : orientation & duration are related. 
+
+% step 1 
+
+% calculate the expected frequencies 
+
+totalObservation = sum(contTable(:));
+
+rowTotal = [];
+colTotal = [];
+expectedFrequency = []; % expected values if two variables are unrelated. 
+
+
+for i = 1:size(contTable,1)
+    for j = 1:size(contTable,2) % contTable involves observed values. 
+        rowTotal = sum(contTable(i, :));     % row r total
+        colTotal = sum(contTable(:, j));     % Column c total
+        expectedFrequency(i, j) = (rowTotal * colTotal) / totalObservation; % here I calculate the expected frequency if variables are unrelated
+    end
+end
+
+
+% calculate chi square 
+
+% X2 = ((observed-expected)/expected)2 
+
+for i = 1:size(contTable,1)
+
+     for j = 1:size(contTable,2)
+
+         cqiStep1 = 
+
+
+     end
+
+end
+
+
+
+%[h, p, stats] = chi2test(contTable);
