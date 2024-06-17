@@ -7,8 +7,7 @@ function[BinomialTable] = binomialFunction(totalProbes,correctProbes,group)
 %  totalProbes : total data set for given category - nr of times given
 %  probe is asked
 %  correctProbes : total correct responses for the given probe
-%  group : category you conduct the binomial test, should be string (e.g.
-%  'face' or 'orientation' 
+%  group : category you conduct 
 
 
 alpha = 0.05;
