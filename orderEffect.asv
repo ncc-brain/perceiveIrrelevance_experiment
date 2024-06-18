@@ -1,0 +1,30 @@
+
+
+% this script is to test the effect of order on the accuracy of the results
+
+clear
+clc
+addpath('./')
+configIrrelevant;
+
+cd(processedDataIrrelevant)
+addpath(genpath(processedDataIrrelevant)); 
+
+load('facePostSurprise.mat');
+load('objectPostSurprise.mat');
+load('faceCritical.mat');
+load('objectCritical.mat');
+
+facePost = facePostSurpriseTrials;
+objectPost = objectPostSurpriseTrials;
+
+faceCritical = faceCriticalTrial;
+objectCritical = objectCriticalTrial;
+
+%get the probe order (only saved for the post-surprise but it is same as
+%critical) 
+
+OrientationFirs
+
+
+
