@@ -85,9 +85,16 @@ TotalCorrect = TotalCorrectOrientation + TotalCorrectDuration;
 TotalCorrectFace = correctOrientationFace + correctDurationFace;
 TotalCorrectObject = correctOrientationObject + correctDurationObject;
 
+TotalCorrectObjectOrientation = correctOrientationObject;
+TotalCorrectObjectDuration = correctDurationObject;
+
+TotalCorrectFaceOrientation = correctOrientationFace;
+TotalCorrectFaceDuration = correctDurationFace;
+
 CriticalAccuracyTable = table(TotalFaceProbes,TotalObjectProbes,TotalSpecificProbes,TotalProbes,TotalCorrectOrientation,...
-    TotalCorrectDuration,TotalCorrect,TotalCorrectFace,TotalCorrectObject,'VariableNames',{'NrFaceProbes','NrObjectProbes','Nr1IrrelevantProbe',...
-    'NrAllirrelevantProbes','totalCorrectOrientation','totalCorrectDuration','TotalCorrectResponse','totalCorrectFace','totalCorrectObject'});
+    TotalCorrectDuration,TotalCorrect,TotalCorrectFace,TotalCorrectObject,TotalCorrectObjectOrientation,TotalCorrectObjectDuration,TotalCorrectFaceOrientation,TotalCorrectFaceDuration,'VariableNames',{'NrFaceProbes','NrObjectProbes','Nr1IrrelevantProbe',...
+    'NrAllirrelevantProbes','totalCorrectOrientation','totalCorrectDuration','TotalCorrectResponse','totalCorrectFace','totalCorrectObject','TotalCorrectObjectOrientation',...
+   'TotalCorrectObjectDuration','TotalCorrectFaceOrientation','TotalCorrectFaceDuration'});
 
 
 % accuracy table for face post surprise 
@@ -178,9 +185,16 @@ TotalPostCorrect = TotalPostCorrectOrientation + TotalPostCorrectDuration;
 TotalPostCorrectFace = PostTotalcorrectOrientationFace + PostTotalcorrectDurationFace;
 TotalPostCorrectObject = PostTotalcorrectOrientationObject + PostTotalcorrectDurationObject;
 
+TotalPostCorrectOrientationObject = PostTotalcorrectOrientationObject;
+TotalPostCorrectDurationObject = PostTotalcorrectDurationObject;
+
+TotalPostCorrectOrientationFace = PostTotalcorrectOrientationFace;
+TotalPostCorrectDurationFace = PostTotalcorrectDurationFace;
+
 PostAccuracyTable = table(TotalPostFaceProbes,TotalPostObjectProbes,TotalPostSpecificProbes,TotalPostProbes,TotalPostCorrectOrientation,...
-    TotalPostCorrectDuration,TotalPostCorrect,TotalPostCorrectFace,TotalPostCorrectObject,'VariableNames',{'NrFaceProbes','NrObjectProbes','Nr1IrrelevantProbe',...
-    'NrAllirrelevantProbes','totalCorrectOrientation','totalCorrectDuration','TotalCorrectResponse','totalCorrectFace','totalCorrectObject'});
+    TotalPostCorrectDuration,TotalPostCorrect,TotalPostCorrectFace,TotalPostCorrectObject,TotalPostCorrectOrientationObject,TotalPostCorrectDurationObject,TotalPostCorrectOrientationFace,TotalPostCorrectDurationFace,'VariableNames',{'NrFaceProbes','NrObjectProbes','Nr1IrrelevantProbe',...
+    'NrAllirrelevantProbes','totalCorrectOrientation','totalCorrectDuration','TotalCorrectResponse','totalCorrectFace','totalCorrectObject',...
+    'TotalPostCorrectOrientationObject','TotalPostCorrectDurationObject','TotalPostCorrectOrientationFace','TotalPostCorrectDurationFace'});
 
 
 % save the tables 
