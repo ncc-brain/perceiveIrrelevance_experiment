@@ -28,7 +28,7 @@ facePost = facePostSurpriseTrials;
 objectPost = objectPostSurpriseTrials;
 
 
-%% Contingency table groups 
+%% Contingency tables 
 
 %critical
 
@@ -41,10 +41,7 @@ durationAllObject = [];
 
 if numel(faceCritical) ~= numel(objectCritical)
 
-    disp('ERROR! , size of the critical trials should be same');
-
-end
-
+    disp('ERROR! , size of the ')
 
 for i = 1:numel(faceCritical) 
 
@@ -64,24 +61,38 @@ for i = 1:numel(faceCritical)
 end
 
 
-%generate comparison tables for orientation & duration 
+for j = 1:numel(objectCritical)
 
+
+    
+end
+
+%generate contingency tables 
 
 AllOrientation = [orientationAllFace,orientationAllObject];
 AllDuration = [durationAllFace,durationAllObject];
 
 
+AllOrientation = categorical(AllOrientation, [0, 1], categoryNames);
+AllDuration = categorical(AllDuration,[0, 1], categoryNames);
 
-%first post surprise groups 
+[contTable, chi2, p, labels] = crosstab(AllOrientation, AllDuration);
 
-% check size 
-if numel(facePost) ~= numel(objectPost)
+% Manually create unique row and column labels
+orientationLabels = {'OrientationWrong', 'OrientationCorrect'};
+durationLabels = {'DurationWrong', 'DurationCorrect'};
 
-    disp('ERROR! , size of the post trials should be same');
+contingencyTable = array2table(contTable, 'VariableNames', durationLabels, 'RowNames', orientationLabels);
 
-end
+% save the table 
+contingencyTableFile = 'contingencyTable.mat';
+
+save(fullfile(processedDataIrrelevant,contingencyTableFile),'contingencyTable');
 
 
+% surprise and postsurprise performance contingency table 
+
+%first post surprise table- face
 
 for i = 1:numel(facePost) 
 
@@ -90,6 +101,12 @@ for i = 1:numel(facePost)
     currentDurationPostFace = currentPostFace.durationAccuracy(1);
     orientationPostFace(i) = currentOrientationPostFace;
     durationPostFace(i) = currentDurationPostFace;
+    
+end
+
+% first post surprise table- object
+
+for i = 1:numel(objectPost) 
 
     currentPostObject = objectPost{i};
     currentOrientationPostObject= currentPostObject.orientationAccuracy(1);
@@ -99,7 +116,6 @@ for i = 1:numel(facePost)
     
 end
 
-% generate groups 
 
 AllPostSurprise = [ orientationPostFace,durationPostFace,orientationPostObject, durationPostObject];
 AllSurprise = [orientationAllFace,orientationAllObject,durationAllFace,durationAllObject];
@@ -109,8 +125,63 @@ AllSurprise = [orientationAllFace,orientationAllObject,durationAllFace,durationA
 
 
 
+% contingency table 
 
 
+
+AllSurprise = categorical(AllSurprise, [0, 1], categoryNames);
+AllPostSurprise = categorical(AllPostSurprise,[0, 1], categoryNames);
+
+[contTablePerf, chi2, p, labelsPerf] = crosstab(AllSurprise, AllPostSurprise);
+
+% Manually create unique row and column labels
+SurpriseLabels = {'SurpriseWrong', 'SurpriseCorrect'};
+PostSurpriseLabels = {'PostWrong', 'PostCorrect'};
+
+contingencyTablePerf = array2table(contTablePerf, 'VariableNames', SurpriseLabels, 'RowNames', PostSurpriseLabels);
+%%
+% chi square for independence
+
+% null hypothsis : orientation and duration are not related
+% h1 : orientation & duration are related. 
+
+% step 1 
+
+% calculate the expected frequencies 
+
+totalObservation = sum(contTable(:));
+
+rowTotal = [];
+colTotal = [];
+expectedTable = []; % expected values if two variables are unrelated. 
+
+
+for i = 1:size(contTable,1)
+    for j = 1:size(contTable,2) % contTable involves observed values. 
+        rowTotal = sum(contTable(i, :));     % row r total
+        colTotal = sum(contTable(:, j));     % Column c total
+        expectedTable(i, j) = (rowTotal * colTotal) / totalObservation; % here I calculate the expected frequency if variables are unrelated
+    end
+end
+
+
+% calculate chi square 
+
+% X2 = ((observed-expected)/expected)2 
+
+ cqiSquareFirstStep = [];
+
+for i = 1:size(contTable,1)
+
+     for j = 1:size(contTable,2)
+
+         cqiSquareFirstStep(i,j) = ((contTable(i,j) - expectedTable(i,j))^2)/(expectedTable(i,j));
+
+     end
+
+end
+
+cqiSquare = sum(cqiSquareFirstStep(:));
 
 % critical chi square value ( df and alpha is necessery)
 
