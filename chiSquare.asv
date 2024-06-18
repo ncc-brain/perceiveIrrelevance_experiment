@@ -28,7 +28,7 @@ facePost = facePostSurpriseTrials;
 objectPost = objectPostSurpriseTrials;
 
 
-%% Contingency tables 
+%% Contingency table groups 
 
 %critical
 
@@ -41,7 +41,10 @@ durationAllObject = [];
 
 if numel(faceCritical) ~= numel(objectCritical)
 
-    disp('ERROR! , size of the ')
+    disp('ERROR! , size of the critical trials should be same');
+
+end
+
 
 for i = 1:numel(faceCritical) 
 
@@ -51,48 +54,34 @@ for i = 1:numel(faceCritical)
     orientationAllFace(i) = currentOrientationFace;
     durationAllFace (i) = currentDurationFace;
 
-    currentCellObject = objectCritical{j};
+    currentCellObject = objectCritical{i};
     currentOrientationObject = currentCellObject.orientationPerformance;
     currentDurationObject = currentCellObject.durationPerformance;
-    orientationAllObject(j) = currentOrientationObject;
-    durationAllObject(j) = currentDurationObject;
+    orientationAllObject(i) = currentOrientationObject;
+    durationAllObject(i) = currentDurationObject;
     
     
 end
 
 
-for j = 1:numel(objectCritical)
+%generate comparison tables for orientation & duration 
 
-
-    
-end
-
-%generate contingency tables 
 
 AllOrientation = [orientationAllFace,orientationAllObject];
 AllDuration = [durationAllFace,durationAllObject];
 
 
-AllOrientation = categorical(AllOrientation, [0, 1], categoryNames);
-AllDuration = categorical(AllDuration,[0, 1], categoryNames);
 
-[contTable, chi2, p, labels] = crosstab(AllOrientation, AllDuration);
+%first post surprise groups 
 
-% Manually create unique row and column labels
-orientationLabels = {'OrientationWrong', 'OrientationCorrect'};
-durationLabels = {'DurationWrong', 'DurationCorrect'};
+% check size 
+if numel(facePost) ~= numel(objectPost)
 
-contingencyTable = array2table(contTable, 'VariableNames', durationLabels, 'RowNames', orientationLabels);
+    disp('ERROR! , size of the post trials should be same');
 
-% save the table 
-contingencyTableFile = 'contingencyTable.mat';
-
-save(fullfile(processedDataIrrelevant,contingencyTableFile),'contingencyTable');
+end
 
 
-% surprise and postsurprise performance contingency table 
-
-%first post surprise table- face
 
 for i = 1:numel(facePost) 
 
@@ -101,12 +90,6 @@ for i = 1:numel(facePost)
     currentDurationPostFace = currentPostFace.durationAccuracy(1);
     orientationPostFace(i) = currentOrientationPostFace;
     durationPostFace(i) = currentDurationPostFace;
-    
-end
-
-% first post surprise table- object
-
-for i = 1:numel(objectPost) 
 
     currentPostObject = objectPost{i};
     currentOrientationPostObject= currentPostObject.orientationAccuracy(1);
@@ -116,86 +99,32 @@ for i = 1:numel(objectPost)
     
 end
 
+% generate groups 
 
-AllPostSurprise = [ orientationPostFace,durationPostFace,orientationPostObject, durationPostObject];
+AllPostSurprise = [orientationPostFace,durationPostFace,orientationPostObject, durationPostObject];
 AllSurprise = [orientationAllFace,orientationAllObject,durationAllFace,durationAllObject];
 
 
+%% Chi square 
+
+[fisherProbe,chiProbe]= chiSquareFunction(AllOrientation,AllDuration); % compare two groups
+
+ProbeFisher = fisherProbe;
+ProbeChi = chiProbe; 
+
+pilot1ProbeFisherFile = 'pilot1ProbeFisher';
+save(fullfile(processedDataIrrelevant,pilot1ProbeFisherFile),'ProbeFisher');
+
+pilot1ProbeChiFIle = 'pilot1ProbeChi';
+save(fullfile(processedDataIrrelevant,pilot1ProbeChiFIle),'ProbeChi');
+
+[fisherPerf,chiPerf]=chiSquareFunction(AllSurprise,AllPostSurprise);
+
+pilot1PerformanceFisherFile = 'pilot1PerfFisher';
+save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf');
+
+pilot1PerformanceChiFIle = 'pilot1ProbeChi';
+save(fullfile(processedDataIrrelevant,pilot1ProbeChiFIle),'ProbeChi');
 
 
 
-
-% contingency table 
-
-
-
-AllSurprise = categorical(AllSurprise, [0, 1], categoryNames);
-AllPostSurprise = categorical(AllPostSurprise,[0, 1], categoryNames);
-
-[contTablePerf, chi2, p, labelsPerf] = crosstab(AllSurprise, AllPostSurprise);
-
-% Manually create unique row and column labels
-SurpriseLabels = {'SurpriseWrong', 'SurpriseCorrect'};
-PostSurpriseLabels = {'PostWrong', 'PostCorrect'};
-
-contingencyTablePerf = array2table(contTablePerf, 'VariableNames', SurpriseLabels, 'RowNames', PostSurpriseLabels);
-%%
-% chi square for independence
-
-% null hypothsis : orientation and duration are not related
-% h1 : orientation & duration are related. 
-
-% step 1 
-
-% calculate the expected frequencies 
-
-totalObservation = sum(contTable(:));
-
-rowTotal = [];
-colTotal = [];
-expectedTable = []; % expected values if two variables are unrelated. 
-
-
-for i = 1:size(contTable,1)
-    for j = 1:size(contTable,2) % contTable involves observed values. 
-        rowTotal = sum(contTable(i, :));     % row r total
-        colTotal = sum(contTable(:, j));     % Column c total
-        expectedTable(i, j) = (rowTotal * colTotal) / totalObservation; % here I calculate the expected frequency if variables are unrelated
-    end
-end
-
-
-% calculate chi square 
-
-% X2 = ((observed-expected)/expected)2 
-
- cqiSquareFirstStep = [];
-
-for i = 1:size(contTable,1)
-
-     for j = 1:size(contTable,2)
-
-         cqiSquareFirstStep(i,j) = ((contTable(i,j) - expectedTable(i,j))^2)/(expectedTable(i,j));
-
-     end
-
-end
-
-cqiSquare = sum(cqiSquareFirstStep(:));
-
-% critical chi square value ( df and alpha is necessery)
-
-criticalChi = chi2inv((1-0.05),1); % p is percentile, 1 is df
-
-
-if cqiSquare > criticalChi
-
-    disp('groups are significantly different')
-else
-    disp('groups are not significanly different')
-
-end
-
-%Fischer's exact test 
-
-%[h,p,stats] = fishertest(contTable);

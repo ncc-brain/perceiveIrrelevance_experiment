@@ -1,8 +1,7 @@
 
-% this script if for deciding the groups you want to conduct chi square &
-% create contingency tables for them 
-% finally using the function chiSquareFunction, you conduct chi square of
-% independence
+% this script if for deciding the groups you want to conduct chi square 
+% and using the function ,chiSquareFunction, to conduct chi square of
+% independence & fisher's extract test 
 
 % in this experiment we will compare 2 probes (orientation & duration) and performance in surprise %
 % first control 
@@ -54,11 +53,11 @@ for i = 1:numel(faceCritical)
     orientationAllFace(i) = currentOrientationFace;
     durationAllFace (i) = currentDurationFace;
 
-    currentCellObject = objectCritical{j};
+    currentCellObject = objectCritical{i};
     currentOrientationObject = currentCellObject.orientationPerformance;
     currentDurationObject = currentCellObject.durationPerformance;
-    orientationAllObject(j) = currentOrientationObject;
-    durationAllObject(j) = currentDurationObject;
+    orientationAllObject(i) = currentOrientationObject;
+    durationAllObject(i) = currentDurationObject;
     
     
 end
@@ -101,30 +100,30 @@ end
 
 % generate groups 
 
-AllPostSurprise = [ orientationPostFace,durationPostFace,orientationPostObject, durationPostObject];
+AllPostSurprise = [orientationPostFace,durationPostFace,orientationPostObject, durationPostObject];
 AllSurprise = [orientationAllFace,orientationAllObject,durationAllFace,durationAllObject];
 
 
+%% Chi square 
+
+[fisherProbe,chiProbe]= chiSquareFunction(AllOrientation,AllDuration); % compare two groups
+
+ProbeFisher = fisherProbe;
+ProbeChi = chiProbe; 
+
+pilot1ProbeFisherFile = 'pilot1ProbeFisher';
+save(fullfile(processedDataIrrelevant,pilot1ProbeFisherFile),'ProbeFisher');
+
+pilot1ProbeChiFile = 'pilot1ProbeChi';
+save(fullfile(processedDataIrrelevant,pilot1ProbeChiFile),'ProbeChi');
+
+[fisherPerf,chiPerf]=chiSquareFunction(AllSurprise,AllPostSurprise);
+
+pilot1PerformanceFisherFile = 'pilot1PerfFisher';
+save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf');
+
+pilot1PerformanceChiFile = 'pilot1PerfChi';
+save(fullfile(processedDataIrrelevant,pilot1PerformanceChiFile),'ProbeChi');
 
 
 
-
-
-
-
-% critical chi square value ( df and alpha is necessery)
-
-criticalChi = chi2inv((1-0.05),1); % p is percentile, 1 is df
-
-
-if cqiSquare > criticalChi
-
-    disp('groups are significantly different')
-else
-    disp('groups are not significanly different')
-
-end
-
-%Fischer's exact test 
-
-%[h,p,stats] = fishertest(contTable);
