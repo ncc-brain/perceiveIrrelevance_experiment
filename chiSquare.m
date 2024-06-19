@@ -125,3 +125,17 @@ save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf')
 pilot1PerformanceChiFile = 'pilot1PerfChi';
 save(fullfile(processedDataIrrelevant,pilot1PerformanceChiFile),'ProbeChi');
 
+% compare All faces % All objects 
+
+AllFaces = [orientationAllFace,durationAllFace];
+AllObjects = [orientationAllObject,durationAllObject];
+
+[fisherGroup,chiGroup] = chiSquareFunction(AllFaces,AllObjects);
+
+pilot1GroupsFisherFile = 'pilot1GroupsFisher';
+save(fullfile(processedDataIrrelevant,pilot1GroupsFisherFile),'fisherGroup');
+
+pilot1GroupsChiFile = 'pilot1GroupsChi';
+save(fullfile(processedDataIrrelevant,pilot1GroupsChiFile),'chiGroup');
+
+

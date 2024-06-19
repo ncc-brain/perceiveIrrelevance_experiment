@@ -145,6 +145,36 @@ end
 
 % plot accuracy for order 
 
+% orientation asked first
+
+figure;
+
+bar([correctOrientationOF,correctDurationOF],'FaceColor',orientationColor );
+xlabel('Probes');
+ylabel('Nr of correct responses');
+xticklabels({'Orientation','Duration'});
+title('Accuracy when Orientation Probed First');
+
+ylim([0 12]);
+
+
+
+% duration asked first 
+
+figure;
+
+bar([correctOrientationDF,correctDurationDF],'FaceColor',durationColor );
+xlabel('Probes');
+ylabel('Nr of correct responses');
+xticklabels({'Orientation','Duration'});
+title('Accuracy when Duration Probed First');
+
+ylim([0 12]);
+
+
+
+
+
 
 
 

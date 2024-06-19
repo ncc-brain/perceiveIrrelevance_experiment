@@ -152,9 +152,85 @@ modeObjectDurationConfidence = mode(objectDurationConfidence);
 minObjectDuration = min(objectDurationConfidence);
 maxObjectDuration= max(objectDurationConfidence);
 
+modeConfidenceTable = table(modeFaceOrientationConfidence, minFaceOrientation, maxFaceOrientation, ...
+    modeFaceDurationConfidence, minFaceDuration, maxFaceDuration, ...
+    modeObjectOrientationConfidence, minObjectOrientation, maxObjectOrientation, ...
+    modeObjectDurationConfidence, minObjectDuration, maxObjectDuration, ...
+    'VariableNames', {'modeFaceOrientation', 'minFaceOrientation', 'maxFaceOrientation', ...
+                      'modeFaceDuration', 'minFaceDuration', 'maxFaceDuration', ...
+                      'modeObjectOrientation', 'minObjectOrientation', 'maxObjectOrientation', ...
+                      'modeObjectDuration', 'minObjectDuration', 'maxObjectDuration'});
+
+
+% confidence post surprise - first control 
+
+facePostOrientationConfidence = [];
+facePostDurationConfidence = [];
+objectPostOrientationConfidence = [];
+objectPostDurationConfidence = [];
+
+for i = 1:numel(facePost)
+
+    currentPostFaceTrial = facePost{i};
+    currentPostObjectTrial = objectPost{i};
+     
+    % get the confidence ratings for mode 
+
+        currentPostOrientationFace = currentPostFaceTrial.orientationConfidence(1);
+        currentPostDurationFace = currentPostFaceTrial.durationConfidence(1);
+
+        facePostOrientationConfidence(i) = currentPostOrientationFace;
+        facePostDurationConfidence(i)= currentPostDurationFace;
+
+
+        currentPostOrientationObject = currentPostObjectTrial.orientationConfidence(1);
+        currentPostDurationObject = currentPostObjectTrial.durationConfidence(1);
+
+        objectPostOrientationConfidence(i) = currentPostOrientationObject;
+        objectPostDurationConfidence(i) =  currentPostDurationObject;
+
+     
+end
+
+modePostFaceOrientationConfidence = mode(facePostOrientationConfidence);
+minPostFaceOrientation = min(facePostOrientationConfidence);
+maxPostFaceOrientation = max(facePostOrientationConfidence);
+
+modePostFaceDurationConfidence = mode(facePostDurationConfidence);
+minPostFaceDuration = min(facePostDurationConfidence);
+maxPostFaceDuration = max(facePostDurationConfidence);
+
+
+modePostObjectOrientationConfidence = mode(objectPostOrientationConfidence);
+minPostObjectOrientation = min(objectPostOrientationConfidence);
+maxPostObjectOrientation = max(objectPostOrientationConfidence);
+
+
+modePostObjectDurationConfidence = mode(objectPostDurationConfidence);
+minPostObjectDuration = min(objectPostDurationConfidence);
+maxPostObjectDuration= max(objectPostDurationConfidence);
+
+modePostConfidenceTable = table(modePostFaceOrientationConfidence, minPostFaceOrientation, maxPostFaceOrientation, ...
+    modePostFaceDurationConfidence, minPostFaceDuration, maxPostFaceDuration, ...
+    modePostObjectOrientationConfidence, minPostObjectOrientation, maxPostObjectOrientation, ...
+    modePostObjectDurationConfidence, minPostObjectDuration, maxPostObjectDuration, ...
+    'VariableNames', {'modeFaceOrientation', 'minFaceOrientation', 'maxFaceOrientation', ...
+                      'modeFaceDuration', 'minFaceDuration', 'maxFaceDuration', ...
+                      'modeObjectOrientation', 'minObjectOrientation', 'maxObjectOrientation', ...
+                      'modeObjectDuration', 'minObjectDuration', 'maxObjectDuration'});
+
+
 % mind wandering responses
 
 tabulate(mindWanderingFace);
 tabulate(mindWanderingObject);
+
+% save confidence tables 
+modeConfidenceTableFile = 'pilot1ModeConfidenceTable';
+save(fullfile(processedDataIrrelevant,modeConfidenceTableFile),'modeConfidenceTable');
+
+modePostConfidenceTableFile = 'pilot1ModePostConfidenceTable';
+save(fullfile(processedDataIrrelevant,modePostConfidenceTableFile),'modePostConfidenceTable');
+
 
 
