@@ -1,0 +1,17 @@
+
+
+% accuracy plots 
+
+clear
+clc
+addpath('./')
+configIrrelevant;
+
+cd(processedDataIrrelevant)
+addpath(genpath(processedDataIrrelevant)); 
+
+load('criticalAccuracyTable.mat');
+load('PostAccuracyTable.mat');
+
+% object accuracy plots 
+
