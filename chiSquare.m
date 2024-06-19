@@ -125,5 +125,3 @@ save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf')
 pilot1PerformanceChiFile = 'pilot1PerfChi';
 save(fullfile(processedDataIrrelevant,pilot1PerformanceChiFile),'ProbeChi');
 
-
-
