@@ -117,7 +117,7 @@ save(fullfile(processedDataIrrelevant,pilot1ProbeFisherFile),'ProbeFisher');
 pilot1ProbeChiFile = 'pilot1ProbeChi';
 save(fullfile(processedDataIrrelevant,pilot1ProbeChiFile),'ProbeChi');
 
-[fisherPerf,chiPerf]=chiSquareFunction(AllSurprise,AllPostSurprise);
+[fisherPerf,chiPerf]=chiSquareFunction(AllSurprise,AllPostSurprise); % difference between surprise and post surprise 
 
 pilot1PerformanceFisherFile = 'pilot1PerfFisher';
 save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf');

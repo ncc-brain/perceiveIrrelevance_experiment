@@ -143,6 +143,10 @@ for i = 1:numel(durationFirst)
 
 end
 
+% plot accuracy for order 
+
+
+
 
 % check whether groups are different 
 
