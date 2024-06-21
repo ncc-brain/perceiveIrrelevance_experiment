@@ -66,37 +66,37 @@ binoPostObject4 = binomialFunction(PostAccuracyTable.NrObjectProbes(4),PostAccur
 
 % object specific probes 
 
-binoObjectOrientation = binomialFunction(CriticalAccuracyTable.Nr1IrrelevantProbe,CriticalAccuracyTable.TotalCorrectObjectOrientation,'criticalObjectOrientation');
-binoObjectDuration = binomialFunction(CriticalAccuracyTable.Nr1IrrelevantProbe,CriticalAccuracyTable.TotalCorrectObjectDuration,'criticalObjectDuration');
+binoObjectOrientation = binomialFunction(CriticalAccuracyTable.Total1ProbeObject,CriticalAccuracyTable.TotalCorrectObjectOrientation,'criticalObjectOrientation');
+binoObjectDuration = binomialFunction(CriticalAccuracyTable.Total1ProbeObject,CriticalAccuracyTable.TotalCorrectObjectDuration,'criticalObjectDuration');
 
-binoPostObjectOrientation1 = binomialFunction(PostAccuracyTable.NrObjectProbes(1),PostAccuracyTable.TotalPostCorrectOrientationObject(1),'postObjectOrientation1');
-binoPostObjectDuration1 = binomialFunction(PostAccuracyTable.NrObjectProbes(1),PostAccuracyTable.TotalPostCorrectDurationObject(1),'postObjectDuration1');
+binoPostObjectOrientation1 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(1),PostAccuracyTable.TotalPostCorrectOrientationObject(1),'postObjectOrientation1');
+binoPostObjectDuration1 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(1),PostAccuracyTable.TotalPostCorrectDurationObject(1),'postObjectDuration1');
 
-binoPostObjectOrientation2 = binomialFunction(PostAccuracyTable.NrObjectProbes(2),PostAccuracyTable.TotalPostCorrectOrientationObject(2),'postObjectOrientation2');
-binoPostObjectDuration2 = binomialFunction(PostAccuracyTable.NrObjectProbes(2),PostAccuracyTable.TotalPostCorrectDurationObject(2),'postObjectDuration2');
+binoPostObjectOrientation2 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(2),PostAccuracyTable.TotalPostCorrectOrientationObject(2),'postObjectOrientation2');
+binoPostObjectDuration2 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(2),PostAccuracyTable.TotalPostCorrectDurationObject(2),'postObjectDuration2');
 
-binoPostObjectOrientation3 = binomialFunction(PostAccuracyTable.NrObjectProbes(3),PostAccuracyTable.TotalPostCorrectOrientationObject(3),'postObjectOrientation3');
-binoPostObjectDuration3 = binomialFunction(PostAccuracyTable.NrObjectProbes(3),PostAccuracyTable.TotalPostCorrectOrientationObject(3),'postObjectDuration3');
+binoPostObjectOrientation3 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(3),PostAccuracyTable.TotalPostCorrectOrientationObject(3),'postObjectOrientation3');
+binoPostObjectDuration3 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(3),PostAccuracyTable.TotalPostCorrectOrientationObject(3),'postObjectDuration3');
 
-binoPostObjectOrientation4 = binomialFunction(PostAccuracyTable.NrObjectProbes(4),PostAccuracyTable.TotalPostCorrectOrientationObject(4),'postObjectOrientation4');
-binoPostObjectDuration4 = binomialFunction(PostAccuracyTable.NrObjectProbes(4),PostAccuracyTable.TotalPostCorrectDurationObject(4),'postObjectDuration4');
+binoPostObjectOrientation4 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(4),PostAccuracyTable.TotalPostCorrectOrientationObject(4),'postObjectOrientation4');
+binoPostObjectDuration4 = binomialFunction(PostAccuracyTable.Total1PostProbeObject(4),PostAccuracyTable.TotalPostCorrectDurationObject(4),'postObjectDuration4');
 
 % face specific probes 
 
-binoFaceOrientation = binomialFunction(CriticalAccuracyTable.Nr1IrrelevantProbe,CriticalAccuracyTable.TotalCorrectFaceOrientation,'criticalFaceOrientation');
-binoFaceDuration = binomialFunction(CriticalAccuracyTable.Nr1IrrelevantProbe,CriticalAccuracyTable.TotalCorrectFaceDuration,'criticalFaceDuration');
+binoFaceOrientation = binomialFunction(CriticalAccuracyTable.Total1ProbeFace,CriticalAccuracyTable.TotalCorrectFaceOrientation,'criticalFaceOrientation');
+binoFaceDuration = binomialFunction(CriticalAccuracyTable.Total1ProbeFace,CriticalAccuracyTable.TotalCorrectFaceDuration,'criticalFaceDuration');
 
-binoPostFaceOrientation1 = binomialFunction(PostAccuracyTable.NrObjectProbes(1),PostAccuracyTable.TotalPostCorrectOrientationFace(1),'postFaceOrientation1');
-binoPostFaceDuration1 = binomialFunction(PostAccuracyTable.NrObjectProbes(1),PostAccuracyTable.TotalPostCorrectDurationFace(1),'postFaceDuration1');
+binoPostFaceOrientation1 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(1),PostAccuracyTable.TotalPostCorrectOrientationFace(1),'postFaceOrientation1');
+binoPostFaceDuration1 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(1),PostAccuracyTable.TotalPostCorrectDurationFace(1),'postFaceDuration1');
 
-binoPostFaceOrientation2 = binomialFunction(PostAccuracyTable.NrObjectProbes(2),PostAccuracyTable.TotalPostCorrectOrientationFace(2),'postFaceOrientation2');
-binoPostFaceDuration2 = binomialFunction(PostAccuracyTable.NrObjectProbes(2),PostAccuracyTable.TotalPostCorrectDurationFace(2),'postFaceDuration2');
+binoPostFaceOrientation2 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(2),PostAccuracyTable.TotalPostCorrectOrientationFace(2),'postFaceOrientation2');
+binoPostFaceDuration2 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(2),PostAccuracyTable.TotalPostCorrectDurationFace(2),'postFaceDuration2');
 
-binoPostFaceOrientation3 = binomialFunction(PostAccuracyTable.NrObjectProbes(3),PostAccuracyTable.TotalPostCorrectOrientationFace(3),'postFaceOrientation3');
-binoPostFaceDuration3 = binomialFunction(PostAccuracyTable.NrObjectProbes(3),PostAccuracyTable.TotalPostCorrectDurationFace(3),'postFaceDuration3');
+binoPostFaceOrientation3 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(3),PostAccuracyTable.TotalPostCorrectOrientationFace(3),'postFaceOrientation3');
+binoPostFaceDuration3 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(3),PostAccuracyTable.TotalPostCorrectDurationFace(3),'postFaceDuration3');
 
-binoPostFaceOrientation4 = binomialFunction(PostAccuracyTable.NrObjectProbes(4),PostAccuracyTable.TotalPostCorrectOrientationFace(4),'postFaceOrientation4');
-binoPostFaceDuration4 = binomialFunction(PostAccuracyTable.NrObjectProbes(4),PostAccuracyTable.TotalPostCorrectDurationFace(4),'postFaceDuration4');
+binoPostFaceOrientation4 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(4),PostAccuracyTable.TotalPostCorrectOrientationFace(4),'postFaceOrientation4');
+binoPostFaceDuration4 = binomialFunction(PostAccuracyTable.Total1PostProbeFace(4),PostAccuracyTable.TotalPostCorrectDurationFace(4),'postFaceDuration4');
 
 % all probes 
 

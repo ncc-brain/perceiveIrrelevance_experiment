@@ -15,7 +15,7 @@ load('PostAccuracyTable.mat');
 
 critical = CriticalAccuracyTable;
 post = PostAccuracyTable;
-% object critical  accuracy plots 
+% object critical correct response plots 
 
 figure;
 
@@ -27,7 +27,7 @@ title('Object Surprise Trial Probe Accuracy');
 
 ylim([0 12]);
 
-% face  critical accuracy table 
+% face  critical correct response plot table 
 
 bar([critical.TotalCorrectFaceOrientation, critical.TotalCorrectFaceDuration],'FaceColor',faceColor);
 xlabel('Probe');
@@ -37,7 +37,7 @@ title('Face Surprise Trial Probe Accuracy');
 
 ylim([0 12]);
 
-% object post-suprise accuracy plots
+% object post-suprise correct response plots
 
 figure;
 
@@ -49,7 +49,7 @@ title('Object First Control Probe Accuracy');
 
 ylim([0 12]);
 
-% face post-surprise accuracy plots 
+% face post-surprise correct response plots 
 
 figure;
 
@@ -60,4 +60,9 @@ xticklabels({'Orientation','Duration'});
 title('Face First Control Probe Accuracy');
 
 ylim([0 12]);
+
+% object accuracy plot 
+
+AccuracyObjectOrientation = critical.TotalCorrectObjectOrientation/critical.Nr1IrrelevantProbe
+AccuracyObjectDuration = 
 
