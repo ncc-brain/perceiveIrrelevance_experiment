@@ -12,3 +12,7 @@ faceColor = [0.7686, 0.5922, 0.6353];
 
 orientationColor = [1, 0.9255, 0.6510];
 durationColor = [1, 0.6510, 0.6510];
+
+CombinedColor = [1.0,0.706,0.635];
+
+AllCombinedColor = [0.898,0.596,0.608];
