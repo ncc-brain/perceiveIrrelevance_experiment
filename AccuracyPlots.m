@@ -306,14 +306,11 @@ hold off;
 
 %% Post Combined 
 
-totalPostOrientationAccuracy = post.totalCorrectOrientation(1)/post.Nr1IrrelevantProbe(1);
+totalPostOrientationAccuracy = post.totalCorrectOrientation(1)/post.Nr1IrrelevantProbe(1); % accuracy values 
 totalPostDurationAccuracy = post.totalCorrectDuration(1)/post.Nr1IrrelevantProbe(1);
 
-totalPostOrientationP = binomialTables.postOrientation1(4);
+totalPostOrientationP = binomialTables.postOrientation1(4); % P values 
 totalPostDurationP = binomialTables.postDuration1(4);
-
-totalPostAccuracy = [totalPostOrientationAccuracy,totalPostDurationAccuracy];
-totalPostAccuracyP = [totalPostOrientationP,totalPostDurationP];
 
 
 PostlowerBoundOrientation = binomialTables.postOrientation1(2);
@@ -340,15 +337,15 @@ PostCombinedPlot.CData(2,:)= durationColor;
 
 % set the length of the error bars 
 
-lowerBoundOrientationL = totalOrientationAccuracy - TotalConfidenceIntervals(1, 1); 
-upperBoundOrientationL = TotalConfidenceIntervals(1, 2) - totalOrientationAccuracy;
+PostlowerBoundOrientationL = totalPostOrientationAccuracy - PostTotalConfidenceIntervals(1, 1); 
+PostupperBoundOrientationL = PostTotalConfidenceIntervals(1, 2) - totalPostOrientationAccuracy;
 
-lowerBoundDurationL = totalDurationAccuracy - TotalConfidenceIntervals(2, 1);
-upperBoundDurationL = TotalConfidenceIntervals(2, 2) - totalDurationAccuracy;
+PostlowerBoundDurationL = totalPostDurationAccuracy - PostTotalConfidenceIntervals(2, 1);
+PostupperBoundDurationL = PostTotalConfidenceIntervals(2, 2) - totalPostDurationAccuracy;
 
 
-errorbar(1, totalOrientationAccuracy, lowerBoundOrientationL, upperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
-errorbar(2, totalDurationAccuracy, lowerBoundDurationL, upperBoundDurationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for duration
+errorbar(1, totalPostOrientationAccuracy, PostlowerBoundOrientationL, PostupperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
+errorbar(2, totalPostDurationAccuracy, PostlowerBoundDurationL, PostupperBoundDurationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for duration
 
 
 yline(ChanceLevel, '--k'); % add the line to the chance level 
@@ -357,7 +354,7 @@ yticks([0, 0.5, 1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
 xlabel('Probe','FontWeight','bold','FontSize', 14);
-title('Surprise Trial Probe Accuracy','FontSize', 16);
+title('First Control Probe Accuracy','FontSize', 16);
 
 ax = gca; % Get the current axes
 ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
@@ -369,16 +366,18 @@ ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
     
-    if totalOrientationP < PValue  % p value for combined orientation
-        text(1+0.40 - Astoffset, totalOrientationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if totalPostOrientationP < PValue  % p value for combined orientation
+        text(1+0.40 - Astoffset, totalPostOrientationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
     
-    if totalDurationP < PValue % p value for combined duration
-        text(2+0.40 - Astoffset, totalDurationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if totalPostDurationP < PValue % p value for combined duration
+        text(2+0.40 - Astoffset, totalPostDurationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
 
 hold off;
 
+
+%% Post All Combined 
 
 
 

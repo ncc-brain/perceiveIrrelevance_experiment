@@ -306,14 +306,11 @@ hold off;
 
 %% Post Combined 
 
-totalPostOrientationAccuracy = post.totalCorrectOrientation(1)/post.Nr1IrrelevantProbe(1);
+totalPostOrientationAccuracy = post.totalCorrectOrientation(1)/post.Nr1IrrelevantProbe(1); % accuracy values 
 totalPostDurationAccuracy = post.totalCorrectDuration(1)/post.Nr1IrrelevantProbe(1);
 
-totalPostOrientationP = binomialTables.postOrientation1(4);
+totalPostOrientationP = binomialTables.postOrientation1(4); % P values 
 totalPostDurationP = binomialTables.postDuration1(4);
-
-totalPostAccuracy = [totalPostOrientationAccuracy,totalPostDurationAccuracy];
-totalPostAccuracyP = [totalPostOrientationP,totalPostDurationP];
 
 
 PostlowerBoundOrientation = binomialTables.postOrientation1(2);
@@ -334,17 +331,17 @@ hold on;
 
 % set the colours 
 
-AccuracyCombinedPlot.FaceColor = 'flat';
-AccuracyCombinedPlot.CData(1,:) = orientationColor; 
-AccuracyCombinedPlot.CData(2,:)= durationColor;
+PostCombinedPlot.FaceColor = 'flat';
+PostCombinedPlot.CData(1,:) = orientationColor; 
+PostCombinedPlot.CData(2,:)= durationColor;
 
 % set the length of the error bars 
 
-lowerBoundOrientationL = totalOrientationAccuracy - TotalConfidenceIntervals(1, 1); 
-upperBoundOrientationL = TotalConfidenceIntervals(1, 2) - totalOrientationAccuracy;
+PostlowerBoundOrientationL = totalPostOrientationAccuracy - PostTotalConfidenceIntervals(1, 1); 
+PostupperBoundOrientationL = PostTotalConfidenceIntervals(1, 2) - totalPostOrientationAccuracy;
 
-lowerBoundDurationL = totalDurationAccuracy - TotalConfidenceIntervals(2, 1);
-upperBoundDurationL = TotalConfidenceIntervals(2, 2) - totalDurationAccuracy;
+PostlowerBoundDurationL = totalPostDurationAccuracy - TotalConfidenceIntervals(2, 1);
+PostupperBoundDurationL = TotalConfidenceIntervals(2, 2) - totalDurationAccuracy;
 
 
 errorbar(1, totalOrientationAccuracy, lowerBoundOrientationL, upperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
