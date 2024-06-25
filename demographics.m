@@ -96,19 +96,28 @@ save(fullfile(processedDataIrrelevant,demographicsTableFile),'demographicsTable'
 
 figure;
 
-bar([countFemale,countMale],'FaceColor',DescriptiveGenderColour );
-xlabel('Sex');
-ylabel('Count');
+b= bar([countFemale,countMale],'FaceColor',DescriptiveGenderColour );
+xlabel('Sex','FontWeight','bold','FontSize',14);
+ylabel('Count','FontWeight','bold','FontSize',14);
 xticklabels({'Female','Male'});
-title('Sex Distribution');
+title('Sex Distribution','FontSize',16);
+ylim([0,20])
+yticks= ([0 20]);
+
+% add the numbers 
+ytips = b.YData; % get the coordinates of the bar
+labels = string(ytips);
+text(1:length(ytips), ytips, labels, 'HorizontalAlignment', 'center', ...
+    'VerticalAlignment', 'bottom', 'FontSize', 12); % Add labels
 
 %plot age
 
 figure;
 histogram(ageData,'FaceColor',DescriptiveAgeColor);
-xlabel('Age');
-ylabel('Count');
-title('Age distribution');
+xlabel('Age','FontWeight','bold','FontSize',14);
+ylabel('Count','FontWeight','bold','Fontsize',14);
+ylim([0 7]);
+title('Age distribution','FontSize',16);
 
 
 

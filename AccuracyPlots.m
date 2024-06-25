@@ -21,6 +21,7 @@ post = PostAccuracyTable;
 load("binomialTables.mat");
 
 %decide chance level 
+
 ChanceLevel = 0.5;
 PValue = 0.05;
 
@@ -44,9 +45,6 @@ upperBoundObjectDuration = binomialTables.criticalObjectDuration(3);
 
 ObjectConfidenceIntervals = [lowerBoundObjectOrientation,upperBoundObjectOrientation;lowerBoundObjectDuration,upperBoundObjectDuration];
 
-lowerBoundObject = objectAccuracy - ObjectConfidenceIntervals(:, 1)'; %length of the lower errorbar 
-upperBoundObject = ObjectConfidenceIntervals(:, 2)' - objectAccuracy;% lenght of the upper errorbar 
-
 %face surprise
 
 faceOrientationAccuracy = critical.TotalCorrectFaceOrientation/critical.Total1ProbeFace;
@@ -58,7 +56,78 @@ faceDurationP = binomialTables.criticalFaceDuration(4);
 faceAccuracy = [faceOrientationAccuracy,faceDurationAccuracy];
 faceAccuracyP = [faceOrientationP,faceDurationP];
 
-%total accuracy surprise 
+lowerBoundFaceOrientation = binomialTables.criticalFaceOrientation(2);
+upperBoundFaceOrientation = binomialTables.criticalFaceOrientation(3);
+
+lowerBoundFaceDuration = binomialTables.criticalFaceDuration(2);
+upperBoundFaceDuration = binomialTables.criticalFaceDuration(3);
+
+FaceConfidenceIntervals = [lowerBoundFaceOrientation,upperBoundFaceOrientation;lowerBoundFaceDuration,upperBoundFaceDuration];
+
+% surprise trial plot 
+
+BarAccuracy = [objectAccuracy; faceAccuracy]';
+BarColors = [repmat(objectColor, 2, 1); repmat(faceColor, 2, 1)];
+
+figure; % figure for the subplots 
+
+AccuracyPlot = bar(BarAccuracy, 'grouped');
+
+hold on;
+
+AccuracyPlot(1).FaceColor = objectColor; 
+AccuracyPlot(2).FaceColor = faceColor;
+
+% set the length for the error bars 
+
+lowerBoundObject = objectAccuracy - ObjectConfidenceIntervals(:, 1)'; % error bar lengths 
+upperBoundObject = ObjectConfidenceIntervals(:, 2)' - objectAccuracy;
+
+lowerBoundFace = faceAccuracy - FaceConfidenceIntervals(:, 1)';
+upperBoundFace = FaceConfidenceIntervals(:, 2)' - faceAccuracy;
+
+errorbar([1-0.15, 2-0.15], objectAccuracy, lowerBoundObject, upperBoundObject, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for object 
+errorbar([1+0.15, 2+0.15], faceAccuracy, lowerBoundFace, upperBoundFace, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for face
+
+
+yline(ChanceLevel, '--k'); % add the line to the chance level 
+yticks([0, 0.5, 1]);
+
+
+ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probe','FontWeight','bold','FontSize', 14);
+title('Surprise Trial Probe Accuracy','FontSize', 16);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+
+% add asterisks for significant values 
+
+Astoffset = 0.1; % asterisks ofset to decide the placement of it 
+
+
+for i = 1:numel(objectAccuracy) % number of values are same for the object and face
+    % object P value 
+    
+    if objectAccuracyP(i) < PValue
+        text(i-0.40 - Astoffset, objectAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if faceAccuracyP(i) < PValue
+        text(i+0.40 - Astoffset, faceAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+end
+
+legend('Object', 'Face', 'Location', 'northeast', 'Position', [0.81, 0.86, 0.05, 0.05]);
+
+
+hold off;
+
+%% combined accuracy 
+
 
 totalOrientationAccuracy = critical.totalCorrectOrientation/critical.Nr1IrrelevantProbe;
 totalDurationAccuracy = critical.totalCorrectDuration/critical.Nr1IrrelevantProbe;
@@ -66,8 +135,73 @@ totalDurationAccuracy = critical.totalCorrectDuration/critical.Nr1IrrelevantProb
 totalOrientationP = binomialTables.criticalOrientation(4);
 totalDurationP = binomialTables.criticalDuration(4);
 
-totalAccuracy = [totalOrientationAccuracy,totalDurationAccuracy];
-totalAccuracyP = [totalOrientationP,totalDurationP];
+
+% get the confidence intervals 
+
+lowerBoundOrientation = binomialTables.criticalOrientation(2);
+upperBoundOrientation = binomialTables.criticalOrientation(3);
+
+lowerBoundDuration = binomialTables.criticalDuration(2);
+upperBoundDuration = binomialTables.criticalDuration(3);
+
+TotalConfidenceIntervals = [lowerBoundOrientation,upperBoundOrientation;lowerBoundDuration,upperBoundDuration];
+
+BarCombinedAccuracy = [totalOrientationAccuracy; totalDurationAccuracy];
+
+figure; 
+
+AccuracyCombinedPlot = bar(BarCombinedAccuracy);
+
+hold on;
+
+% set the colours 
+
+AccuracyCombinedPlot.FaceColor = 'flat';
+AccuracyCombinedPlot.CData(1,:) = orientationColor; 
+AccuracyCombinedPlot.CData(2,:)= durationColor;
+
+% set the length of the error bars 
+
+lowerBoundOrientationL = totalOrientationAccuracy - TotalConfidenceIntervals(1, 1); 
+upperBoundOrientationL = TotalConfidenceIntervals(1, 2) - totalOrientationAccuracy;
+
+lowerBoundDurationL = totalDurationAccuracy - TotalConfidenceIntervals(2, 1);
+upperBoundDurationL = TotalConfidenceIntervals(2, 2) - totalDurationAccuracy;
+
+
+errorbar(1, totalOrientationAccuracy, lowerBoundOrientationL, upperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
+errorbar(2, totalDurationAccuracy, lowerBoundDurationL, upperBoundDurationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for duration
+
+
+yline(ChanceLevel, '--k'); % add the line to the chance level 
+yticks([0, 0.5, 1]);
+
+
+ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probe','FontWeight','bold','FontSize', 14);
+title('Surprise Trial Probe Accuracy','FontSize', 16);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+% add asterisks for significant values 
+
+Astoffset = 0.1; % asterisks ofset to decide the placement of it 
+
+    
+    if totalOrientationP < PValue  % p value for combined orientation
+        text(1+0.40 - Astoffset, totalOrientationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    
+    if totalDurationP < PValue % p value for combined duration
+        text(2+0.40 - Astoffset, totalDurationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+
+hold off;
+
+%% First Control face & object probes
 
 
 %object post first control 
@@ -81,6 +215,13 @@ objectPostDurationP = binomialTables.postObjectDuration1(4);
 objectPostAccuracy = [objectPostOrientationAccuracy,objectPostDurationAccuracy];
 objectPostAccuracyP = [objectPostOrientationP,objectPostDurationP];
 
+PostlowerBoundObjectOrientation = binomialTables.postObjectOrientation1(2);
+PostupperBoundObjectOrientation = binomialTables.postObjectOrientation1(3);
+
+PostlowerBoundObjectDuration = binomialTables.postObjectDuration1(2);
+PostupperBoundObjectDuration = binomialTables.postObjectDuration1(3);
+
+PostObjectConfidenceIntervals = [PostlowerBoundObjectOrientation,PostupperBoundObjectOrientation;PostlowerBoundObjectDuration,PostupperBoundObjectDuration];
 
 %face post first control 
 
@@ -93,8 +234,78 @@ facePostDurationP = binomialTables.postFaceDuration1(4);
 facePostAccuracy = [facePostOrientationAccuracy,facePostDurationAccuracy];
 facePostAccuracyP = [facePostOrientationP,facePostDurationP];
 
+PostlowerBoundFaceOrientation = binomialTables.postFaceOrientation1(2);
+PostupperBoundFaceOrientation = binomialTables.postFaceOrientation1(3);
 
-%combined all first control 
+PostlowerBoundFaceDuration = binomialTables.postFaceDuration1(2);
+PostupperBoundFaceDuration = binomialTables.postFaceDuration1(3);
+
+PostFaceConfidenceIntervals = [PostlowerBoundFaceOrientation,PostupperBoundFaceOrientation;PostlowerBoundFaceDuration,PostupperBoundFaceDuration];
+
+% post plot 
+
+PostBarAccuracy = [objectPostAccuracy; facePostAccuracy]';
+BarColors = [repmat(objectColor, 2, 1); repmat(faceColor, 2, 1)];
+
+figure; % figure for the subplots 
+
+PostAccuracyPlot = bar(PostBarAccuracy, 'grouped');
+
+hold on;
+
+PostAccuracyPlot(1).FaceColor = objectColor; 
+PostAccuracyPlot(2).FaceColor = faceColor;
+
+% set the length for the error bars 
+
+PostlowerBoundObject = objectPostAccuracy - PostObjectConfidenceIntervals(:, 1)'; % error bar lengths 
+PostupperBoundObject = PostObjectConfidenceIntervals(:, 2)' - objectPostAccuracy;
+
+PostlowerBoundFace = facePostAccuracy - PostFaceConfidenceIntervals(:, 1)';
+PostupperBoundFace = PostFaceConfidenceIntervals(:, 2)' - facePostAccuracy;
+
+errorbar([1-0.15, 2-0.15], objectPostAccuracy, PostlowerBoundObject, PostupperBoundObject, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for object 
+errorbar([1+0.15, 2+0.15], facePostAccuracy, PostlowerBoundFace,PostupperBoundFace, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for face
+
+
+yline(ChanceLevel, '--k'); % add the line to the chance level 
+yticks([0, 0.5, 1]);
+
+
+ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probe','FontWeight','bold','FontSize', 14);
+title('First Control Probe Accuracy','FontSize', 16);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+
+% add asterisks for significant values 
+
+Astoffset = 0.1; % asterisks ofset to decide the placement of it 
+
+
+for i = 1:numel(objectPostAccuracy) % number of values are same for the object and face
+    % object P value 
+    
+    if objectPostAccuracyP(i) < PValue
+        text(i-0.02 - Astoffset,  objectPostAccuracy(i) + 0.04, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if facePostAccuracyP(i) < PValue
+        text(i+0.30 - Astoffset, facePostAccuracy(i) + 0.04, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+end
+
+legend('Object', 'Face', 'Location', 'northeast', 'Position', [0.81, 0.86, 0.05, 0.05]);
+
+
+hold off;
+
+%% Post Combined 
+
 totalPostOrientationAccuracy = post.totalCorrectOrientation(1)/post.Nr1IrrelevantProbe(1);
 totalPostDurationAccuracy = post.totalCorrectDuration(1)/post.Nr1IrrelevantProbe(1);
 
@@ -104,224 +315,67 @@ totalPostDurationP = binomialTables.postDuration1(4);
 totalPostAccuracy = [totalPostOrientationAccuracy,totalPostDurationAccuracy];
 totalPostAccuracyP = [totalPostOrientationP,totalPostDurationP];
 
-% pilots 
 
-%object surprise
+PostlowerBoundOrientation = binomialTables.postOrientation1(2);
+PostupperBoundOrientation = binomialTables.postOrientation1(3);
 
+PostlowerBoundDuration = binomialTables.postDuration1(2);
+PostupperBoundDuration = binomialTables.postDuration1(3);
 
-numBars = numel(objectAccuracyP);
+PostTotalConfidenceIntervals = [PostlowerBoundOrientation,PostupperBoundOrientation;PostlowerBoundDuration,PostupperBoundDuration];
 
-figure;
+PostCombined = [totalPostOrientationAccuracy;totalPostDurationAccuracy];
 
-bar(objectAccuracy,'FaceColor',objectColour);
-ylim([0 1]);
-ylabel('Accuracy','FontWeight','bold');
-xlabel('Probe','FontWeight','bold');
-xticklabels({'Orientation','Duration'});
-title('Object Surprise Trial Probe Accuracy');
+figure; 
 
-hold on;
-
-errorbar(1:numBars,objectAccuracy,lowerBoundObject, upperBoundObject, 'k', 'LineStyle', 'none', 'LineWidth', 1);
-
-yline(ChanceLevel, '--k', 'Chance Level');
-
-%Add asterisks for significant values
-
-yticks([0, 0.5, 1]);
-
-for i = 1:numel(objectAccuracy)
-
-    % check orientation P value 
-
-    currentProbe = objectAccuracy(i);
-    currentP = objectAccuracyP(i);
-
-    if currentP < PValue
-       text(i, objectAccuracy(i) + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
-    
-    end
-   
-
-end
-
-hold off;
-
-%face surprise 
-
-figure;
-
-bar(faceAccuracy,'FaceColor',faceColor);
-ylim([0 1]);
-ylabel('Accuracy','FontWeight','bold');
-xlabel('Probe','FontWeight','bold');
-xticklabels({'Orientation','Duration'});
-title('Face Surprise Trial Probe Accuracy');
+PostCombinedPlot = bar(PostCombined);
 
 hold on;
-yline(ChanceLevel, '--k', 'Chance Level');
 
-%Add asterisks for significant values
+% set the colours 
 
+PostCombinedPlot.FaceColor = 'flat';
+PostCombinedPlot.CData(1,:) = orientationColor; 
+PostCombinedPlot.CData(2,:)= durationColor;
+
+% set the length of the error bars 
+
+lowerBoundOrientationL = totalOrientationAccuracy - TotalConfidenceIntervals(1, 1); 
+upperBoundOrientationL = TotalConfidenceIntervals(1, 2) - totalOrientationAccuracy;
+
+lowerBoundDurationL = totalDurationAccuracy - TotalConfidenceIntervals(2, 1);
+upperBoundDurationL = TotalConfidenceIntervals(2, 2) - totalDurationAccuracy;
+
+
+errorbar(1, totalOrientationAccuracy, lowerBoundOrientationL, upperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
+errorbar(2, totalDurationAccuracy, lowerBoundDurationL, upperBoundDurationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for duration
+
+
+yline(ChanceLevel, '--k'); % add the line to the chance level 
 yticks([0, 0.5, 1]);
 
-for i = 1:numel(faceAccuracy)
 
-    % check orientation P value 
+ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probe','FontWeight','bold','FontSize', 14);
+title('Surprise Trial Probe Accuracy','FontSize', 16);
 
-    currentProbe = faceAccuracy(i);
-    currentP = faceAccuracyP(i);
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 
-    if currentP < PValue
-       text(i, faceAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
+% add asterisks for significant values 
+
+Astoffset = 0.1; % asterisks ofset to decide the placement of it 
+
     
+    if totalOrientationP < PValue  % p value for combined orientation
+        text(1+0.40 - Astoffset, totalOrientationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-   
-
-end
-
-hold off;
-
-% combined accuracy plot 
-
-figure;
-
-bar(totalAccuracy,'FaceColor',CombinedColor);
-ylim([0 1]);
-ylabel('Accuracy','FontWeight','bold');
-xlabel('Probe','FontWeight','bold');
-xticklabels({'Orientation','Duration'});
-title('Combined Surprise Trial Probe Accuracy');
-
-hold on;
-yline(ChanceLevel, '--k', 'Chance Level');
-
-%Add asterisks for significant values
-
-yticks([0, 0.5, 1]);
-
-for i = 1:numel(totalAccuracy)
-
-    % check orientation P value 
-
-    currentProbe = totalAccuracy(i);
-    currentP = totalAccuracyP(i);
-
-    if currentP < PValue
-       text(i, totalAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
     
+    if totalDurationP < PValue % p value for combined duration
+        text(2+0.40 - Astoffset, totalDurationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-   
-
-end
-
-hold off;
-
-
-%object post
-figure;
-
-bar(objectPostAccuracy,'FaceColor',objectColour);
-ylim([0 1]);
-ylabel('Accuracy','FontWeight','bold');
-xlabel('Probe','FontWeight','bold');
-xticklabels({'Orientation','Duration'});
-title('Object First Control Trial Probe Accuracy');
-
-hold on;
-yline(ChanceLevel, '--k', 'Chance Level');
-
-%Add asterisks for significant values
-
-yticks([0, 0.5, 1]);
-
-for i = 1:numel(objectPostAccuracy)
-
-    % check orientation P value 
-
-    currentProbe = objectPostAccuracy(i);
-    currentP = objectPostAccuracyP(i);
-
-    if currentP < PValue
-       text(i, objectPostAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
-    
-    end
-   
-
-end
-
-hold off;
-
-
-
-%face post
-
-figure;
-
-bar(facePostAccuracy,'FaceColor',faceColor);
-ylim([0 1]);
-ylabel('Accuracy','FontWeight','bold');
-xlabel('Probe','FontWeight','bold');
-xticklabels({'Orientation','Duration'});
-title('Face First Control Trial Probe Accuracy');
-
-hold on;
-yline(ChanceLevel, '--k', 'Chance Level');
-
-%Add asterisks for significant values
-
-yticks([0, 0.5, 1]);
-
-for i = 1:numel(facePostAccuracy)
-
-    % check orientation P value 
-
-    currentProbe = facePostAccuracy(i);
-    currentP = facePostAccuracyP(i);
-
-    if currentP < PValue
-       text(i, facePostAccuracy(i)  - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
-    
-    end
-   
-
-end
-
-hold off;
-
-%combined post
-
-
-figure;
-
-bar(totalPostAccuracy,'FaceColor',CombinedColor);
-ylim([0 1]);
-ylabel('Accuracy','FontWeight','bold');
-xlabel('Probe','FontWeight','bold');
-xticklabels({'Orientation','Duration'});
-title('Combined First Control Trial Probe Accuracy');
-
-hold on;
-yline(ChanceLevel, '--k', 'Chance Level');
-
-%Add asterisks for significant values
-
-yticks([0, 0.5, 1]);
-
-for i = 1:numel(totalPostAccuracy)
-
-    % check orientation P value 
-
-    currentProbe = totalPostAccuracy(i);
-    currentP = totalPostAccuracyP(i);
-
-    if currentP < PValue
-       text(i, totalPostAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle');
-    
-    end
-   
-
-end
 
 hold off;
 

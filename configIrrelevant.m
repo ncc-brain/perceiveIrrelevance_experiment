@@ -7,11 +7,11 @@ processedDataIrrelevant = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03da
 DescriptiveGenderColour = [0.7686, 0.8392, 0.6902];
 DescriptiveAgeColor = [0.6902, 0.7176, 0.8392];
 
-objectColour = [0.5922, 0.7686, 0.7569];
-faceColor = [0.7686, 0.5922, 0.6353];
+objectColor = [0.7216 0.7529 1.0000];
+faceColor = [0.8471, 0.8863, 0.8627];
 
-orientationColor = [1, 0.9255, 0.6510];
-durationColor = [1, 0.6510, 0.6510];
+orientationColor = [1.0000, 0.90196, 0.90980];
+durationColor = [0.9882, 0.9608, 0.7804];
 
 CombinedColor = [1.0,0.706,0.635];
 
