@@ -52,7 +52,7 @@ for i = 1:numel(faceCritical)
     currentFaceTrial = faceCritical{i};
     currentObjectTrial = objectCritical{i};
      
-    % get the confidence ratings for mode 
+    % get the confidence ratings 
 
         currentOrientationFace = currentFaceTrial.orientationConfidence;
         currentDurationFace = currentFaceTrial.durationConfidence;
@@ -161,6 +161,39 @@ modeConfidenceTable = table(modeFaceOrientationConfidence, minFaceOrientation, m
                       'modeObjectOrientation', 'minObjectOrientation', 'maxObjectOrientation', ...
                       'modeObjectDuration', 'minObjectDuration', 'maxObjectDuration'});
 
+
+% confidence tabulate 
+
+faceOrientation = tabulate(faceOrientationConfidence);
+faceDuration = tabulate(faceDurationConfidence);
+objectOrientation = tabulate(objectOrientationConfidence);
+objectDuration = tabulate(objectDurationConfidence);
+
+% get only the percentages for the confidence 
+
+faceOrientationPercentage = faceOrientation(:,3)';
+faceDurationPercentage = faceDuration(:,3)';
+objectOrientationPercentage = objectOrientation(:,3)';
+objectDurationPercentage = objectDuration(:,3)';
+
+confidenceCounts = [faceOrientationPercentage;faceDurationPercentage;objectOrientationPercentage;objectDurationPercentage];
+
+
+figure;
+bar(confidenceCounts,'stacked','BarWidth', 0.9);
+colororder(confidenceColors );
+
+xlabel('Probes','FontWeight','bold','FontSize',14)
+ylabel('% of participants answered','FontWeight','bold','FontSize',14)
+title('Surprise Trial Confidence Ratings');
+ylim([0 100]);
+
+ax = gca;
+ax.XTickLabel = {'Face Orientation', 'Face Duration', 'Object Orientation', 'Object Duration'};
+ax.XTickLabelRotation = 180;  % Optional: Rotate x-axis labels if they are too long
+ax.FontWeight = 'bold';
+
+legend('1', '2', '3', '4', '5', 'Location', 'BestOutside');
 
 % confidence post surprise - first control 
 
