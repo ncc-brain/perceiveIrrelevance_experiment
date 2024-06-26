@@ -34,8 +34,8 @@ mindWanderingObject = {};
 objectOrientationConfidence = [];
 objectDurationConfidence = [];
 
-confidentAccuracyOrientationFace = 0;
-confidentFailOrientationFace = 0;
+confidentAccuracyOrientationFace = 0; % participants give high accuracy and performed well
+confidentFailOrientationFace = 0; % participants give low accuracy and performed bad 
 
 confidentAccuracyDurationFace = 0;
 confidentFailDurationFace = 0;
@@ -202,6 +202,18 @@ facePostDurationConfidence = [];
 objectPostOrientationConfidence = [];
 objectPostDurationConfidence = [];
 
+confidentPostAccuracyOrientationFace = 0; % if participants gave higher ratings and they performed well
+confidentPostFailOrientationFace = 0; % if participants gave lower ratings and they performed low. 
+
+confidentPostAccuracyDurationFace = 0; 
+confidentPostFailDurationFace = 0;
+
+confidentPostAccuracyOrientationObject = 0;
+confidentPostFailOrientationObject = 0;
+
+confidentPostAccuracyDurationObject = 0;
+confidentPostFailDurationObject = 0;
+
 for i = 1:numel(facePost)
 
     currentPostFaceTrial = facePost{i};
@@ -222,8 +234,61 @@ for i = 1:numel(facePost)
         objectPostOrientationConfidence(i) = currentPostOrientationObject;
         objectPostDurationConfidence(i) =  currentPostDurationObject;
 
-     
+
+        % post confidence & performance accuracy 
+
+        if currentPostOrientationFace >= 4 && currentPostFaceTrial.orientationAccuracy(1) == 1
+
+           confidentPostAccuracyOrientationFace =  confidentPostAccuracyOrientationFace +1 ;
+
+       elseif currentPostOrientationFace <= 2 && currentPostFaceTrial.orientationAccuracy(1) == 0
+
+           confidentPostFailOrientationFace = confidentPostFailOrientationFace + 1; 
+
+       end
+
+       %duration face 
+
+       if currentPostDurationFace >= 4 && currentPostFaceTrial.durationAccuracy(1) == 1
+
+           confidentPostAccuracyDurationFace =  confidentPostAccuracyDurationFace +1 ;
+
+       elseif currentPostDurationFace <= 2 && currentPostFaceTrial.durationAccuracy(1) == 0
+
+           confidentPostFailDurationFace = confidentPostFailDurationFace + 1;
+            
+
+       end
+
+       %orientation object 
+
+       if currentPostOrientationObject >= 4 && currentPostObjectTrial.orientationAccuracy(1) == 1
+
+           confidentPostAccuracyOrientationObject =  confidentPostAccuracyOrientationObject +1 ;
+
+       elseif currentPostOrientationObject <= 2 && currentPostObjectTrial.orientationAccuracy(1) == 0
+
+           confidentPostFailOrientationObject = confidentPostFailOrientationObject + 1; 
+
+       end
+
+       %duration object 
+        
+       if currentPostDurationObject >= 4 && currentPostObjectTrial.durationAccuracy(1) == 1
+
+           confidentPostAccuracyDurationObject =  confidentPostAccuracyDurationObject +1 ;
+
+       elseif currentPostDurationObject <= 2 && currentPostObjectTrial.durationAccuracy(1) == 0
+
+           confidentPostFailDurationObject = confidentPostFailDurationObject + 1; 
+
+       end
+
+    
 end
+
+     
+confidenceTable = table ()
 
 modePostFaceOrientationConfidence = mode(facePostOrientationConfidence);
 minPostFaceOrientation = min(facePostOrientationConfidence);
@@ -251,6 +316,42 @@ modePostConfidenceTable = table(modePostFaceOrientationConfidence, minPostFaceOr
                       'modeFaceDuration', 'minFaceDuration', 'maxFaceDuration', ...
                       'modeObjectOrientation', 'minObjectOrientation', 'maxObjectOrientation', ...
                       'modeObjectDuration', 'minObjectDuration', 'maxObjectDuration'});
+
+
+
+%tabulate post 
+
+facePostOrientation = tabulate(facePostOrientationConfidence);
+facePostDuration = tabulate(facePostDurationConfidence);
+objectPostOrientation = tabulate(objectPostOrientationConfidence);
+objectPostDuration = tabulate(objectPostDurationConfidence);
+
+% get only the percentages for the confidence 
+
+facePostOrientationPercentage = facePostOrientation(:,3)';
+facePostDurationPercentage = facePostDuration(:,3)';
+objectPostOrientationPercentage = objectPostOrientation(:,3)';
+objectPostDurationPercentage = objectPostDuration(:,3)';
+
+confidencePostCounts = [facePostOrientationPercentage;facePostDurationPercentage;objectPostOrientationPercentage;objectPostDurationPercentage];
+
+
+figure;
+bar(confidencePostCounts,'stacked','BarWidth', 0.9);
+colororder(confidenceColors );
+
+xlabel('Probes','FontWeight','bold','FontSize',14)
+ylabel('% of participants answered','FontWeight','bold','FontSize',14)
+title('First Control Confidence Ratings','FontSize',16);
+ylim([0 100]);
+
+ax = gca;
+ax.XTickLabel = {'Face Orientation', 'Face Duration', 'Object Orientation', 'Object Duration'};
+ax.XTickLabelRotation = 45;  
+%ax.FontWeight = 'bold';
+
+legend('1', '2', '3', '4', '5', 'Location', 'BestOutside');
+
 
 
 % mind wandering responses
