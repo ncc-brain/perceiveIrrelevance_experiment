@@ -15,14 +15,20 @@ addpath(genpath(processedDataIrrelevant));
 
 load('faceCritical.mat');
 load('objectCritical.mat');
-load("facePostSurprise.mat");
+load('facePostSurprise.mat');
 load('objectPostSurprise.mat');
+
+load('criticalAccuracyTable.mat');
+load('PostAccuracyTable.mat');
 
 faceCritical = faceCriticalTrial;
 objectCritical = objectCriticalTrial;
 
 facePost = facePostSurpriseTrials;
 objectPost= objectPostSurpriseTrials;
+
+criticalPerf = CriticalAccuracyTable;
+postPerf = PostAccuracyTable;
 
 % get confidence ratings given in critical 
 
@@ -288,7 +294,6 @@ for i = 1:numel(facePost)
 end
 
      
-confidenceTable = table ()
 
 modePostFaceOrientationConfidence = mode(facePostOrientationConfidence);
 minPostFaceOrientation = min(facePostOrientationConfidence);
@@ -351,6 +356,71 @@ ax.XTickLabelRotation = 45;
 %ax.FontWeight = 'bold';
 
 legend('1', '2', '3', '4', '5', 'Location', 'BestOutside');
+
+
+% plot confidence and performance
+
+% get performance for correct and incorrect 
+
+totalFace = criticalPerf.Total1ProbeFace;
+
+correctFaceOrientation = criticalPerf.TotalCorrectFaceOrientation;
+falseFaceOrientation = totalFace - correctFaceOrientation;
+
+correctFaceDuration = criticalPerf.TotalCorrectFaceDuration;
+falseFaceDuration = totalFace-correctFaceDuration;
+
+% decide the data for face orientation and duration 
+
+faceOrientation = [correctFaceOrientation, confidentAccuracyOrientationFace,falseFaceOrientation,confidentFailOrientationFace];
+faceDuration =  [correctFaceDuration,confidentAccuracyDurationFace,falseFaceDuration,confidentFailDurationFace];
+
+plotDataFace = [faceOrientation;faceDuration];
+
+faceOrientationColors = [orientationColor;highConfidence;falseOrientation;lowConfidence];
+faceDurationColors =[durationColor;highConfidence;falseDuration;lowConfidence];
+
+
+figure; % figure for the subplots 
+
+faceConfidenceBar = bar(plotDataFace,'grouped');
+
+hold on;
+
+
+
+
+hold off;
+
+%%
+
+%add the colors 
+
+[faceConfidenceBar.FaceColor] = deal('flat');
+
+for group = 1:numel(faceConfidenceBar) % Loop over each group
+       
+        currentGroup = faceConfidenceBar(group);
+    
+    for bar = 1:numel(currentGroup.Children) % Loop over each bar in the group
+
+        currentBar = currentGroup.Children(bar);
+        
+        % change the color of the bar 
+
+        if group == 1
+
+        currentBar.CData(bar) = faceOrientationColors(bar,:);
+
+        elseif group == 2
+
+        currentBar.CData(bar) = faceDurationColors(bar,:);
+        end
+   end
+end
+
+hold off;
+
 
 
 
