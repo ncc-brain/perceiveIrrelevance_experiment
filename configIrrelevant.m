@@ -23,8 +23,8 @@ confidenceColors = [
     0.7765, 0.8706, 0.9451;  
     0.8588, 0.8039, 0.9412];
 
-highConfidence = [0.9686, 0.8510, 0.7686]; 
-lowConfidence = [ 0.8588, 0.8039, 0.9412];
+highConfidence = [ 0.8588, 0.8039, 0.9412]; 
+lowConfidence = [0.5765, 0.7098, 0.7765];
 
-falseOrientation = [0.9490, 0.8471, 0.8549];
-falseDuration = [0.9294, 0.8980, 0.7373];
+falseOrientation = [0.3529, 0.2863, 0.4];
+falseDuration = [0.8941, 0.5725, 0.4510];

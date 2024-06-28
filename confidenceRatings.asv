@@ -183,7 +183,7 @@ objectOrientationPercentage = objectOrientation(:,3)';
 objectDurationPercentage = objectDuration(:,3)';
 
 confidenceCounts = [faceOrientationPercentage;faceDurationPercentage;objectOrientationPercentage;objectDurationPercentage];
-
+%%
 
 figure;
 bar(confidenceCounts,'stacked','BarWidth', 0.9);
@@ -200,7 +200,7 @@ ax.XTickLabelRotation = 45;
 %ax.FontWeight = 'bold';
 
 legend('1', '2', '3', '4', '5', 'Location', 'BestOutside');
-
+%%
 % confidence post surprise - first control 
 
 facePostOrientationConfidence = [];
@@ -340,7 +340,7 @@ objectPostDurationPercentage = objectPostDuration(:,3)';
 
 confidencePostCounts = [facePostOrientationPercentage;facePostDurationPercentage;objectPostOrientationPercentage;objectPostDurationPercentage];
 
-
+%%
 figure;
 bar(confidencePostCounts,'stacked','BarWidth', 0.9);
 colororder(confidenceColors );
@@ -357,7 +357,7 @@ ax.XTickLabelRotation = 45;
 
 legend('1', '2', '3', '4', '5', 'Location', 'BestOutside');
 
-
+%%
 % plot confidence and performance
 
 % get performance for correct and incorrect 
@@ -370,58 +370,382 @@ falseFaceOrientation = totalFace - correctFaceOrientation;
 correctFaceDuration = criticalPerf.TotalCorrectFaceDuration;
 falseFaceDuration = totalFace-correctFaceDuration;
 
-% decide the data for face orientation and duration 
+% group the values for face orientation and duration 
 
-faceOrientation = [correctFaceOrientation, confidentAccuracyOrientationFace,falseFaceOrientation,confidentFailOrientationFace];
-faceDuration =  [correctFaceDuration,confidentAccuracyDurationFace,falseFaceDuration,confidentFailDurationFace];
+faceOrientation = [correctFaceOrientation,falseFaceOrientation,confidentAccuracyOrientationFace,confidentFailOrientationFace];
+faceDuration =  [correctFaceDuration,falseFaceDuration,confidentAccuracyDurationFace,confidentFailDurationFace];
 
-plotDataFace = [faceOrientation,faceDuration]';
+plotDataFace = [faceOrientation;faceDuration];
 
-faceOrientationColors = [orientationColor;highConfidence;falseOrientation;lowConfidence];
-faceDurationColors =[durationColor;highConfidence;falseDuration;lowConfidence];
+percentageDataFace = (plotDataFace/totalFace) * 100;
 
+faceOrientationColors = [orientationColor;falseOrientation;highConfidence;lowConfidence];
+faceDurationColors =[durationColor;falseDuration;highConfidence;lowConfidence];
 
-figure; % figure for the subplots 
+figure;
 
-faceConfidenceBar = bar(plotDataFace);
+faceConfidenceBar = bar(percentageDataFace,'grouped','FaceColor','flat');
 
 hold on;
+% I access each bars seperately since I want to give them individual colors
 
-% Assuming you want to change the second bar in the first group (orientation)
-secondBar = faceConfidenceBar(2); % Access the second bar object
+for i = 1: size(plotDataFace,1) % go through the groups
 
-% Assign the desired color (in this case, yellow [1 1 0])
-secondBar.CData = [1 1 0];
-%%
+    for  j = 1:size(plotDataFace,2) % go through the bars
 
-%add the colors 
+        if i == 1   % group orientation
 
-[faceConfidenceBar.FaceColor] = deal('flat');
+            faceConfidenceBar(j).CData(i,:)= faceOrientationColors(j,:);
 
-for group = 1:numel(faceConfidenceBar) % Loop over each group
-       
-        currentGroup = faceConfidenceBar(group);
-    
-    for bar = 1:numel(currentGroup.Children) % Loop over each bar in the group
+        elseif i ==2
 
-        currentBar = currentGroup.Children(bar);
-        
-        % change the color of the bar 
-
-        if group == 1
-
-        currentBar.CData(bar) = faceOrientationColors(bar,:);
-
-        elseif group == 2
-
-        currentBar.CData(bar) = faceDurationColors(bar,:);
+            faceConfidenceBar(j).CData(i,:)= faceDurationColors(j,:);
         end
-   end
+
+    end
+
 end
+
+ylabel('% of participants responsed','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probes','FontWeight','bold','FontSize', 14);
+title('Surprise Face Group Probe Performance and Confidence Comparison','FontSize', 15);
+
+yticks([0 20 40 60 80 100]);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+legendColors = [orientationColor;falseOrientation;durationColor;falseDuration;highConfidence;lowConfidence];
+legendLabels = {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'};
+
+% add the legend colors 
+
+legends = []; % generate an empty legend 
+
+for i = 1:size(legendColors,1)
+
+currentLegend = plot(nan,nan,'color',legendColors(i,:),'LineWidth',5);
+
+legends = [legends,currentLegend];
+
+end
+
+legend(legends, {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'})
+
+% add the text to no data points 
+
+
+for i = 1:size(percentageDataFace, 1) % Iterate over groups
+    for j = 1:size(percentageDataFace, 2) % Iterate over bars
+        if percentageDataFace(i, j) == 0 % get the values that are 0 (empty bars)
+
+            xtip = faceConfidenceBar(j).XEndPoints(i);
+            ytip = faceConfidenceBar(j).YEndPoints(i);
+
+            ytip = ytip + 7;
+
+           text(xtip, ytip, '- No Data', 'Rotation', 90, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+
+        end
+    end
+end
+
+
+hold off;
+
+%% object confidence plot 
+
+totalObject = criticalPerf.Total1ProbeObject;
+
+correctObjectOrientation = criticalPerf.TotalCorrectObjectOrientation;
+falseObjectOrientation = totalObject - correctObjectOrientation;
+
+correctObjectDuration = criticalPerf.TotalCorrectObjectDuration;
+falseObjectDuration = totalObject-correctObjectDuration;
+
+% group the values for face orientation and duration 
+
+objectOrientation = [correctObjectOrientation,falseObjectOrientation,confidentAccuracyOrientationObject,confidentFailOrientationObject];
+objectDuration =  [correctObjectDuration,falseObjectDuration,confidentAccuracyDurationObject,confidentFailDurationObject];
+
+plotDataObject = [objectOrientation;objectDuration];
+
+percentageDataObject = (plotDataObject/totalObject) * 100; % turn them into percentages
+
+objectOrientationColors = [orientationColor;falseOrientation;highConfidence;lowConfidence];
+objectDurationColors =[durationColor;falseDuration;highConfidence;lowConfidence];
+
+figure;
+
+objectConfidenceBar = bar(percentageDataObject,'grouped','FaceColor','flat');
+
+hold on;
+% I access each bars seperately since I want to give them individual colors
+
+for i = 1: size(plotDataObject,1) % go through the groups
+
+    for  j = 1:size(plotDataObject,2) % go through the bars
+
+        if i == 1   % group orientation
+
+            objectConfidenceBar(j).CData(i,:)= objectOrientationColors(j,:);
+
+        elseif i ==2
+
+            objectConfidenceBar(j).CData(i,:)= objectDurationColors(j,:);
+        end
+
+    end
+
+end
+
+ylabel('% of participants responsed','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probes','FontWeight','bold','FontSize', 14);
+title('Surprise Object Group Probe Performance and Confidence Comparison','FontSize', 15);
+
+ylim([0 100]);
+yticks([0 20 40 60 80 100]);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+legendColors = [orientationColor;falseOrientation;durationColor;falseDuration;highConfidence;lowConfidence];
+legendLabels = {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'};
+
+% add the legend colors 
+
+legends = []; % generate an empty legend 
+
+for i = 1:size(legendColors,1)
+
+currentLegend = plot(nan,nan,'color',legendColors(i,:),'LineWidth',5);
+
+legends = [legends,currentLegend];
+
+end
+
+legend(legends, {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'})
+
+% add the text to no data points 
+
+
+for i = 1:size(percentageDataObject, 1) % Iterate over groups
+    for j = 1:size(percentageDataObject, 2) % Iterate over bars
+        if percentageDataObject(i, j) == 0 % get the values that are 0 (empty bars)
+
+            xtip = objectConfidenceBar(j).XEndPoints(i);
+            ytip = objectConfidenceBar(j).YEndPoints(i);
+
+            ytip = ytip + 7;
+
+           text(xtip, ytip, '- No Data', 'Rotation', 90, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+
+        end
+    end
+end
+
 
 hold off;
 
 
+%% first control confidence alignment 
+
+
+totalPostFace = postPerf.Total1PostProbeFace(1);
+
+correctPostFaceOrientation = postPerf.TotalPostCorrectOrientationFace(1);
+falsePostFaceOrientation = totalPostFace - correctPostFaceOrientation;
+
+correctPostFaceDuration = postPerf.TotalPostCorrectDurationFace(1);
+falsePostFaceDuration = totalPostFace-correctPostFaceDuration;
+
+% group the values for face orientation and duration 
+
+facePostOrientation = [correctPostFaceOrientation,falsePostFaceOrientation,confidentPostAccuracyOrientationFace,confidentPostFailOrientationFace];
+facePostDuration =  [correctPostFaceDuration,falsePostFaceDuration,confidentPostAccuracyDurationFace,confidentPostFailDurationFace];
+
+plotDataPostFace = [facePostOrientation;facePostDuration];
+
+percentageDataPostFace = (plotDataPostFace/totalPostFace) * 100; % turn them into percentages
+
+OrientationColors = [orientationColor;falseOrientation;highConfidence;lowConfidence];
+DurationColors =[durationColor;falseDuration;highConfidence;lowConfidence];
+
+
+figure;
+
+postFaceConfidenceBar = bar(percentageDataPostFace,'grouped','FaceColor','flat');
+
+hold on;
+% I access each bars seperately since I want to give them individual colors
+
+for i = 1: size(plotDataPostFace,1) % go through the groups
+
+    for  j = 1:size(plotDataPostFace,2) % go through the bars
+
+        if i == 1   % group orientation
+
+            postFaceConfidenceBar(j).CData(i,:)= OrientationColors(j,:);
+
+        elseif i ==2
+
+            postFaceConfidenceBar(j).CData(i,:)= DurationColors(j,:);
+        end
+
+    end
+
+end
+
+ylabel('% of participants responsed','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probes','FontWeight','bold','FontSize', 14);
+title('First Control Face Group Probe Performance and Confidence Comparison','FontSize', 15);
+
+ylim([0 100]);
+yticks([0 20 40 60 80 100]);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+legendColors = [orientationColor;falseOrientation;durationColor;falseDuration;highConfidence;lowConfidence];
+legendLabels = {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'};
+
+% add the legend colors 
+
+legends = []; % generate an empty legend 
+
+for i = 1:size(legendColors,1)
+
+currentLegend = plot(nan,nan,'color',legendColors(i,:),'LineWidth',5);
+
+legends = [legends,currentLegend];
+
+end
+
+legend(legends, {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'})
+
+% add the text to no data points 
+
+
+for i = 1:size(percentageDataPostFace, 1) % Iterate over groups
+    for j = 1:size(percentageDataPostFace, 2) % Iterate over bars
+        if percentageDataPostFace(i, j) == 0 % get the values that are 0 (empty bars)
+
+            xtip = postFaceConfidenceBar(j).XEndPoints(i);
+            ytip = postFaceConfidenceBar(j).YEndPoints(i);
+
+            ytip = ytip + 7;
+
+           text(xtip, ytip, '- No Data', 'Rotation', 90, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+
+        end
+    end
+end
+
+
+hold off;
+
+%% post object 
+
+totalPostObject = postPerf.Total1PostProbeObject(1);
+
+correctPostObjectOrientation = postPerf.TotalPostCorrectOrientationObject(1);
+falsePostObjectOrientation = totalPostObject - correctPostObjectOrientation;
+
+correctPostObjectDuration = postPerf.TotalPostCorrectDurationObject(1);
+falsePostObjectDuration = totalPostObject-correctPostObjectDuration;
+
+% group the values for face orientation and duration 
+
+objectPostOrientation = [correctPostObjectOrientation,falsePostObjectOrientation,confidentPostAccuracyOrientationObject,confidentPostFailOrientationObject];
+objectPostDuration =  [correctPostObjectDuration,falsePostObjectDuration,confidentPostAccuracyDurationFace,confidentPostFailDurationFace];
+
+plotDataPostFace = [facePostOrientation;facePostDuration];
+
+percentageDataPostFace = (plotDataPostFace/totalPostFace) * 100; % turn them into percentages
+
+OrientationColors = [orientationColor;falseOrientation;highConfidence;lowConfidence];
+DurationColors =[durationColor;falseDuration;highConfidence;lowConfidence];
+
+
+figure;
+
+postFaceConfidenceBar = bar(percentageDataPostFace,'grouped','FaceColor','flat');
+
+hold on;
+% I access each bars seperately since I want to give them individual colors
+
+for i = 1: size(plotDataPostFace,1) % go through the groups
+
+    for  j = 1:size(plotDataPostFace,2) % go through the bars
+
+        if i == 1   % group orientation
+
+            postFaceConfidenceBar(j).CData(i,:)= OrientationColors(j,:);
+
+        elseif i ==2
+
+            postFaceConfidenceBar(j).CData(i,:)= DurationColors(j,:);
+        end
+
+    end
+
+end
+
+ylabel('% of participants responsed','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probes','FontWeight','bold','FontSize', 14);
+title('First Control Face Group Probe Performance and Confidence Comparison','FontSize', 15);
+
+ylim([0 100]);
+yticks([0 20 40 60 80 100]);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+legendColors = [orientationColor;falseOrientation;durationColor;falseDuration;highConfidence;lowConfidence];
+legendLabels = {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'};
+
+% add the legend colors 
+
+legends = []; % generate an empty legend 
+
+for i = 1:size(legendColors,1)
+
+currentLegend = plot(nan,nan,'color',legendColors(i,:),'LineWidth',5);
+
+legends = [legends,currentLegend];
+
+end
+
+legend(legends, {'Correct Orientation','False Orientation','Correct Duration','False Duration','High Confidence','Low Confidence'})
+
+% add the text to no data points 
+
+
+for i = 1:size(percentageDataPostFace, 1) % Iterate over groups
+    for j = 1:size(percentageDataPostFace, 2) % Iterate over bars
+        if percentageDataPostFace(i, j) == 0 % get the values that are 0 (empty bars)
+
+            xtip = postFaceConfidenceBar(j).XEndPoints(i);
+            ytip = postFaceConfidenceBar(j).YEndPoints(i);
+
+            ytip = ytip + 7;
+
+           text(xtip, ytip, '- No Data', 'Rotation', 90, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+
+        end
+    end
+end
+
+
+hold off;
 
 
 % mind wandering responses
