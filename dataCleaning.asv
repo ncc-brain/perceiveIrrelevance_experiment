@@ -707,7 +707,7 @@ for i = 1:numel(facePostSurpriseTrials) %nr of trials for face and object are eq
 
    if strcmp(currentFaceSubject.probeOrder,'orientationFirsr') % orientationFirsr --> typo during the recording ( stands for orientation First) 
        subOrientationFirstFace{end+1} = currentFaceSubject.ParticipantID(1); % subject number orientation probed first
-       currentFaceSubject.probeOrder =  repmat({'orientationFirst'}, height(currentFaceSubject.probeOrder), 1); % fix the typo 
+       currentFaceSubject.probeOrder =  repmat('orientationFirst', , 1); % fix the typo 
 
    elseif strcmp(currentFaceSubject.probeOrder,'durationFirst')
        subDurationFirstFace{end+1} = currentFaceSubject.ParticipantID(1); %subject number duration probed first
@@ -721,8 +721,6 @@ for i = 1:numel(facePostSurpriseTrials) %nr of trials for face and object are eq
        subDurationFirstObject{end+1} = currentObjectSubject.ParticipantID(1);
 
    end
-
-       facePostSurpriseTrials{i} = currentFaceSubject; % update the cell without typo 
  
 end
 
@@ -736,24 +734,22 @@ for j = 1:numel(faceCriticalTrial) % same nr for objects
 
        %critical data orientation probed first 
     if  any(cellfun(@(x) isequal(x, currentFaceCritical.ParticipantID),subOrientationFirstFace)) 
-        currentFaceCritical.probeOrder ={'orientationFirst'};
+        currentFaceCritical.probeOrder ='orientationFirst';
     end  
     % critical data duration probed first
     if  any(cellfun(@(x) isequal(x, currentFaceCritical.ParticipantID),subDurationFirstFace))
-       currentFaceCritical.probeOrder = {'durationFirst'};
+       currentFaceCritical.probeOrder = 'durationFirst';
     end
 
      if  any(cellfun(@(x) isequal(x, currentObjectCritical.ParticipantID),subOrientationFirstObject))
-       currentObjectCritical.probeOrder = {'orientationFirst'};
+       currentObjectCritical.probeOrder = 'orientationFirst';
      end
     
     % critical data duration probed first
-    if  any(cellfun(@(x) isequal(x, currentObjectCritical.ParticipantID), subDurationFirstObject))        
-      currentObjectCritical.probeOrder = {'durationFirst'};
+    if  any(cellfun(@(x) isequal(x, currentObjectCritical.ParticipantID), subDurationFirstObject))
+        
+      currentObjectCritical.probeOrder = 'durationFirst';
     end
-
-    faceCriticalTrial{j} = currentFaceCritical;  % update your tables 
-    objectCriticalTrial{j} = currentObjectCritical;
 end
 
 
