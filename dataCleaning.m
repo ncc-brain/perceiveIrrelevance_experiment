@@ -756,31 +756,184 @@ for j = 1:numel(faceCriticalTrial) % same nr for objects
     objectCriticalTrial{j} = currentObjectCritical;
 end
 
+% convert tables into one table 
+
+%face table 
+
+criticalTableFace = vertcat(faceCriticalTrial{:});
+criticalTableFace.groupName = repmat({'face'}, height(criticalTableFace), 1); %add group name 
+
+%object table 
+
+criticalTableObject = vertcat(objectCriticalTrial{:});
+criticalTableObject.groupName = repmat({'object'},height(criticalTableObject),1); %add group name
+
+criticalTable = [criticalTableFace;criticalTableObject]; % combine tables 
 
 
+%face post-table
+
+postTableFace = vertcat(facePostSurpriseTrials{:});
+postTableFace.groupName =  repmat({'face'}, height(postTableFace), 1);
+
+%object post-table 
+
+postTableObject = vertcat (objectPostSurpriseTrials{:});
+postTableObject.groupName =  repmat({'object'}, height(postTableObject), 1);
 
 
+postTable = [postTableFace;postTableObject];
 
-  %Save the files 
+%generate accuracy tables for future accuracy analysis 
 
-  facePreSurprise = 'facePreSurprise.mat';
-  save(fullfile(processedDataIrrelevant,facePreSurprise),'facePreSurpriseTrials');
-  objectPreSurprise = 'objectPreSurprise.mat';
-  save(fullfile(processedDataIrrelevant,objectPreSurprise),'objectPreSurpriseTrials');
+nrOfProbes = height(criticalTable); %this stands for one specific probe (orientation or duration) - nr of orientation & duration are equal
+nrOfProbesOneGroup = sum(strcmp(criticalTable.groupName,'object')); %this  stands for one specific probe in one group (e.g. total orientation probes in object group), number of specific probes in one group are equal
 
-  faceCritical ='faceCritical.mat';
-  save(fullfile(processedDataIrrelevant,faceCritical),'faceCriticalTrial');
-  objectCritical = 'objectCritical.mat';
-  save(fullfile(processedDataIrrelevant,objectCritical),'objectCriticalTrial');
+correctOrientation = sum(criticalTable.orientationPerformance == 1);
+correctDuration = sum(criticalTable.durationPerformance == 1);
 
-  facePostSurprise = 'facePostSurprise.mat';
-  save(fullfile(processedDataIrrelevant,facePostSurprise),'facePostSurpriseTrials');
-  objectPostSurprise ='objectPostSurprise.mat';
-  save(fullfile(processedDataIrrelevant,objectPostSurprise),'objectPostSurpriseTrials');            
- 
+incorrectOrientation = sum(criticalTable.orientationPerformance==0);
+incorrectDuration = sum(criticalTable.durationPerformance == 0);
+
+correctFaceOrientation = sum(strcmp(criticalTable.groupName,'face') & criticalTable.orientationPerformance==1);
+correctFaceDuration = sum(strcmp(criticalTable.groupName,'face') & criticalTable.durationPerformance==1);
+
+incorrectFaceOrientation = sum(strcmp(criticalTable.groupName,'face') & criticalTable.orientationPerformance==0);
+incorrectFaceDuration = sum(strcmp(criticalTable.groupName,'face') & criticalTable.durationPerformance==0);
+
+correctObjectOrientation  = sum(strcmp(criticalTable.groupName,'object') & criticalTable.orientationPerformance==1);
+correctObjectDuration = sum(strcmp(criticalTable.groupName,'object') & criticalTable.durationPerformance==1);
+
+incorrectObjectOrientation = sum(strcmp(criticalTable.groupName,'object') & criticalTable.orientationPerformance==0);
+incorrectObjectDuration = sum(strcmp(criticalTable.groupName,'object') & criticalTable.durationPerformance==0);
+
+criticalAccuracyTable = table(nrOfProbes,nrOfProbesOneGroup,correctOrientation,correctDuration,incorrectOrientation,incorrectDuration,correctFaceOrientation,...
+    correctFaceDuration,incorrectFaceOrientation,incorrectFaceDuration,correctObjectOrientation,correctObjectDuration,...
+    incorrectObjectOrientation,incorrectObjectDuration,'VariableNames',{'nrOfProbes','nrOfProbesOneGroup','correctOrientation','correctDuration','incorrectOrientation','incorrectDuration','correctFaceOrientation',...
+    'correctFaceDuration','incorrectFaceOrientation','incorrectFaceDuration','correctObjectOrientation','correctObjectDuration','incorrectObjectOrientation','incorrectObjectDuration'});
 
 
+%post accuracy 
 
+uniqueParticipants = unique(postTable.ParticipantID); % get accuracy for each row of each participant 
+
+numTrials = 4; % each post-suprise has 4 trials. 
+
+orientationGroups = cell(1, numTrials);
+durationGroups = cell(1,numTrials);
+
+for i = 1:numel(uniqueParticipants) 
+
+     currentParticipant = uniqueParticipants(i); % get the current participant
+
+         participantData=postTable(postTable.ParticipantID == currentParticipant,:); %combined Data 
+    
+          
+     for j = 1:numTrials
+
+         orientationGroups{i,j} = participantData.orientationAccuracy(j); % get orientation for 4 trials
+         
+         durationGroups{i,j} =  participantData.durationAccuracy(j); % get duration for 4 trials 
+        
+         
+         
+     end
+        
+        groupNames{i} = participantData.groupName{1};
+end
+    
+        groupNames = groupNames';
+
+        % add group names to the post-surprise tables 
+
+        for i = 1:height(groupNames)
+         orientationGroup(i, :) = [orientationGroups(i, :),  groupNames(i)];
+         durationGroup(i,:) = [durationGroups(i,:),groupNames(i)];
+        end
+
+        orientationGroup = cell2table(orientationGroup); % includes the name of the cell
+        durationGroup = cell2table(durationGroup); % includes the name of the cell
+% get accuracy numbers for post-surprise 
+
+        variableNames = {'control1','control2','control3','control4'};
+
+        correctOrientation = sum(orientationGroup(:,1:end-1)==1);
+        correctOrientation.Properties.VariableNames = variableNames; % make it ready to combine them all in one table 
+        
+        correctDuration = sum(durationGroup(:,1:end-1)==1);
+        correctDuration.Properties.VariableNames = variableNames; 
+
+        falseOrientation = sum(orientationGroup(:,1:end-1)==0);
+        falseOrientation.Properties.VariableNames = variableNames; 
+
+        falseDuration = sum(durationGroup(:,1:end-1)==0);
+        falseDuration.Properties.VariableNames = variableNames; 
+
+        correctFaceOrientation = array2table(sum((orientationGroup{:,1:end-1} == 1) & strcmp(orientationGroup.orientationGroup5, 'face')));
+        correctFaceOrientation.Properties.VariableNames = variableNames; 
+        
+        correctFaceDuration =  array2table(sum((durationGroup{:,1:end-1} == 1) & strcmp(durationGroup.durationGroup5, 'face')));
+        correctFaceDuration.Properties.VariableNames = variableNames; 
+        
+        falseFaceOrientation = array2table(sum((orientationGroup{:,1:end-1} == 0) & strcmp(orientationGroup.orientationGroup5, 'face')));
+        falseFaceOrientation.Properties.VariableNames = variableNames; 
+        
+        falseFaceDuration = array2table(sum((durationGroup{:,1:end-1} == 0) & strcmp(durationGroup.durationGroup5, 'face')));
+        falseFaceDuration.Properties.VariableNames = variableNames; 
+
+
+        correctObjectOrientation = array2table(sum((orientationGroup{:,1:end-1} == 1) & strcmp(orientationGroup.orientationGroup5, 'object')));
+        correctObjectOrientation.Properties.VariableNames = variableNames; 
+        
+        correctObjectDuration = array2table(sum((durationGroup{:,1:end-1} == 1) & strcmp(durationGroup.durationGroup5, 'object')));
+        correctObjectDuration.Properties.VariableNames = variableNames; 
+        
+        falseObjectOrientation = array2table(sum((orientationGroup{:,1:end-1} == 0) & strcmp(orientationGroup.orientationGroup5, 'object')));
+        falseObjectOrientation.Properties.VariableNames = variableNames; 
+        
+        falseObjectDuration = array2table(sum((durationGroup{:,1:end-1} == 0) & strcmp(durationGroup.durationGroup5, 'object')));
+        falseObjectDuration.Properties.VariableNames = variableNames; 
+        
+
+        postAccuracyTable = rows2vars([correctOrientation;correctDuration;falseOrientation;falseDuration;correctFaceOrientation;correctFaceDuration;falseFaceOrientation;falseFaceDuration;correctObjectOrientation;...
+            correctObjectDuration;falseObjectOrientation;falseObjectDuration]);
+
+        colNames = {'controlGroups','correctOrientation','correctDuration','falseOrientation','falseDuration','correctFaceOrientation','correctFaceDuration','falseFaceOrientation','falseFaceDuration','correctObjectOrientation',...
+           'correctObjectDuration','falseObjectOrientation','falseObjectDuration'};      
+
+        postAccuracyTable.Properties.VariableNames=colNames; % add the variable names
+
+        
+        % add the number of probes (same as the critical) to the postAccuracyTable  
+        
+        postNrOfProbes = repmat(nrOfProbes,height(postAccuracyTable),1);
+        postNrOfProbesGroup = repmat(nrOfProbesOneGroup,height(postAccuracyTable),1); 
+
+        postAccuracyTable = addvars(postAccuracyTable, postNrOfProbes, 'NewVariableNames', 'nrOfProbes');
+        postAccuracyTable = addvars(postAccuracyTable, postNrOfProbesGroup, 'NewVariableNames', 'nrOfProbesOneGroup');
+       
+        
+%Save the files '
+%pre-surprise file
+facePreSurprise = 'facePreSurprise.mat';
+save(fullfile(processedDataIrrelevant,facePreSurprise),'facePreSurpriseTrials');
+objectPreSurprise = 'objectPreSurprise.mat';
+save(fullfile(processedDataIrrelevant,objectPreSurprise),'objectPreSurpriseTrials');
+
+%critical file
+criticalTableName = 'criticalTable.mat';
+save(fullfile(processedDataIrrelevant,criticalTableName),'criticalTable');
+
+%post surprise file 
+postTableName = 'postTable.mat';
+save(fullfile(processedDataIrrelevant,postTableName),'postTable');
+
+%accuracy files 
+criticalAccuracyTableFile = 'criticalAccuracyTable.mat';
+save(fullfile(processedDataIrrelevant,criticalAccuracyTableFile),'criticalAccuracyTable');
+
+postAccuracyTableFile= 'postAccuracyTable.mat';
+save(fullfile(processedDataIrrelevant,postAccuracyTableFile),'postAccuracyTable');
 
 
 
