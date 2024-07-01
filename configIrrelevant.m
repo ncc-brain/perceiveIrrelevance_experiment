@@ -4,6 +4,8 @@
 rawDataIrrelevant = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/rawData');
 processedDataIrrelevant = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/derivatives');
 
+figuresIrrelevant = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/05figures/perceiveIrrelevance');
+
 DescriptiveGenderColour = [0.7686, 0.8392, 0.6902];
 DescriptiveAgeColor = [0.6902, 0.7176, 0.8392];
 
@@ -12,6 +14,9 @@ faceColor = [0.8471, 0.8863, 0.8627];
 
 orientationColor = [1.0000, 0.90196, 0.90980];
 durationColor = [0.9882, 0.9608, 0.7804];
+
+postOrientation = [0.9176, 0.6353, 0.5765];
+postDuration = [0.996, 0.886, 0.6];
 
 orientationFirstColor = [1, 0.7176, 0.7647];
 durationFirstColor = [0.9451, 1, 0.7686];
