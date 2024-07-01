@@ -1,5 +1,5 @@
 
-function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2)
+function [contTable,fisherExtract,chiResults] = chiSquareFunction(group1,group2)
 
 % this function receives 2 groups you want to compare as input, generates contingency table, conducts chi square of
 % independence. As output it returns chi square and critical value together
@@ -28,9 +28,9 @@ criticalChi = chi2inv((1-alpha),df); % p is percentile, 1 is df
 
 if chi2 > criticalChi
 
-    disp('chi result : groups are significantly different');
+    disp('groups are significantly different')
 else
-    disp('chi result : groups are not significanly different-chi');
+    disp('groups are not significanly different')
 
 end
 
