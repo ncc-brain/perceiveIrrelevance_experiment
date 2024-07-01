@@ -16,11 +16,10 @@ group2 = categorical(group2,[0, 1], categoryNames);
 
 [contTable, chi2, pValue] = crosstab(group1, group2);
 
-
 % calculate critical chi 
 
 alpha = 0.05;
-df = 1; 
+df = 1; % nr of groups - 1 
 
 criticalChi = chi2inv((1-alpha),df); % p is percentile, 1 is df
 
@@ -40,11 +39,27 @@ chiResults = table(chi2,criticalChi,pValue,'VariableNames',{'chisquare','critica
 
 %fisher's exact test 
 
+%check whether there are zeros in the table 
+    
+    if any(contTable(:) == 0)
+        disp('Zeros found in the table, adjusting counts.'); % add constant to avoid zeros - haldane-anscombe correction
+        contTable = contTable + 1;
+    end
+
 [h,p,stats] = fishertest(contTable,"Tail","right","Alpha",0.05);
 
 oddsRatio = stats.OddsRatio;
 confInterval = stats.ConfidenceInterval;
 
+if h == 1
+    
+    disp('Fisher Result : groups are significantly different');
+
+elseif h == 0 
+    
+    disp('Fisher Result : groups are not significantly different');
+
+end
 fisherExtract = table(h,p,oddsRatio,confInterval(1),confInterval(2),'VariableNames',{'h','p','oddsRatio','lowerLimit','upperLimit'});
 
 end

@@ -19,7 +19,7 @@ addpath(genpath(processedDataIrrelevant));
 load('criticalTable.mat'); 
 load('postTable.mat');
 
-%% Contingency table groups 
+%% Groups to compare 
 
 %critical - compare performances in probes 
 
@@ -48,35 +48,43 @@ end
     postPerf = [orientationControl,durationControl];
 
 
-%  critical probe order 
+%  compare performance with order effect 
 
    orientationFirstRow = strcmp(criticalTable.probeOrder, 'orientationFirst');
-   orientationFirst = (criticalTable.orientationPerformance(orientationFirstRow))';
-   
    durationFirstRow = strcmp(criticalTable.probeOrder,'durationFirst');
-   durationFirst = (criticalTable.durationPerformance(durationFirstRow));'
+   
+   orientationFirst = (criticalTable.orientationPerformance(orientationFirstRow))'; % orientation performance if orientation first
+   durationFirst = (criticalTable.durationPerformance(durationFirstRow))'; % duration performance if duration first
+
+   orientationSecond = (criticalTable.orientationPerformance(durationFirstRow))';
+   durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
 
 
-%% Chi square 
+%% Chi square % Fisher Test
 
-[fisherProbe,chiProbe]= chiSquareFunction(AllOrientation,AllDuration); % compare two groups
+names = {'contTable', 'chi2', 'fisherExtract'};
 
-ProbeFisher = fisherProbe;
-ProbeChi = chiProbe; 
+% stats for comparing probes in critical trial 
 
-pilot1ProbeFisherFile = 'pilot1ProbeFisher';
-save(fullfile(processedDataIrrelevant,pilot1ProbeFisherFile),'ProbeFisher');
+[contTableProbe,chiProbe,fisherProbe]= chiSquareFunction(orientationCritical,durationCritical); % compare two groups
 
-pilot1ProbeChiFile = 'pilot1ProbeChi';
-save(fullfile(processedDataIrrelevant,pilot1ProbeChiFile),'ProbeChi');
+criticalProbeStats = {array2table(contTableProbe),chiProbe,fisherProbe};
 
-[fisherPerf,chiPerf]=chiSquareFunction(AllSurprise,AllPostSurprise); % difference between surprise and post surprise 
+%stats for comparing critical % post-surprise 
 
-pilot1PerformanceFisherFile = 'pilot1PerfFisher';
-save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf');
+[contTablePerf,chiPerf,fisherPerf] = chiSquareFunction(surprisePerf,postPerf);
 
-pilot1PerformanceChiFile = 'pilot1PerfChi';
-save(fullfile(processedDataIrrelevant,pilot1PerformanceChiFile),'ProbeChi');
+controlPerfStats = {array2table(contTablePerf),chiPerf,fisherPerf};
+
+%stats for comparing order effect 
+
+[contTableOrientation,chiOrientation,fisherOrientation] = chiSquareFunction(orientationFirst,orientationSecond);
+
+
+
+
+
+
 
 
 

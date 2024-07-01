@@ -60,27 +60,45 @@ end
    durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
 
 
+%% Chi square % Fisher Test
 
-%% Chi square 
+names = {'contTable', 'chi2', 'fisherExtract'};
 
-[fisherProbe,chiProbe]= chiSquareFunction(AllOrientation,AllDuration); % compare two groups
+% stats for comparing probes in critical trial 
 
-ProbeFisher = fisherProbe;
-ProbeChi = chiProbe; 
+[contTableProbe,chiProbe,fisherProbe]= chiSquareFunction(orientationCritical,durationCritical); % compare two groups
 
-pilot1ProbeFisherFile = 'pilot1ProbeFisher';
-save(fullfile(processedDataIrrelevant,pilot1ProbeFisherFile),'ProbeFisher');
+criticalProbeStats = {array2table(contTableProbe),chiProbe,fisherProbe};
 
-pilot1ProbeChiFile = 'pilot1ProbeChi';
-save(fullfile(processedDataIrrelevant,pilot1ProbeChiFile),'ProbeChi');
+%stats for comparing critical % post-surprise 
 
-[fisherPerf,chiPerf]=chiSquareFunction(AllSurprise,AllPostSurprise); % difference between surprise and post surprise 
+[contTablePerf,chiPerf,fisherPerf] = chiSquareFunction(surprisePerf,postPerf);
 
-pilot1PerformanceFisherFile = 'pilot1PerfFisher';
-save(fullfile(processedDataIrrelevant,pilot1PerformanceFisherFile),'fisherPerf');
+controlPerfStats = {array2table(contTablePerf),chiPerf,fisherPerf};
 
-pilot1PerformanceChiFile = 'pilot1PerfChi';
-save(fullfile(processedDataIrrelevant,pilot1PerformanceChiFile),'ProbeChi');
+%stats for comparing order effect 
+
+[contTableOrientation,chiOrientation,fisherOrientation] = chiSquareFunction(orientationFirst,orientationSecond);
+
+orientationOrderStats = {array2table(contTableOrientation),chiOrientation,fisherOrientation};
+
+[contTableDuration,chiDuration,fisherDuration]=chiSquareFunction(durationFirst,durationSecond);
+
+durationOrderStats = {array2table(contTableOrientation),chiOrientation,fisherOrientation};
+
+%save the stats 
+
+pilot1Stats = struct();
+pilot1Stats.criticalProbeStats = criticalProbeStats;
+pilot1Stats.controlPerfStats = controlPerfStats;
+pilot1Stats.orientationOrderStats = orientationOrderStats;
+pilot1Stats.durationOrderStats = durationOrderStats;
+
+pilot1StatsName = 'pilot1Stats.mat';
+save(fullfile(processedDataIrrelevant,pilot1StatsName),'pilot1Stats');
+
+
+
 
 
 
