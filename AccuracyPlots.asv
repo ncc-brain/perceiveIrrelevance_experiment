@@ -208,11 +208,16 @@ controlPvalues =[binom.postOrientation1(4),binom.postDuration1(4)];
 
 %lowerBoundOrientation = binom.criticalOrientation(2);
 %upperBoundOrientation = binom.criticalOrientation(3);
-
 %lowerBoundDuration = binom.criticalDuration(2);
 %upperBoundDuration = binom.criticalDuration(3);
 
 %TotalConfidenceIntervals = [lowerBoundOrientation,upperBoundOrientation;lowerBoundDuration,upperBoundDuration];
+
+%PostlowerBoundOrientation = binomialTables.postOrientation1(2);
+PostupperBoundOrientation = binomialTables.postOrientation1(3);
+
+PostlowerBoundDuration = binomialTables.postDuration1(2);
+PostupperBoundDuration = binomialTables.postDuration1(3);
 
 BarCombinedAccuracy = [combinedSurprise;combinedControl]';
 surpriseColors = [orientationColor;durationColor];
@@ -301,11 +306,7 @@ totalPostOrientationP = binomialTables.postOrientation1(4); % P values
 totalPostDurationP = binomialTables.postDuration1(4);
 
 
-PostlowerBoundOrientation = binomialTables.postOrientation1(2);
-PostupperBoundOrientation = binomialTables.postOrientation1(3);
 
-PostlowerBoundDuration = binomialTables.postDuration1(2);
-PostupperBoundDuration = binomialTables.postDuration1(3);
 
 PostTotalConfidenceIntervals = [PostlowerBoundOrientation,PostupperBoundOrientation;PostlowerBoundDuration,PostupperBoundDuration];
 

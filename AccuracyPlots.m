@@ -208,11 +208,18 @@ controlPvalues =[binom.postOrientation1(4),binom.postDuration1(4)];
 
 %lowerBoundOrientation = binom.criticalOrientation(2);
 %upperBoundOrientation = binom.criticalOrientation(3);
-
 %lowerBoundDuration = binom.criticalDuration(2);
 %upperBoundDuration = binom.criticalDuration(3);
 
 %TotalConfidenceIntervals = [lowerBoundOrientation,upperBoundOrientation;lowerBoundDuration,upperBoundDuration];
+
+%postLowerBoundOrientation = binom.postOrientation1(2);
+%postUpperBoundOrientation = binom.postOrientation1(3);
+%postLowerBoundDuration = binom.postDuration1(2);
+%postUpperBoundDuration = binom.postDuration1(3);
+
+%postTotalConfidenceIntervals = [postLowerBoundOrientation,postUpperBoundOrientation;postLowerBoundDuration,postUpperBoundDuration];
+
 
 BarCombinedAccuracy = [combinedSurprise;combinedControl]';
 surpriseColors = [orientationColor;durationColor];
@@ -293,35 +300,6 @@ hold off;
 
 
 %% Post Combined 
-
-totalPostOrientationAccuracy = post.totalCorrectOrientation(1)/post.Nr1IrrelevantProbe(1); % accuracy values 
-totalPostDurationAccuracy = post.totalCorrectDuration(1)/post.Nr1IrrelevantProbe(1);
-
-totalPostOrientationP = binomialTables.postOrientation1(4); % P values 
-totalPostDurationP = binomialTables.postDuration1(4);
-
-
-PostlowerBoundOrientation = binomialTables.postOrientation1(2);
-PostupperBoundOrientation = binomialTables.postOrientation1(3);
-
-PostlowerBoundDuration = binomialTables.postDuration1(2);
-PostupperBoundDuration = binomialTables.postDuration1(3);
-
-PostTotalConfidenceIntervals = [PostlowerBoundOrientation,PostupperBoundOrientation;PostlowerBoundDuration,PostupperBoundDuration];
-
-PostCombined = [totalPostOrientationAccuracy;totalPostDurationAccuracy];
-
-figure; 
-
-PostCombinedPlot = bar(PostCombined);
-
-hold on;
-
-% set the colours 
-
-PostCombinedPlot.FaceColor = 'flat';
-PostCombinedPlot.CData(1,:) = orientationColor; 
-PostCombinedPlot.CData(2,:)= durationColor;
 
 % set the length of the error bars 
 
