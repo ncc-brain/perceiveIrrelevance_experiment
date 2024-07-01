@@ -100,7 +100,7 @@ end
 
 % generate groups 
 
-AllPostSurprise = [orientationPostFace,durationPostFace,orientationPostObject, durationPostObject];
+AllPostSurprise = [orientationPostFace,durationPostFace,orientationPostObject,durationPostObject];
 AllSurprise = [orientationAllFace,orientationAllObject,durationAllFace,durationAllObject];
 
 

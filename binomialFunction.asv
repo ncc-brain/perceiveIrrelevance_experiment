@@ -17,16 +17,15 @@ chanceLevel = 0.5;
 
 %accuracy 
 
-accuracy = correctProbes/totalProbes;
-
 %binofit (confidence intervals) 
 
-[~,pci] = binofit(correctProbes,totalProbes , alpha); 
+[pci] = binofit(correctProbes,totalProbes , alpha); 
+
 
 %binocdf (returns p value for hypothesis testing)
 
 PValue = 1-binocdf(correctProbes-1,totalProbes,chanceLevel); 
 
-BinomialTable = table([accuracy; pci(1); pci(2);PValue], 'VariableNames', {group}, 'RowNames', {'accuracy', 'LowerBound', 'UpperBound','PValue'});
+BinomialTable = table([phat; pci(1); pci(2);PValue], 'VariableNames', {group}, 'RowNames', {'phat', 'LowerBound', 'UpperBound','PValue'});
 
 end
