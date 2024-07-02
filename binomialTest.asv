@@ -75,18 +75,18 @@ binoPostFaceDuration4 = binomialFunction(postAccuracyTable.nrOfProbesOneGroup(4)
 
 %order effect 
 
-accuracyOrientationFirst = binomialFunction((height(orderEffect)),sum(orderEffect.orientationFirst),'orientationFirst');
-accuracyOrientationSecond = binomialFunction((height(orderEffect)),sum(orderEffect.orientationSecond),'orientationSecond');
-accuracyDurationFirst= binomialFunction((height(orderEffect)),sum(orderEffect.durationFirst),'durationFirst');
-accuracyDurationSecond=binomialFunction((height(orderEffect)),sum(orderEffect.durationSecond),'durationSecond');
-
+accuracyOrientationFirst = binomialFunction(height(orderEffect),sum(orderEffect.orientationFirst,'orientationFirst');
+accuracyOrientationSecond =
+accuracyDurationFirst=
+accuracyDurationSecond=
+accuracyDuration = [(sum(orderEffect.durationFirst)/height(orderEffect));(sum(orderEffect.durationSecond)/height(orderEffect))];
 
 % combined binomial table 
 
 binomialTables = [binoOrientation,binoPostOrientation1,binoPostOrientation2,binoPostOrientation3,binoPostOrientation4,binoDuration,binoPostDuration1,binoPostDuration2,binoPostDuration3,binoPostDuration4,...
    binoObjectOrientation,binoObjectDuration,binoPostObjectOrientation1,binoPostObjectDuration1,...
    binoPostObjectOrientation2,binoPostObjectDuration2,binoPostObjectOrientation3,binoPostObjectDuration3,binoPostObjectOrientation4,binoPostObjectDuration4,binoFaceOrientation,binoFaceDuration,binoPostFaceOrientation1,binoPostFaceDuration1,...
-   binoPostFaceOrientation2,binoPostFaceDuration2,binoPostFaceOrientation3,binoPostFaceDuration3,binoPostFaceOrientation4,binoPostFaceDuration4,accuracyOrientationFirst,accuracyOrientationSecond,accuracyDurationFirst,accuracyDurationSecond];
+   binoPostFaceOrientation2,binoPostFaceDuration2,binoPostFaceOrientation3,binoPostFaceDuration3,binoPostFaceOrientation4,binoPostFaceDuration4];
 
 binomialTableFile = 'binomialTables.mat';
 save(fullfile(processedDataIrrelevant,binomialTableFile),'binomialTables');

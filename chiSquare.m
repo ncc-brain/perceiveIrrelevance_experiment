@@ -58,6 +58,12 @@ end
 
    orientationSecond = (criticalTable.orientationPerformance(durationFirstRow))';
    durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
+  
+   %save the order effect results 
+
+   orderEffect = table((orientationFirst)',(durationFirst)',(orientationSecond)',(durationSecond)','VariableNames',{'orientationFirst','durationFirst','orientationSecond','durationSecond'});
+   orderEffectName = 'orderEffect.mat';
+   save(fullfile(processedDataIrrelevant,orderEffectName),'orderEffect');
 
 
 %% Chi square % Fisher Test

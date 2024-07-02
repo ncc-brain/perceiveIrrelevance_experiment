@@ -206,17 +206,17 @@ controlPvalues =[binom.postOrientation1(4),binom.postDuration1(4)];
 
 % get the confidence intervals 
 
-%lowerBoundOrientation = binom.criticalOrientation(2);
-%upperBoundOrientation = binom.criticalOrientation(3);
-%lowerBoundDuration = binom.criticalDuration(2);
-%upperBoundDuration = binom.criticalDuration(3);
+% lowerBoundOrientation = binom.criticalOrientation(2);
+% upperBoundOrientation = binom.criticalOrientation(3);
+% lowerBoundDuration = binom.criticalDuration(2);
+% upperBoundDuration = binom.criticalDuration(3);
 
 %TotalConfidenceIntervals = [lowerBoundOrientation,upperBoundOrientation;lowerBoundDuration,upperBoundDuration];
 
-%postLowerBoundOrientation = binom.postOrientation1(2);
-%postUpperBoundOrientation = binom.postOrientation1(3);
-%postLowerBoundDuration = binom.postDuration1(2);
-%postUpperBoundDuration = binom.postDuration1(3);
+% postLowerBoundOrientation = binom.postOrientation1(2);
+% postUpperBoundOrientation = binom.postOrientation1(3);
+% postLowerBoundDuration = binom.postDuration1(2);
+% postUpperBoundDuration = binom.postDuration1(3);
 
 %postTotalConfidenceIntervals = [postLowerBoundOrientation,postUpperBoundOrientation;postLowerBoundDuration,postUpperBoundDuration];
 
@@ -244,15 +244,16 @@ hold on;
 
 % set the length of the error bars 
 
-%lowerBoundOrientationL = totalOrientationAccuracy - TotalConfidenceIntervals(1, 1); 
-%upperBoundOrientationL = TotalConfidenceIntervals(1, 2) - totalOrientationAccuracy;
 
-%lowerBoundDurationL = totalDurationAccuracy - TotalConfidenceIntervals(2, 1);
-%upperBoundDurationL = TotalConfidenceIntervals(2, 2) - totalDurationAccuracy;
+% lowerBoundSurpriseL = combinedSurprise - TotalConfidenceIntervals(:, 1)'; 
+% upperBoundsupriseL = TotalConfidenceIntervals(:, 2)' - combinedSurprise;
+
+% lowerBoundPostL = combinedControl - postTotalConfidenceIntervals(:, 1)';
+% upperBoundPostL = postTotalConfidenceIntervals(:, 2)' - combinedControl;
 
 
-%errorbar(1, totalOrientationAccuracy, lowerBoundOrientationL, upperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
-%errorbar(2, totalDurationAccuracy, lowerBoundDurationL, upperBoundDurationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for duration
+%errorbar([1-0.15, 2-0.15], combinedSurprise,lowerBoundSurpriseL,upperBoundsupriseL, 'k', 'LineStyle', 'none', 'LineWidth', 1); % surprise
+%errorbar([1+0.15, 2+0.15], combinedControl, lowerBoundPostL,upperBoundPostL, 'k', 'LineStyle', 'none', 'LineWidth', 1);
 
 
 yline(ChanceLevel, '--k'); % add the line to the chance level 
@@ -262,7 +263,7 @@ yticks([0 0.5 1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
 xlabel('Probe','FontWeight','bold','FontSize', 14);
-title('Surprise Trial Probe Accuracy','FontSize', 16);
+title('Surprise and First Control Probe Accuracy','FontSize', 16);
 
 ax = gca; % Get the current axes
 ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
@@ -273,80 +274,81 @@ ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
+for i = 1:numel(combinedSurprise) 
     
-    if totalOrientationP < PValue  % p value for combined orientation
-        text(1+0.20 - Astoffset, totalOrientationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if surprisePvalues(i) < PValue
+        text(i-0.05 - Astoffset,  combinedSurprise(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    
-    if totalDurationP < PValue % p value for combined duration
-        text(2+0.20 - Astoffset, totalDurationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    % face p-value
+    if controlPvalues(i) < PValue
+        text(i+0.25 - Astoffset, combinedControl(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
+end
+
+% add legends 
+
+legendColors = [orientationColor;postOrientation;durationColor;postDuration];
+legendLabels = {'Surprise Orientation','Post Orientation','Surprise Duration','Post Duration'};
+
+% add the legend colors 
+
+legends = []; % generate an empty legend 
+
+for i = 1:size(legendColors,1)
+
+currentLegend = plot(nan,nan,'color',legendColors(i,:),'LineWidth',5);
+
+legends = [legends,currentLegend];
+
+end
+
+legend(legends, {'Surprise Orientation','Post Orientation','Surprise Duration','Post Duration'});
+
 
 hold off;
 
-%% First Control face & object probes
+%% Order effect accuracy plots 
 
+% load order effect data 
 
-%object post first control 
+load('orderEffect.mat');
 
+accuracyOrientation = [(sum(orderEffect.orientationFirst)/height(orderEffect));(sum(orderEffect.orientationSecond)/height(orderEffect))];
+accuracyDuration = [(sum(orderEffect.durationFirst)/height(orderEffect));(sum(orderEffect.durationSecond)/height(orderEffect))];
 
+%plot orientation order effect 
 
+figure,
 
-%face post first control 
+orientationPlot = bar(accuracyOrientation,'FaceColor','flat');
 
-
-
-% post plot 
-
-
-%% Post Combined 
-
-% set the length of the error bars 
-
-PostlowerBoundOrientationL = totalPostOrientationAccuracy - PostTotalConfidenceIntervals(1, 1); 
-PostupperBoundOrientationL = PostTotalConfidenceIntervals(1, 2) - totalPostOrientationAccuracy;
-
-PostlowerBoundDurationL = totalPostDurationAccuracy - PostTotalConfidenceIntervals(2, 1);
-PostupperBoundDurationL = PostTotalConfidenceIntervals(2, 2) - totalPostDurationAccuracy;
-
-
-%errorbar(1, totalPostOrientationAccuracy, PostlowerBoundOrientationL, PostupperBoundOrientationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for orientation
-%errorbar(2, totalPostDurationAccuracy, PostlowerBoundDurationL, PostupperBoundDurationL, 'k', 'LineStyle', 'none', 'LineWidth', 1); %error bars for duration
-
+orientationPlot.CData(1,:) = orientationFirstColor; 
+orientationPlot.CData(2,:)= durationFirstColor;
 
 yline(ChanceLevel, '--k'); % add the line to the chance level 
-ylim([0 1]);
-yticks([0, 0.5, 1]);
-
+ylim([0 1])
+yticks([0 0.5 1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
 xlabel('Probe','FontWeight','bold','FontSize', 14);
-title('First Control Probe Accuracy','FontSize', 16);
+title('Surprise Trial Orientation Probe Accuracy','FontSize', 16);
 
 ax = gca; % Get the current axes
-ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
+ax.XTickLabel = {'Orientation First', 'Orientation Second'}; % Set the xticklabels
 ax.FontSize = 12; % Adjust the font size as needed
 ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 
-% add asterisks for significant values 
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
+for i = 1:numel(combinedSurprise) 
     
-    if totalPostOrientationP < PValue  % p value for combined orientation
-        text(1+0.40 - Astoffset, totalPostOrientationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if surprisePvalues(i) < PValue
+        text(i-0.05 - Astoffset,  combinedSurprise(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    
-    if totalPostDurationP < PValue % p value for combined duration
-        text(2+0.40 - Astoffset, totalPostDurationAccuracy + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    % face p-value
+    if controlPvalues(i) < PValue
+        text(i+0.25 - Astoffset, combinedControl(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-
-hold off;
-
-
-
-
-
-
-
+end
 

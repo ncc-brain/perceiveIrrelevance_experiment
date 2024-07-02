@@ -15,7 +15,7 @@ faceColor = [0.8471, 0.8863, 0.8627];
 orientationColor = [1.0000, 0.90196, 0.90980];
 durationColor = [0.9882, 0.9608, 0.7804];
 
-postOrientation = [0.9176, 0.6353, 0.5765];
+postOrientation = [1, 0.659, 0.545];
 postDuration = [0.996, 0.886, 0.6];
 
 orientationFirstColor = [1, 0.7176, 0.7647];
