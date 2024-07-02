@@ -349,14 +349,10 @@ hold off;
 surpriseOrientationConfidence = array2table(tabulate(criticalTable.orientationConfidence),"VariableNames",{'value','count','percent'});
 surpriseDurationConfidence = array2table(tabulate(criticalTable.durationConfidence),"VariableNames",{'value','count','percent'});
 
-PostOrientationConfidence = array2table(tabulate(postOrientationConfidence),"VariableNames",{'value','count','percent'});
-PostDurationConfidence = array2table(tabulate(postDurationConfidence),"VariableNames",{'value','count','percent'});
+postOrientationConfidence = array2table(tabulate(postOrientationConfidence),"VariableNames",{'value','count','percent'});
+postDurationConfidence = array2table(tabulate(postDurationConfidence),"VariableNames",{'value','count','percent'});
 
 % mind wandering responses
-
-
-mindWanderingFace = criticalTable.mindwandering(faceRows);
-mindWanderingObject = criticalTable.mindwandering(objectRows);
 
 mindWanderingFace = array2table(tabulate(mindWanderingFace),"VariableNames",{'value','count','percent'});
 mindWanderingObject = array2table(tabulate(mindWanderingObject),"VariableNames",{'value','count','percent'});
@@ -369,12 +365,5 @@ confidenceMindWanderingPilot1 = struct();
 
 confidenceMindWanderingPilot1.surpriseOrientationConfidence = surpriseOrientationConfidence;
 confidenceMindWanderingPilot1.surpriseDurationConfidence = surpriseDurationConfidence;
-confidenceMindWanderingPilot1.postOrientationConfidence = PostOrientationConfidence;
-confidenceMindWanderingPilot1.postDurationConfidence = PostDurationConfidence;
-confidenceMindWanderingPilot1.mindWanderingFace = mindWanderingFace;
-confidenceMindWanderingPilot1.mindWanderingObject = mindWanderingObject;
-
-tabulateFile = 'confidenceMindWanderingPilot1.mat';
-save(fullfile(processedDataIrrelevant,tabulateFile),'confidenceMindWanderingPilot1');
-
+confidenceMindWanderingPilot1.postOrientationConfidence =
 
