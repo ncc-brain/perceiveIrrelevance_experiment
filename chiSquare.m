@@ -90,7 +90,7 @@ orientationOrderStats = {array2table(contTableOrientation),chiOrientation,fisher
 
 [contTableDuration,chiDuration,fisherDuration]=chiSquareFunction(durationFirst,durationSecond);
 
-durationOrderStats = {array2table(contTableOrientation),chiOrientation,fisherOrientation};
+durationOrderStats = {array2table(contTableDuration),chiDuration,fisherDuration};
 
 %save the stats 
 

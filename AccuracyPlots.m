@@ -311,10 +311,11 @@ hold off;
 
 % load order effect data 
 
-load('orderEffect.mat');
+accuracyOrientation = [binom.orientationFirst(1),binom.orientationSecond(1)];
+accuracyDuration = [binom.durationFirst(1),binom.durationSecond(1)];
 
-accuracyOrientation = [(sum(orderEffect.orientationFirst)/height(orderEffect));(sum(orderEffect.orientationSecond)/height(orderEffect))];
-accuracyDuration = [(sum(orderEffect.durationFirst)/height(orderEffect));(sum(orderEffect.durationSecond)/height(orderEffect))];
+orientationPvalues = [binom.orientationFirst(4),binom.orientationSecond(4)];
+durationPvalues = [binom.durationFirst(4),binom.durationSecond(4)];
 
 %plot orientation order effect 
 
@@ -341,14 +342,46 @@ ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
-for i = 1:numel(combinedSurprise) 
+for i = 1:numel(accuracyOrientation) 
     
-    if surprisePvalues(i) < PValue
-        text(i-0.05 - Astoffset,  combinedSurprise(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if orientationPvalues(i) < PValue
+        text(i-0.001 - Astoffset,  accuracyOrientation(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    % face p-value
-    if controlPvalues(i) < PValue
-        text(i+0.25 - Astoffset, combinedControl(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+   
+end
+
+hold off;
+
+%plot duration order effect 
+
+figure,
+
+durationPlot = bar(accuracyDuration,'FaceColor','flat');
+
+durationPlot.CData(1,:) = durationFirstColor; 
+durationPlot.CData(2,:)= orientationFirstColor;
+
+yline(ChanceLevel, '--k'); % add the line to the chance level 
+ylim([0 1])
+yticks([0 0.5 1]);
+
+ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probe','FontWeight','bold','FontSize', 14);
+title('Surprise Trial Duration Probe Accuracy','FontSize', 16);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Duration First', 'Duration Second'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+
+Astoffset = 0.1; % asterisks ofset to decide the placement of it 
+
+for i = 1:numel(accuracyDuration) 
+    
+    if durationPvalues(i) < PValue
+        text(i-0.001 - Astoffset,  accuracyDuration(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
+   
 end
 

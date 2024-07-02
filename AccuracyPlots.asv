@@ -311,17 +311,45 @@ hold off;
 
 % load order effect data 
 
-load('orderEffect.mat');
+accuracyOrientation = [binom.orientationFirst(1),binom.orientationSecond(1)];
+accuracyDuration = [binom.durationFirst(1),binom.durationSecond(1)];
 
-accuracyOrientation = [(sum(orderEffect.orientationFirst)/height(orderEffect));(sum(orderEffect.orientationSecond)/height(orderEffect))];
-accuracyDuration = [(sum(orderEffect.durationFirst)/height(orderEffect));(sum(orderEffect.durationSecond)/height(orderEffect))];
+orientationPvalues = [binom.orientationFirst(4),binom.orientationSecond(4)];
+durationPvalues = [binom.durationFirst(4),binom.durationSecond(4)];
 
 %plot orientation order effect 
 
 figure,
 
-orientationPlot = bar(accuracyOrientation);
+orientationPlot = bar(accuracyOrientation,'FaceColor','flat');
 
-orientationPlot (1).FaceColor = orientationFirstColor; 
-orientationPlot (2).FaceColor = faceColor;
+orientationPlot.CData(1,:) = orientationFirstColor; 
+orientationPlot.CData(2,:)= durationFirstColor;
+
+yline(ChanceLevel, '--k'); % add the line to the chance level 
+ylim([0 1])
+yticks([0 0.5 1]);
+
+ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
+xlabel('Probe','FontWeight','bold','FontSize', 14);
+title('Surprise Trial Orientation Probe Accuracy','FontSize', 16);
+
+ax = gca; % Get the current axes
+ax.XTickLabel = {'Orientation First', 'Orientation Second'}; % Set the xticklabels
+ax.FontSize = 12; % Adjust the font size as needed
+ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
+
+
+Astoffset = 0.1; % asterisks ofset to decide the placement of it 
+
+for i = 1:numel(combinedSurprise) 
+    
+    if surprisePvalues(i) < PValue
+        text(i-0.05 - Astoffset,  combinedSurprise(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if controlPvalues(i) < PValue
+        text(i+0.25 - Astoffset, combinedControl(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+end
 
