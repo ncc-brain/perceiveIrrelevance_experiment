@@ -920,6 +920,7 @@ save(fullfile(processedDataIrrelevant,facePreSurprise),'facePreSurpriseTrials');
 objectPreSurprise = 'objectPreSurprise.mat';
 save(fullfile(processedDataIrrelevant,objectPreSurprise),'objectPreSurpriseTrials');
 
+%%
 %critical file
 criticalTableName = 'criticalTable.mat';
 save(fullfile(processedDataIrrelevant,criticalTableName),'criticalTable');
