@@ -105,6 +105,9 @@ end
 
 %% create seperate pre-surprise, critical and post surprise files
 
+%change the format (participant ID is long %Change display format
+
+format long g
 
 % in this loop I generate seperate tables for pre-surprise, surprise and
 % post-surprise trials. For surprise and post-surprise trials, accuracy of
@@ -120,9 +123,10 @@ for j = 1: numel(faceFolders) % iterares over face files %
     
      %participantID = participantIDtable.Subject_Code; % this part is for
      %lab experiment
-     participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment 
-       
-  % Pre-surprise face
+     
+     participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment    
+  
+     % Pre-surprise face
 
   % seperate the data for the pre-surprise trials 
   % this part generates seperate tables for each subject's pre-surprise
@@ -417,7 +421,11 @@ end
      currentObjectTrial = readtable(objectTrialPath); % access trial data
      participantIDPath = fullfile(objectFolderPath,"sessions.csv");
      participantIDtable = readtable(participantIDPath);
-     participantID = participantIDtable.Subject_Code;
+     
+     %participantID = participantIDtable.Subject_Code; %this part is for
+     %lab experiment 
+
+     participantID = participantIDtable.Exp_Subject_Id;
        
     % get the pre-surprise trials 
      preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
@@ -819,6 +827,7 @@ criticalAccuracyTable = table(nrOfProbes,nrOfProbesOneGroup,correctOrientation,c
 %post accuracy 
 
 uniqueParticipants = unique(postTable.ParticipantID); % get accuracy for each row of each participant 
+disp(uniqueParticipants)
 
 numTrials = 4; % each post-suprise has 4 trials. 
 
@@ -923,7 +932,6 @@ save(fullfile(processedDataIrrelevant,facePreSurprise),'facePreSurpriseTrials');
 objectPreSurprise = 'objectPreSurprise.mat';
 save(fullfile(processedDataIrrelevant,objectPreSurprise),'objectPreSurpriseTrials');
 
-%%
 %critical file
 criticalTableName = 'criticalTable.mat';
 save(fullfile(processedDataIrrelevant,criticalTableName),'criticalTable');
