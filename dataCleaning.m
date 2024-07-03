@@ -117,7 +117,10 @@ for j = 1: numel(faceFolders) % iterares over face files %
      currentFaceTrial = readtable(faceTrialPath); % access trial data
      participantIDPath = fullfile(faceFolderPath,"sessions.csv");
      participantIDtable = readtable(participantIDPath);
-     participantID = participantIDtable.Subject_Code;
+    
+     %participantID = participantIDtable.Subject_Code; % this part is for
+     %lab experiment
+     participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment 
        
   % Pre-surprise face
 
