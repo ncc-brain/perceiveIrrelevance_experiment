@@ -54,15 +54,15 @@ for i = 1:numel(subjectFolders)
   end
 end
 
-
+%%
 
 %sub126 is missing --> add it manually to the end of the gender & age data 
 
-ageData = [ageData,31];
+%ageData = [ageData,31]; this line is for lab experiment 
 
-MissingGender = {'male'};
+%MissingGender = {'male'};
 
-genderData{end+1} = MissingGender;
+%genderData{end+1} = MissingGender;
 
 genderData = cellfun(@(x) x{1}, genderData, 'UniformOutput', false);
 
