@@ -70,19 +70,20 @@ end
 
 names = {'contTable', 'chi2', 'fisherExtract'};
 
-% stats for comparing probes in critical trial 
+%% stats for comparing probes in critical trial 
 
 [contTableProbe,chiProbe,fisherProbe]= chiSquareFunction(orientationCritical,durationCritical); % compare two groups
 
 criticalProbeStats = {array2table(contTableProbe),chiProbe,fisherProbe};
 
-%stats for comparing critical % post-surprise 
+
+%% stats for comparing critical % post-surprise 
 
 [contTablePerf,chiPerf,fisherPerf] = chiSquareFunction(surprisePerf,postPerf);
 
 controlPerfStats = {array2table(contTablePerf),chiPerf,fisherPerf};
 
-%stats for comparing order effect 
+%% stats for comparing order effect 
 
 [contTableOrientation,chiOrientation,fisherOrientation] = chiSquareFunction(orientationFirst,orientationSecond);
 
@@ -92,7 +93,7 @@ orientationOrderStats = {array2table(contTableOrientation),chiOrientation,fisher
 
 durationOrderStats = {array2table(contTableDuration),chiDuration,fisherDuration};
 
-%save the stats 
+%% save the stats 
 
 pilot1Stats = struct();
 pilot1Stats.criticalProbeStats = criticalProbeStats;
