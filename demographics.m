@@ -101,7 +101,7 @@ xlabel('Sex','FontWeight','bold','FontSize',14);
 ylabel('Count','FontWeight','bold','FontSize',14);
 xticklabels({'Female','Male'});
 title('Sex Distribution','FontSize',16);
-ylim([0,20])
+ylim([0,(countFemale+countMale)]);
 yticks= ([0 20]);
 
 % add the numbers 
@@ -116,7 +116,7 @@ figure;
 histogram(ageData,'FaceColor',DescriptiveAgeColor);
 xlabel('Age','FontWeight','bold','FontSize',14);
 ylabel('Count','FontWeight','bold','Fontsize',14);
-ylim([0 7]);
+ylim([0 10]);
 title('Age distribution','FontSize',16);
 
 
