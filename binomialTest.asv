@@ -82,16 +82,15 @@ NaNorientationSecond = ~isnan(orderEffect.orientationSecond);
 NandurationFirst = ~isnan(orderEffect.durationFirst);
 NaNdurationSecond = ~isnan(orderEffect.durationSecond);
 
-orientationFirst = orderEffect.orientationFirst(NaNorientationFirst);
-orientationSecond = orderEffect.orientationSecond(NaNorientationSecond);
-durationFirst = orderEffect.durationFirst(NandurationFirst);
-durationSecond = orderEffect.durationSecond(NaNdurationSecond);
+orientationFirst = orientationFirst(NaNorientationFirst);
+orientationSecond = orientationSecond(NaNorientationSecond);
 
 
-accuracyOrientationFirst = binomialFunction((height(orderEffect)),sum(orientationFirst),'orientationFirst');
-accuracyOrientationSecond = binomialFunction((height(orderEffect)),sum(orientationSecond),'orientationSecond');
-accuracyDurationFirst= binomialFunction((height(orderEffect)),sum(durationFirst),'durationFirst');
-accuracyDurationSecond=binomialFunction((height(orderEffect)),sum(durationSecond),'durationSecond');
+
+accuracyOrientationFirst = binomialFunction((height(orderEffect)),sum(orderEffect.orientationFirst),'orientationFirst');
+accuracyOrientationSecond = binomialFunction((height(orderEffect)),sum(orderEffect.orientationSecond),'orientationSecond');
+accuracyDurationFirst= binomialFunction((height(orderEffect)),sum(orderEffect.durationFirst),'durationFirst');
+accuracyDurationSecond=binomialFunction((height(orderEffect)),sum(orderEffect.durationSecond),'durationSecond');
 
 
 % combined binomial table 
