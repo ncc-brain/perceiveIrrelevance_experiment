@@ -754,10 +754,10 @@ end
 
 for j = 1:maxNumber % same nr for objects 
     
-     if j <= numel(faceCriticalTrial)
+     if i <= numel(objectPostSurpriseTrials)
 
    currentFaceCritical = faceCriticalTrial{j};
-   
+   currentObjectCritical = objectCriticalTrial{j};
 
        %critical data orientation probed first 
     if  any(cellfun(@(x) isequal(x, currentFaceCritical.ParticipantID),subOrientationFirstFace)) 
@@ -767,12 +767,6 @@ for j = 1:maxNumber % same nr for objects
     if  any(cellfun(@(x) isequal(x, currentFaceCritical.ParticipantID),subDurationFirstFace))
        currentFaceCritical.probeOrder = {'durationFirst'};
     end
-     faceCriticalTrial{j} = currentFaceCritical;  % update your tables 
-     end
-    
-     if j <= numel(objectCriticalTrial)
-    
-         currentObjectCritical = objectCriticalTrial{j};
 
      if  any(cellfun(@(x) isequal(x, currentObjectCritical.ParticipantID),subOrientationFirstObject))
        currentObjectCritical.probeOrder = {'orientationFirst'};
@@ -782,11 +776,10 @@ for j = 1:maxNumber % same nr for objects
     if  any(cellfun(@(x) isequal(x, currentObjectCritical.ParticipantID), subDurationFirstObject))        
       currentObjectCritical.probeOrder = {'durationFirst'};
     end
- 
-    objectCriticalTrial{j} = currentObjectCritical; % update your tables
-     end
 
-     end
+    faceCriticalTrial{j} = currentFaceCritical;  % update your tables 
+    objectCriticalTrial{j} = currentObjectCritical;
+end
 
 % convert tables into one table 
 
@@ -944,33 +937,7 @@ end
 
         postAccuracyTable = addvars(postAccuracyTable, postNrOfProbes, 'NewVariableNames', 'nrOfProbes');
         postAccuracyTable = addvars(postAccuracyTable, postNrOfProbesGroup, 'NewVariableNames', 'nrOfProbesOneGroup');
-   
-
-        % compare performance with order effect 
-
-   orientationFirstRow = strcmp(criticalTable.probeOrder, 'orientationFirst');
-   durationFirstRow = strcmp(criticalTable.probeOrder,'durationFirst');
-   
-   orientationFirst = (criticalTable.orientationPerformance(orientationFirstRow))'; % orientation performance if orientation first
-   durationFirst = (criticalTable.durationPerformance(durationFirstRow))'; % duration performance if duration first
-
-   orientationSecond = (criticalTable.orientationPerformance(durationFirstRow))';
-   durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
-
-
-   % if it is not same size, replace empty cells with NaN 
-
-   maxLength = max([length(orientationFirst), length(durationFirst), length(orientationSecond), length(durationSecond)]);
-
-   % Add NaN to the empty cells 
-    orientationFirst = [orientationFirst, NaN(1, maxLength - length(orientationFirst))];
-    durationFirst = [durationFirst, NaN(1, maxLength - length(durationFirst))];
-    orientationSecond = [orientationSecond, NaN(1, maxLength - length(orientationSecond))];
-    durationSecond = [durationSecond, NaN(1, maxLength - length(durationSecond))];
-  
-   %save the order effect results 
-   orderEffect = table(orientationFirst',durationFirst',orientationSecond',durationSecond','VariableNames',{'orientationFirst','durationFirst','orientationSecond','durationSecond'});
-   
+       
         
 %Save the files '
 %pre-surprise file
@@ -994,9 +961,7 @@ save(fullfile(processedDataIrrelevant,criticalAccuracyTableFile),'criticalAccura
 postAccuracyTableFile= 'postAccuracyTable.mat';
 save(fullfile(processedDataIrrelevant,postAccuracyTableFile),'postAccuracyTable');
 
-%orderEffect
-orderEffectName = 'orderEffect.mat';
-   save(fullfile(processedDataIrrelevant,orderEffectName),'orderEffect');
+
 
 
 

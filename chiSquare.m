@@ -18,6 +18,7 @@ addpath(genpath(processedDataIrrelevant));
 
 load('criticalTable.mat'); 
 load('postTable.mat');
+load('orderEffect.mat');
 
 %% Groups to compare 
 
@@ -46,24 +47,6 @@ end
 
     surprisePerf = [orientationCritical,durationCritical];
     postPerf = [orientationControl,durationControl];
-
-
-%  compare performance with order effect 
-
-   orientationFirstRow = strcmp(criticalTable.probeOrder, 'orientationFirst');
-   durationFirstRow = strcmp(criticalTable.probeOrder,'durationFirst');
-   
-   orientationFirst = (criticalTable.orientationPerformance(orientationFirstRow))'; % orientation performance if orientation first
-   durationFirst = (criticalTable.durationPerformance(durationFirstRow))'; % duration performance if duration first
-
-   orientationSecond = (criticalTable.orientationPerformance(durationFirstRow))';
-   durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
-  
-   %save the order effect results 
-
-   orderEffect = table((orientationFirst)',(durationFirst)',(orientationSecond)',(durationSecond)','VariableNames',{'orientationFirst','durationFirst','orientationSecond','durationSecond'});
-   orderEffectName = 'orderEffect.mat';
-   save(fullfile(processedDataIrrelevant,orderEffectName),'orderEffect');
 
 
 %% Chi square % Fisher Test
