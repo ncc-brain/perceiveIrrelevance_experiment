@@ -68,11 +68,11 @@ controlPerfStats = {array2table(contTablePerf),chiPerf,fisherPerf};
 
 %% stats for comparing order effect 
 
-[contTableOrientation,chiOrientation,fisherOrientation] = chiSquareFunction(orientationFirst,orientationSecond);
+[contTableOrientation,chiOrientation,fisherOrientation] = chiSquareFunction(orderEffect.orientationFirst,orderEffect.orientationSecond);
 
 orientationOrderStats = {array2table(contTableOrientation),chiOrientation,fisherOrientation};
 
-[contTableDuration,chiDuration,fisherDuration]=chiSquareFunction(durationFirst,durationSecond);
+[contTableDuration,chiDuration,fisherDuration]=chiSquareFunction(orderEffect.durationFirst,orderEffect.durationSecond);
 
 durationOrderStats = {array2table(contTableDuration),chiDuration,fisherDuration};
 
@@ -81,8 +81,8 @@ durationOrderStats = {array2table(contTableDuration),chiDuration,fisherDuration}
 pilot1Stats = struct();
 pilot1Stats.criticalProbeStats = criticalProbeStats;
 pilot1Stats.controlPerfStats = controlPerfStats;
-pilot1Stats.orientationOrderStats = orientationOrderStats;
-pilot1Stats.durationOrderStats = durationOrderStats;
+%pilot1Stats.orientationOrderStats = orientationOrderStats;
+%pilot1Stats.durationOrderStats = durationOrderStats;
 
 pilot1StatsName = 'pilot1Stats.mat';
 save(fullfile(processedDataIrrelevant,pilot1StatsName),'pilot1Stats');
