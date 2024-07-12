@@ -11,8 +11,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataIrrelevant)
-addpath(genpath(processedDataIrrelevant)); 
+cd(processedDataLab)
+addpath(genpath(processedDataLab)); 
 
 % load files
 
@@ -81,11 +81,11 @@ durationOrderStats = {array2table(contTableDuration),chiDuration,fisherDuration}
 pilot1Stats = struct();
 pilot1Stats.criticalProbeStats = criticalProbeStats;
 pilot1Stats.controlPerfStats = controlPerfStats;
-%pilot1Stats.orientationOrderStats = orientationOrderStats;
-%pilot1Stats.durationOrderStats = durationOrderStats;
+pilot1Stats.orientationOrderStats = orientationOrderStats;
+pilot1Stats.durationOrderStats = durationOrderStats;
 
-pilot1StatsName = 'pilot1Stats.mat';
-save(fullfile(processedDataIrrelevant,pilot1StatsName),'pilot1Stats');
+pilot1StatsName = 'pilot1LabStats.mat';
+save(fullfile(processedDataLab,pilot1StatsName),'pilot1Stats');
 
 
 

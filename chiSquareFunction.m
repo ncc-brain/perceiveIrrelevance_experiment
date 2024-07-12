@@ -46,7 +46,7 @@ chiResults = table(chi2,criticalChi,pValue,'VariableNames',{'chisquare','critica
         contTable = contTable + 1;
     end
 
-[h,p,stats] = fishertest(contTable,"Tail","right","Alpha",0.05);
+[h,p,stats] = fishertest(contTable,"Tail","both","Alpha",0.05);
 
 oddsRatio = stats.OddsRatio;
 confInterval = stats.ConfidenceInterval;

@@ -6,8 +6,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataIrrelevant)
-addpath(genpath(processedDataIrrelevant)); 
+cd(processedDataLab)
+addpath(genpath(processedDataLab)); 
 
 % load tables for the binomial test 
 
@@ -102,5 +102,5 @@ binomialTables = [binoOrientation,binoPostOrientation1,binoPostOrientation2,bino
    binoPostFaceOrientation2,binoPostFaceDuration2,binoPostFaceOrientation3,binoPostFaceDuration3,binoPostFaceOrientation4,binoPostFaceDuration4,accuracyOrientationFirst,accuracyOrientationSecond,accuracyDurationFirst,accuracyDurationSecond];
 
 binomialTableFile = 'binomialTables.mat';
-save(fullfile(processedDataIrrelevant,binomialTableFile),'binomialTables');
+save(fullfile(processedDataLab,binomialTableFile),'binomialTables');
 

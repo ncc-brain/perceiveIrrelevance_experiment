@@ -6,8 +6,8 @@ configIrrelevant;
 
 %open processed files
 
-cd(processedDataIrrelevant);
-addpath(genpath(processedDataIrrelevant)); 
+cd(processedDataLab);
+addpath(genpath(processedDataLab)); 
 
 % face pre-surprise behavioral data
 
@@ -15,11 +15,11 @@ addpath(genpath(processedDataIrrelevant));
 facePreSurpriseStruct = load("facePreSurprise.mat"); % load data
 facePreSurpriseTable = behavioralPerformanceFunction(facePreSurpriseStruct,'face');
 facePreSurpriseRTtable = 'facePreSurpriseRTtable.mat'; % save processes data
-save(fullfile(processedDataIrrelevant,facePreSurpriseRTtable),'facePreSurpriseTable');
+save(fullfile(processedDataLab,facePreSurpriseRTtable),'facePreSurpriseTable');
 
 % object pre-surprise behavioral data
 
 objectPreSurpriseStruct = load("objectPreSurprise.mat"); %load data
 objectPreSurpriseTable = behavioralPerformanceFunction(objectPreSurpriseStruct,'object');
 objectPreSurpriseRTtable = 'objectPreSurpriseRTtable.mat'; %save processed data
-save(fullfile(processedDataIrrelevant,objectPreSurpriseRTtable),'objectPreSurpriseTable');
+save(fullfile(processedDataLab,objectPreSurpriseRTtable),'objectPreSurpriseTable');
