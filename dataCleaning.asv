@@ -6,10 +6,10 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(rawDataLab);
-addpath(genpath(rawDataLab)); 
+cd(rawDataOnline);
+addpath(genpath(rawDataOnline)); 
 
-participantFolders = dir(rawDataLab); % open participant files
+participantFolders = dir(rawDataOnline); % open participant files
 participantFolders = participantFolders([participantFolders.isdir] & ~startsWith({participantFolders.name}, '.')); % remove hidden files
 
 
@@ -89,7 +89,7 @@ PostSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidence
 for i = 1:numel(participantFolders)
 
 
-    currentSubject = fullfile(rawDataIrrelevant,participantFolders(i).name);
+    currentSubject = fullfile(rawDataOnline,participantFolders(i).name);
     subjectFileContent = dir(currentSubject);
     subjectSessionFile = fullfile(currentSubject,'sessions.csv');
     sessionData = readtable(subjectSessionFile);
@@ -107,7 +107,7 @@ end
 
 %change the format (participant ID is long %Change display format
 
-format long g
+format long g % for lab subject id 
 
 % in this loop I generate seperate tables for pre-surprise, surprise and
 % post-surprise trials. For surprise and post-surprise trials, accuracy of
@@ -121,10 +121,10 @@ for j = 1: numel(faceFolders) % iterares over face files %
      participantIDPath = fullfile(faceFolderPath,"sessions.csv");
      participantIDtable = readtable(participantIDPath);
     
-     participantID = participantIDtable.Subject_Code; % this part is for
+     %participantID = participantIDtable.Subject_Code; % this part is for
      %lab experiment
      
-     %participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment    
+     participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment    
   
      % Pre-surprise face
 
@@ -975,28 +975,28 @@ end
 %Save the files '
 %pre-surprise file
 facePreSurprise = 'facePreSurprise.mat';
-save(fullfile(processedDataLab,facePreSurprise),'facePreSurpriseTrials');
+save(fullfile(processedDataOnline,facePreSurprise),'facePreSurpriseTrials');
 objectPreSurprise = 'objectPreSurprise.mat';
-save(fullfile(processedDataIrrelevant,objectPreSurprise),'objectPreSurpriseTrials');
+save(fullfile(processedDataOnline,objectPreSurprise),'objectPreSurpriseTrials');
 
 %critical file
 criticalTableName = 'criticalTable.mat';
-save(fullfile(processedDataIrrelevant,criticalTableName),'criticalTable');
+save(fullfile(processedDataOnline,criticalTableName),'criticalTable');
 
 %post surprise file 
 postTableName = 'postTable.mat';
-save(fullfile(processedDataIrrelevant,postTableName),'postTable');
+save(fullfile(processedDataOnline,postTableName),'postTable');
 
 %accuracy files 
 criticalAccuracyTableFile = 'criticalAccuracyTable.mat';
-save(fullfile(processedDataIrrelevant,criticalAccuracyTableFile),'criticalAccuracyTable');
+save(fullfile(processedDataLab,criticalAccuracyTableFile),'criticalAccuracyTable');
 
 postAccuracyTableFile= 'postAccuracyTable.mat';
-save(fullfile(processedDataIrrelevant,postAccuracyTableFile),'postAccuracyTable');
+save(fullfile(processedDataLab,postAccuracyTableFile),'postAccuracyTable');
 
 %orderEffect
 orderEffectName = 'orderEffect.mat';
-   save(fullfile(processedDataIrrelevant,orderEffectName),'orderEffect');
+   save(fullfile(processedDataLab,orderEffectName),'orderEffect');
 
 
 

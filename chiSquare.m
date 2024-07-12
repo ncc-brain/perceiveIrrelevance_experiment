@@ -11,8 +11,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataLab)
-addpath(genpath(processedDataLab)); 
+cd(processedDataComb)
+addpath(genpath(processedDataComb)); 
 
 % load files
 
@@ -84,8 +84,8 @@ pilot1Stats.controlPerfStats = controlPerfStats;
 pilot1Stats.orientationOrderStats = orientationOrderStats;
 pilot1Stats.durationOrderStats = durationOrderStats;
 
-pilot1StatsName = 'pilot1LabStats.mat';
-save(fullfile(processedDataLab,pilot1StatsName),'pilot1Stats');
+pilot1StatsName = 'pilot1CombinedStats.mat';
+save(fullfile(processedDataComb,pilot1StatsName),'pilot1Stats');
 
 
 

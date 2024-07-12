@@ -6,8 +6,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataIrrelevant)
-addpath(genpath(processedDataIrrelevant)); 
+cd(processedDataComb)
+addpath(genpath(processedDataComb)); 
 
 % load binomial table for accuracy values & p values 
 

@@ -1,4 +1,5 @@
 % Load the critical table:
+
 load('P:\2023-0383-PerceiveIrrelevance\03data\perceivedIrrelevance\derivatives\criticalTable.mat')
 
 %% Format the table:
@@ -26,5 +27,5 @@ log_reg_tbl.subject = categorical(log_reg_tbl.subject);
 
 %% Fit GLM:
 glme = fitglme(log_reg_tbl,"y~cate * probe+(probe|subject)",Distribution="Binomial");
-[~,~,statsFixed] = fixedEffects(glme)
+[~,~,statsFixed] = fixedEffects(glme);
 anova(glme)

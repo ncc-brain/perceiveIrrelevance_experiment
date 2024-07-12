@@ -6,10 +6,10 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(rawDataLab);
-addpath(genpath(rawDataLab)); 
+cd(rawDataComb);
+addpath(genpath(rawDataComb)); 
 
-participantFolders = dir(rawDataLab); % open participant files
+participantFolders = dir(rawDataComb); % open participant files
 participantFolders = participantFolders([participantFolders.isdir] & ~startsWith({participantFolders.name}, '.')); % remove hidden files
 
 
@@ -89,7 +89,7 @@ PostSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidence
 for i = 1:numel(participantFolders)
 
 
-    currentSubject = fullfile(rawDataLab,participantFolders(i).name);
+    currentSubject = fullfile(rawDataComb,participantFolders(i).name);
     subjectFileContent = dir(currentSubject);
     subjectSessionFile = fullfile(currentSubject,'sessions.csv');
     sessionData = readtable(subjectSessionFile);
@@ -125,7 +125,7 @@ for j = 1: numel(faceFolders) % iterares over face files %
      %lab experiment
      
      participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment    
-  
+     disp (participantIDtable.Subject_Nr_Per_Group);
      % Pre-surprise face
 
   % seperate the data for the pre-surprise trials 
@@ -426,7 +426,7 @@ end
      %lab experiment 
 
      participantID = participantIDtable.Exp_Subject_Id;
-       
+     disp(participantIDtable.Subject_Nr_Per_Group);  
     % get the pre-surprise trials 
      preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
      objectPreSurpriseTrials{j} = preSurpriseTask(:,ObjectPreSurpriseCols);
@@ -975,28 +975,28 @@ end
 %Save the files '
 %pre-surprise file
 facePreSurprise = 'facePreSurprise.mat';
-save(fullfile(processedDataLab,facePreSurprise),'facePreSurpriseTrials');
+save(fullfile(processedDataComb,facePreSurprise),'facePreSurpriseTrials');
 objectPreSurprise = 'objectPreSurprise.mat';
-save(fullfile(processedDataLab,objectPreSurprise),'objectPreSurpriseTrials');
+save(fullfile(processedDataComb,objectPreSurprise),'objectPreSurpriseTrials');
 
 %critical file
 criticalTableName = 'criticalTable.mat';
-save(fullfile(processedDataLab,criticalTableName),'criticalTable');
+save(fullfile(processedDataComb,criticalTableName),'criticalTable');
 
 %post surprise file 
 postTableName = 'postTable.mat';
-save(fullfile(processedDataLab,postTableName),'postTable');
+save(fullfile(processedDataComb,postTableName),'postTable');
 
 %accuracy files 
 criticalAccuracyTableFile = 'criticalAccuracyTable.mat';
-save(fullfile(processedDataLab,criticalAccuracyTableFile),'criticalAccuracyTable');
+save(fullfile(processedDataComb,criticalAccuracyTableFile),'criticalAccuracyTable');
 
 postAccuracyTableFile= 'postAccuracyTable.mat';
-save(fullfile(processedDataLab,postAccuracyTableFile),'postAccuracyTable');
+save(fullfile(processedDataComb,postAccuracyTableFile),'postAccuracyTable');
 
 %orderEffect
 orderEffectName = 'orderEffect.mat';
-   save(fullfile(processedDataLab,orderEffectName),'orderEffect');
+   save(fullfile(processedDataComb,orderEffectName),'orderEffect');
 
 
 
