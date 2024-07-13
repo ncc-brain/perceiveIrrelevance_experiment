@@ -160,6 +160,7 @@ PostAccuracyPlot(2).FaceColor = faceColor;
 
 
 yline(ChanceLevel, '--k'); % add the line to the chance level 
+ylim([0 1]);
 yticks([0, 0.5, 1]);
 
 

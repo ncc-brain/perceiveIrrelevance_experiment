@@ -8,8 +8,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataIrrelevant)
-addpath(genpath(processedDataIrrelevant)); 
+cd(processedDataOnline)
+addpath(genpath(processedDataOnline)); 
 
 %load the data 
 
@@ -374,7 +374,7 @@ confidenceMindWanderingPilot1.postDurationConfidence = PostDurationConfidence;
 confidenceMindWanderingPilot1.mindWanderingFace = mindWanderingFace;
 confidenceMindWanderingPilot1.mindWanderingObject = mindWanderingObject;
 
-tabulateFile = 'confidenceMindWanderingPilot1.mat';
-save(fullfile(processedDataIrrelevant,tabulateFile),'confidenceMindWanderingPilot1');
+tabulateFile = 'confidenceMindWanderingPilotOnline1.mat';
+save(fullfile(processedDataOnline,tabulateFile),'confidenceMindWanderingPilot1');
 
 
