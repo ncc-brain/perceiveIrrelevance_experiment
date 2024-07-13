@@ -6,8 +6,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataLab)
-addpath(genpath(processedDataLab)); 
+cd(processedDataOnline)
+addpath(genpath(processedDataOnline)); 
 
 % load binomial table for accuracy values & p values 
 
@@ -222,25 +222,18 @@ controlPvalues =[binom.postOrientation1(4),binom.postDuration1(4)];
 
 
 BarCombinedAccuracy = [combinedSurprise;combinedControl]';
-surpriseColors = [surpriseColor;surpriseColor];
-postColors = [postColor;postColor];
+BarColors = [repmat(surpriseColor, 2, 1); repmat(postColor, 2, 1)];
 
 figure; 
 
-AccuracyCombinedPlot = bar(BarCombinedAccuracy,'grouped','FaceColor','flat');
+AccuracyCombinedPlot = bar(BarCombinedAccuracy,'grouped');
 
-ho.ld on;
+hold on;
 
 %set the colors 
 
-    for j = 1:size(BarCombinedAccuracy,1)
-
-        AccuracyCombinedPlot(1).CData(j,:)= surpriseColors(j,:); %orientation side
-       
-        AccuracyCombinedPlot(2).CData(j,:)= postColors(j,:); %duration side
-  
-    end
-
+AccuracyCombinedPlot(1).FaceColor = surpriseColor;
+AccuracyCombinedPlot(2).FaceColor = postColor;
 
 % set the length of the error bars 
 
@@ -287,22 +280,7 @@ end
 
 % add legends 
 
-legendColors = [orientationColor;postOrientation;durationColor;postDuration];
-legendLabels = {'Surprise Orientation','Post Orientation','Surprise Duration','Post Duration'};
-
-% add the legend colors 
-
-legends = []; % generate an empty legend 
-
-for i = 1:size(legendColors,1)
-
-currentLegend = plot(nan,nan,'color',legendColors(i,:),'LineWidth',5);
-
-legends = [legends,currentLegend];
-
-end
-
-legend(legends, {'Surprise Orientation','Post Orientation','Surprise Duration','Post Duration'});
+legend('Surprise', 'Post Surprise', 'Location', 'northeast');
 
 
 hold off;
@@ -317,14 +295,22 @@ accuracyDuration = [binom.durationFirst(1),binom.durationSecond(1)];
 orientationPvalues = [binom.orientationFirst(4),binom.orientationSecond(4)];
 durationPvalues = [binom.durationFirst(4),binom.durationSecond(4)];
 
+
+BarOrderAccuracy = [accuracyOrientation;accuracyDuration]';
+BarColors = [repmat(probedFirstColor, 2, 1); repmat(probedSecondColor, 2, 1)];
+
+figure; 
+
+AccuracyOrderPlot = bar(BarOrderAccuracy,'grouped');
+
+hold on;
+
+%set the colors 
+
+AccuracyOrderPlot(1).FaceColor = probedFirstColor;
+AccuracyOrderPlot(2).FaceColor = probedSecondColor;
+
 %plot orientation order effect 
-
-figure,
-
-orientationPlot = bar(accuracyOrientation,'FaceColor','flat');
-
-orientationPlot.CData(1,:) = orientationFirstColor; 
-orientationPlot.CData(2,:)= durationFirstColor;
 
 yline(ChanceLevel, '--k'); % add the line to the chance level 
 ylim([0 1])
@@ -332,10 +318,10 @@ yticks([0 0.5 1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
 xlabel('Probe','FontWeight','bold','FontSize', 14);
-title('Surprise Trial Orientation Probe Accuracy','FontSize', 16);
+title('Surprise Trial Probe Accuracy and Order Effect','FontSize', 16);
 
 ax = gca; % Get the current axes
-ax.XTickLabel = {'Orientation First', 'Orientation Second'}; % Set the xticklabels
+ax.XTickLabel = {'Orientation', 'Duration'}; % Set the xticklabels
 ax.FontSize = 12; % Adjust the font size as needed
 ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 
@@ -345,34 +331,10 @@ Astoffset = 0.1; % asterisks ofset to decide the placement of it
 for i = 1:numel(accuracyOrientation) 
     
     if orientationPvalues(i) < PValue
-        text(i-0.001 - Astoffset,  accuracyOrientation(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+        text(i-0.001 - Astoffset,  accuracyOrientation(i) + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
    
 end
-
-hold off;
-
-%plot duration order effect 
-
-figure,
-
-durationPlot = bar(accuracyDuration,'FaceColor','flat');
-
-durationPlot.CData(1,:) = durationFirstColor; 
-durationPlot.CData(2,:)= orientationFirstColor;
-
-yline(ChanceLevel, '--k'); % add the line to the chance level 
-ylim([0 1])
-yticks([0 0.5 1]);
-
-ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
-xlabel('Probe','FontWeight','bold','FontSize', 14);
-title('Surprise Trial Duration Probe Accuracy','FontSize', 16);
-
-ax = gca; % Get the current axes
-ax.XTickLabel = {'Duration First', 'Duration Second'}; % Set the xticklabels
-ax.FontSize = 12; % Adjust the font size as needed
-ax.FontName = 'Arial'; % Set the font name (change 'Arial' to your desired font)
 
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
@@ -384,4 +346,11 @@ for i = 1:numel(accuracyDuration)
     end
    
 end
+
+legend('Probed first', 'Probed second', 'Location', 'northeast');
+
+hold off;
+
+
+
 

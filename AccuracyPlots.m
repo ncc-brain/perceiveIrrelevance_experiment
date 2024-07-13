@@ -6,8 +6,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataLab)
-addpath(genpath(processedDataLab)); 
+cd(processedDataOnline)
+addpath(genpath(processedDataOnline)); 
 
 % load binomial table for accuracy values & p values 
 
@@ -296,7 +296,7 @@ orientationPvalues = [binom.orientationFirst(4),binom.orientationSecond(4)];
 durationPvalues = [binom.durationFirst(4),binom.durationSecond(4)];
 
 
-BarOrderAccuracy = [accuracyOrientation;accuracyDuration]';
+BarOrderAccuracy = [accuracyOrientation;accuracyDuration];
 BarColors = [repmat(probedFirstColor, 2, 1); repmat(probedSecondColor, 2, 1)];
 
 figure; 
@@ -331,18 +331,15 @@ Astoffset = 0.1; % asterisks ofset to decide the placement of it
 for i = 1:numel(accuracyOrientation) 
     
     if orientationPvalues(i) < PValue
-        text(i-0.001 - Astoffset,  accuracyOrientation(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+        text(i-0.05 - Astoffset,accuracyOrientation(i) + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
    
 end
 
-
-Astoffset = 0.1; % asterisks ofset to decide the placement of it 
-
 for i = 1:numel(accuracyDuration) 
     
     if durationPvalues(i) < PValue
-        text(i-0.001 - Astoffset,  accuracyDuration(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+        text(i+0.95 - Astoffset,accuracyDuration(i) + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
    
 end
