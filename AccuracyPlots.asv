@@ -7,7 +7,7 @@ addpath('./')
 configIrrelevant;
 
 cd(processedDataComb)
-addpath(genpath(processedDataComb)); 
+addpath(genpath(processedDataOnline)); 
 
 % load binomial table for accuracy values & p values 
 
@@ -340,7 +340,7 @@ end
 for i = 1:numel(accuracyDuration) 
     
     if durationPvalues(i) < PValue
-        text(i+0.25 - Astoffset,accuracyDuration(i) + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+        text(i+0.95 - Astoffset,accuracyDuration(i) + 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
    
 end
