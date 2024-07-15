@@ -1,5 +1,5 @@
 
-function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2)
+function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2,label1,label2)
 
 % this function receives 2 groups you want to compare as input, generates contingency table, conducts chi square of
 % independence. As output it returns chi square and critical value together
@@ -9,19 +9,14 @@ function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2)
 
 % contingency table 
 
-categoryNames = {'wrong', 'correct'}; 
-groupNames = {'face','object'};
+accuracyLabels = {'wrong', 'correct'}; 
+groupNames = {'group1','group2'};
 
-group1 = categorical(group1, [0, 1], groupNames);
-group2 = categorical(group2,[0, 1], categoryNames);
+IV = categorical(group1,{label1,label2},groupNames);
+DV = categorical(group2,[0, 1], accuracyLabels);
 
-x=countcats(group1);
-y=countcats(group2);
 
-IV = categories (group1 & group2);
-DV = accuracy ;
-
-conTable = [x,y];
+%conTable = [x,y];
 [contTable, chi2, pValue] = crosstab(IV, DV);
 
 % calculate critical chi 
