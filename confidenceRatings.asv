@@ -374,7 +374,7 @@ confidenceMindWanderingPilot1.postDurationConfidence = PostDurationConfidence;
 confidenceMindWanderingPilot1.mindWanderingFace = mindWanderingFace;
 confidenceMindWanderingPilot1.mindWanderingObject = mindWanderingObject;
 
-tabulateFile = 'confidenceMindWanderingPilotCombined.mat';
-save(fullfile(processedDataComb,tabulateFile),'confidenceMindWanderingPilot1');
+tabulateFile = 'confidenceMindWanderingPilotOnline1.mat';
+save(fullfile(processedDataC,tabulateFile),'confidenceMindWanderingPilot1');
 
 
