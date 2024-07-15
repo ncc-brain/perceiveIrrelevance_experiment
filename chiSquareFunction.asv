@@ -1,5 +1,5 @@
 
-function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2)
+function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2,label1,label2,tailNr)
 
 % this function receives 2 groups you want to compare as input, generates contingency table, conducts chi square of
 % independence. As output it returns chi square and critical value together
@@ -9,17 +9,12 @@ function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2)
 
 % contingency table 
 
-accuracy = {'wrong', 'correct'}; 
+accuracyLabels = {'wrong', 'correct'}; 
 groupNames = {'group1','group2'};
 
-IV = categorical(group1, ['face', 'object'], groupNames);
-DV = categorical(group2,[0, 1], categoryNames);
+IV = categorical(group1,{label1,label2},groupNames);
+DV = categorical(group2,[0, 1], accuracyLabels);
 
-%x=countcats(group1);
-%y=countcats(group2);
-
-%IV = categories (group1 & group2);
-%DV = accuracy ;
 
 %conTable = [x,y];
 [contTable, chi2, pValue] = crosstab(IV, DV);
@@ -54,8 +49,14 @@ chiResults = table(chi2,criticalChi,pValue,'VariableNames',{'chisquare','critica
         contTable = contTable + 1;
     end
 
-[h,p,stats] = fishertest(contTable,'Tail','both','Alpha',0.05);
+    if tailNr == 1;
 
+    [h,p,stats] = fishertest(contTable,'Tail','right','Alpha',0.05);
+    
+    elseif tailNr == 2;
+
+    [h,p,stats] = fishertest(contTable,'Tail','both','Alpha',0.05);
+    end
 oddsRatio = stats.OddsRatio;
 confInterval = stats.ConfidenceInterval;
 
