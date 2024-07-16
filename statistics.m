@@ -72,7 +72,7 @@ objectIndexDuration= strcmp(durationCombined.group,'object');
 
 %% stats for comparing critical & post-surprise (within subject) - McNemar's test
 
-[contFaceOrientation ,~ ,~ ] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'control','critical',1,1);
+[contFaceOrientation ,~ ,~ ] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'control','critical',2,1);
 
 
 %% stats for comparing order effect (within subject) - fisher's exact test 

@@ -116,7 +116,7 @@ function McNemarextest(v,t,alpha)
 
 if length(v) ~= 4
     error('Warning:Vector must have four data. The a,b,c,d entry for the 2x2 table.');
-    
+    return;
 end
 
 if ~all(isfinite(v(:))) || ~all(isnumeric(v(:)))
@@ -169,7 +169,7 @@ warning on
 %Kind hypothesis selection
 if t == 1
     P = P;
-elseif t == 2
+else t = 2;
     P = 2*P;
 end
 
@@ -182,20 +182,20 @@ disp('    Sample 1        Sample 2           P  ');
 fprintf('-------------------------------------------\n');
 fprintf(' %10.4f      %10.4f       %8.6f\n',[P1,P2,P].');
 fprintf('-------------------------------------------\n');
-if t == 1
+if t = 1
     disp('For a selected one-saided test.')
     fprintf('With a given significance of: %.3f\n', alpha);
     if P > alpha
         disp('The test results not significative.')
-    elseif P < alpha
+    else P < alpha;
         disp('The test results significative.')
     end
-elseif t == 2
+else t = 2;
     disp('For a selected two-saided test.')
     fprintf('With a given significance of: %.3f\n', alpha/2);
     if P > alpha/2
         disp('The test results not significative.')
-    elseif P < alpha/2
+    else P < alpha/2;
         disp('The test results significative.')
     end
 end
@@ -222,15 +222,15 @@ if t == 1
     fprintf('With a given significance of: %.3f\n', alpha);
     if P > alpha
         disp('The test results not significative.');
-    elseif P < alpha
+    else P < alpha
         disp('The test results significative.');
     end
-elseif t == 2
+else t = 2;
     disp('For a selected two-saided test.')
     fprintf('With a given significance of: %.3f\n', alpha/2);
     if P > alpha/2
         disp('The test results not significative')
-    elseif P < alpha/2
+    else P < alpha/2;
         disp('The test results significative')
     end
 end
