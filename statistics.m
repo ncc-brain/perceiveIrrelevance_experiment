@@ -46,21 +46,22 @@ end
 
 
 
+
 %% stats for comparing order effect (within subject) - fisher's exact test 
 
-[contTableOrientationOrder,chiOrientationOrder,fisherOrientationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.orientationPerformance,'orientationFirst','durationFirst',1); % between group orientation
-[contTableDurationOrder,chiDurationOrder,FisherDurationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.durationPerformance,'orientationFirst','durationFirst',1);
+[contTableOrientationOrder,chiOrientationOrder,fisherOrientationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.orientationPerformance,'orientationFirst','durationFirst',1,0); % between group orientation
+[contTableDurationOrder,chiDurationOrder,FisherDurationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.durationPerformance,'durationFirst','orientationFirst',1,0); % always put the one you expect better performance (based on your hypothesis) first
 
 orientationOrderStats = {array2table(contTableOrientationOrder),chiOrientationOrder,fisherOrientationOrder};
 durationOrderStats = {array2table(contTableDurationOrder),chiDurationOrder,FisherDurationOrder};
 
 %% stats for comparing performance in face and object (between subject)
 
-[contTableStimO,chiStimO,fisherStimO] = chiSquareFunction(criticalTable.groupName,criticalTable.orientationPerformance,'face','object',2); % between group orientation
-[contTableStimD,chiStimD,fisherStimD] = chiSquareFunction(criticalTable.groupName,criticalTable.durationPerformance,'face','object',2);
+[contTableStimO,chiStimO,fisherStimO] = chiSquareFunction(criticalTable.groupName,criticalTable.orientationPerformance,'face','object',2,0); % between group orientation
+[contTableStimD,chiStimD,fisherStimD] = chiSquareFunction(criticalTable.groupName,criticalTable.durationPerformance,'face','object',2,0);
 
-[contTablePostStimO,chiPostStimO,fisherPostStimO] = chiSquareFunction(firstControlData.groupName,firstControlData.orientationAccuracy,'face','object',2);
-[contTablePostStimD,chiPostStimD,fisherPostStimD] = chiSquareFunction(firstControlData.groupName,firstControlData.durationAccuracy,'face','object',2);
+[contTablePostStimO,chiPostStimO,fisherPostStimO] = chiSquareFunction(firstControlData.groupName,firstControlData.orientationAccuracy,'face','object',2,0);
+[contTablePostStimD,chiPostStimD,fisherPostStimD] = chiSquareFunction(firstControlData.groupName,firstControlData.durationAccuracy,'face','object',2,0);
 
 orientationStats = {array2table(contTableStimO),chiStimO,fisherStimO};
 durationStats = {array2table(contTableStimD),chiStimD,fisherStimD};

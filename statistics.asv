@@ -11,8 +11,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataComb)
-addpath(genpath(processedDataComb)); 
+cd(processedDataLab)
+addpath(genpath(processedDataLab)); 
 
 % load files
 
@@ -46,21 +46,22 @@ end
 
 
 
+
 %% stats for comparing order effect (within subject) - fisher's exact test 
 
-[contTableOrientationOrder,chiOrientationOrder,fisherOrientationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.orientationPerformance,'orientationFirst','durationFirst'); % between group orientation
-[contTableDurationOrder,chiDurationOrder,FisherDurationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.durationPerformance,'orientationFirst','durationFirst');
+[contTableOrientationOrder,chiOrientationOrder,fisherOrientationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.orientationPerformance,'orientationFirst','durationFirst',1,0); % between group orientation
+[contTableDurationOrder,chiDurationOrder,FisherDurationOrder] = chiSquareFunction(criticalTable.probeOrder,criticalTable.durationPerformance,'durationFirst','orientationFirst',1,0); % always put the one 
 
-orientationOrderStats = {array2table(contTableStimO),chiStimO,fisherStimO};
-durationOrderStats = 
+orientationOrderStats = {array2table(contTableOrientationOrder),chiOrientationOrder,fisherOrientationOrder};
+durationOrderStats = {array2table(contTableDurationOrder),chiDurationOrder,FisherDurationOrder};
 
 %% stats for comparing performance in face and object (between subject)
 
-[contTableStimO,chiStimO,fisherStimO] = chiSquareFunction(criticalTable.groupName,criticalTable.orientationPerformance,'face','object'); % between group orientation
-[contTableStimD,chiStimD,fisherStimD] = chiSquareFunction(criticalTable.groupName,criticalTable.durationPerformance,'face','object');
+[contTableStimO,chiStimO,fisherStimO] = chiSquareFunction(criticalTable.groupName,criticalTable.orientationPerformance,'face','object',2,0); % between group orientation
+[contTableStimD,chiStimD,fisherStimD] = chiSquareFunction(criticalTable.groupName,criticalTable.durationPerformance,'face','object',2,0);
 
-[contTablePostStimO,chiPostStimO,fisherPostStimO] = chiSquareFunction(firstControlData.groupName,firstControlData.orientationAccuracy,'face','object');
-[contTablePostStimD,chiPostStimD,fisherPostStimD] = chiSquareFunction(firstControlData.groupName,firstControlData.durationAccuracy,'face','object');
+[contTablePostStimO,chiPostStimO,fisherPostStimO] = chiSquareFunction(firstControlData.groupName,firstControlData.orientationAccuracy,'face','object',2,0);
+[contTablePostStimD,chiPostStimD,fisherPostStimD] = chiSquareFunction(firstControlData.groupName,firstControlData.durationAccuracy,'face','object',2,0);
 
 orientationStats = {array2table(contTableStimO),chiStimO,fisherStimO};
 durationStats = {array2table(contTableStimD),chiStimD,fisherStimD};
@@ -74,8 +75,8 @@ postDurationStats = {array2table(contTablePostStimD),chiPostStimD,fisherPostStim
 pilot1Stats = struct();
 %pilot1Stats.criticalProbeStats = criticalProbeStats;
 %pilot1Stats.controlPerfStats = controlPerfStats;
-%pilot1Stats.orientationOrderStats = orientationOrderStats;
-%pilot1Stats.durationOrderStats = durationOrderStats;
+pilot1Stats.orientationOrderStats = orientationOrderStats;
+pilot1Stats.durationOrderStats = durationOrderStats;
 pilot1Stats.orientationGroupComp = orientationStats;
 pilot1Stats.orientationPostGroupComp = postOrientationStats;
 pilot1Stats.durationGroupComp= durationStats;

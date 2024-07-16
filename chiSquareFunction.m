@@ -1,5 +1,5 @@
 
-function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2,label1,label2,tailNr)
+function [contTable,chiResults,fisherExtract,full_output] = chiSquareFunction(group1,group2,label1,label2,tailNr,mcNemar)
 
 % this function receives 2 groups you want to compare as input, generates contingency table, conducts chi square of
 % independence. As output it returns chi square and critical value together
@@ -7,15 +7,16 @@ function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2,
 % ficherExtract results
 % for tail number, add 1 for right-tailed fisher's exact test and add 2 for
 % two-tailed fisher's exact test
+% mcNemar == 1, means you want to conduct mcNemar test
 
 
 % contingency table 
 
-accuracyLabels = {'wrong', 'correct'}; 
+accuracyLabels = {'correct', 'wrong'}; 
 groupNames = {'group1','group2'};
 
 IV = categorical(group1,{label1,label2},groupNames);
-DV = categorical(group2,[0, 1], accuracyLabels);
+DV = categorical(group2,[1, 0], accuracyLabels);
 
 
 %conTable = [x,y];
@@ -72,5 +73,11 @@ elseif h == 0
 
 end
 fisherExtract = table(h,p,oddsRatio,confInterval(1),confInterval(2),'VariableNames',{'h','p','oddsRatio','lowerLimit','upperLimit'});
+
+if mcNemar == 1 
+
+[full_output]= mcnemar(contTable,alpha);
+
+end
 
 end
