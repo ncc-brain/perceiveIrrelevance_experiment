@@ -1,5 +1,5 @@
 
-function [contTable,chiResults,fisherExtract] = chiSquareFunction(group1,group2,label1,label2,tailNr,mcNemar)
+function [contTable,chiResults,fisherExtract,full_output] = statsFunction(group1,group2,label1,label2,tailNr,mcNemar)
 
 % this function receives 2 groups you want to compare as input, generates contingency table, conducts chi square of
 % independence. As output it returns chi square and critical value together
@@ -76,7 +76,8 @@ fisherExtract = table(h,p,oddsRatio,confInterval(1),confInterval(2),'VariableNam
 
 if mcNemar == 1 
 
-    mcNemar = mcnemar(contTable,alpha)
+[full_output]= mcnemar(contTable,alpha);
 
+end
 
 end
