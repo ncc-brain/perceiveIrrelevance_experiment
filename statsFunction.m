@@ -95,7 +95,7 @@ c= max((controlCorrect - criticalCorrect),0); % correct in the first and wrong i
 d = min(controlIncorrect,criticalIncorrect); % number that wrong in both
 
 vector = [a,b,c,d];
-McNemarextest(vector,1,0.05);
+McNemarextest(vector,tailNr,0.05);
 
 end
 
