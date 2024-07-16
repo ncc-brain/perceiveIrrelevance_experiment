@@ -37,6 +37,34 @@ end
 
     %convert it to table 
     firstControlData = vertcat(firstControlData{:});
+%% prepare matched pairs
+faceOrientationCritical = [num2cell(criticalTable.orientationPerformance(strcmp(criticalTable.groupName, 'face'))), repmat({'face'}, sum(strcmp(criticalTable.groupName, 'face')), 1)];
+faceDurationCritical = [num2cell(criticalTable.durationPerformance(strcmp(criticalTable.groupName, 'face'))), repmat({'face'}, sum(strcmp(criticalTable.groupName, 'face')), 1)];
+
+objectOrientationCritical = [num2cell(criticalTable.orientationPerformance(strcmp(criticalTable.groupName, 'object'))), repmat({'object'}, sum(strcmp(criticalTable.groupName, 'object')), 1)];
+objectDurationCritical = [num2cell(criticalTable.durationPerformance(strcmp(criticalTable.groupName, 'object'))), repmat({'object'}, sum(strcmp(criticalTable.groupName, 'object')), 1)];
+
+faceOrientationPost = [num2cell(firstControlData.orientationAccuracy(strcmp(firstControlData.groupName, 'face'))), repmat({'face'}, sum(strcmp( firstControlData.groupName, 'face')), 1)];
+faceDurationPost = [num2cell( firstControlData.durationAccuracy(strcmp(firstControlData.groupName, 'face'))), repmat({'face'}, sum(strcmp( firstControlData.groupName, 'face')), 1)];
+
+objectOrientationPost = [num2cell(firstControlData.orientationAccuracy(strcmp(firstControlData.groupName, 'object'))), repmat({'object'}, sum(strcmp(firstControlData.groupName, 'object')), 1)];
+objectDurationPost = [num2cell(firstControlData.durationAccuracy(strcmp(firstControlData.groupName, 'object'))), repmat({'object'}, sum(strcmp(firstControlData.groupName, 'object')), 1)];
+
+orientationPerformance = [[faceOrientationCritical(:,1);objectOrientationCritical(:,1)],[faceOrientationCritical(:,2);objectOrientationCritical(:,2)],[repmat({'critical'},height(criticalTable),1)]];
+durationPerformance = [[faceDurationCritical(:,1);objectDurationCritical(:,1)],[faceDurationCritical(:,2);objectDurationCritical(:,2)],[repmat({'critical'},height(criticalTable),1)]];
+
+postOrientationPerformance = [[faceOrientationPost(:,1);objectOrientationPost(:,1)],[faceOrientationPost(:,2);objectOrientationPost(:,2)],[repmat({'control'},height(firstControlData),1)]];
+postDurationPerformance = [[faceDurationPost(:,1);objectDurationPost(:,1)],[faceDurationPost(:,2);objectDurationPost(:,2)],[repmat({'control'},height(firstControlData),1)]];
+
+orientationCombined = cell2table([orientationPerformance;postOrientationPerformance],'VariableNames',{'accuracy','group','test'});
+durationCombined = cell2table([durationPerformance;postDurationPerformance],'VariableNames',{'accuracy','group','test'});
+
+%decide the index 
+faceIndexOrientation = strcmp(orientationCombined.group,'face');
+objectIndexOrientation = strcmp(orientationCombined.group,'object');
+
+faceIndexDuration = strcmp(durationCombined.group,'face');
+objectIndexDuration= strcmp(durationCombined.group,'object');
 
 %% stats for comparing probes in critical trial + in different stimulus categories (within subject) - linear mixed models
 
@@ -44,7 +72,7 @@ end
 
 %% stats for comparing critical & post-surprise (within subject) - McNemar's test
 
-[faceOrientationMcNem] = statsFunction()
+[contFaceOrientation ,~ ,~ ] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'control','critical',1,1);
 
 
 %% stats for comparing order effect (within subject) - fisher's exact test 
@@ -68,6 +96,7 @@ durationStats = {array2table(contTableStimD),chiStimD,fisherStimD};
 
 postOrientationStats = {array2table(contTablePostStimO),chiPostStimO,fisherPostStimO};
 postDurationStats = {array2table(contTablePostStimD),chiPostStimD,fisherPostStimD};
+
 
 
 %% save the stats 
