@@ -11,8 +11,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataComb)
-addpath(genpath(processedDataComb)); 
+cd(processedDataLab)
+addpath(genpath(processedDataLab)); 
 
 % load files
 
@@ -109,16 +109,16 @@ postDurationStats = {array2table(contTablePostStimD),chiPostStimD,fisherPostStim
 %% save the stats 
 
 pilot1Stats = struct();
-%pilot1Stats.criticalProbeStats = criticalProbeStats;
-%pilot1Stats.controlPerfStats = controlPerfStats;
 pilot1Stats.orientationOrderStats = orientationOrderStats;
 pilot1Stats.durationOrderStats = durationOrderStats;
 pilot1Stats.orientationGroupComp = orientationStats;
 pilot1Stats.orientationPostGroupComp = postOrientationStats;
 pilot1Stats.durationGroupComp= durationStats;
 pilot1Stats.durationPostGroupComp=postDurationStats;
-pilot1Stats.faceOrientation =
-pilot1Stats.
+pilot1Stats.faceOrientation = faceOrientationStats;
+pilot1Stats.faceDuration = faceDurationStats;
+pilot1Stats.objectOrientation = objectOrientationStats;
+pilot1Stats.objectDuration = objectDurationStats;
 
 %pilot1StatsName = 'pilot1CombinedStats.mat';
 %save(fullfile(processedDataComb,pilot1StatsName),'pilot1Stats');
