@@ -72,7 +72,7 @@ objectIndexDuration= strcmp(durationCombined.group,'object');
 
 %% stats for comparing critical & post-surprise (within subject) - McNemar's test
 
-[contFaceOrientation ,~ ,~ ,McNemfaceOrientation] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'critical','control',2,1); % give the data ensuring b > c (if not b = c)
+[contFaceOrientation ,~ ,~ ,McNemfaceOrientation] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'critical','control',2,1); % give the data ensuring b > c (if not b = c) and check whether b+c>10 for power 
 
 
 %% stats for comparing order effect (within subject) - fisher's exact test 
