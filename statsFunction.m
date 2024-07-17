@@ -1,5 +1,5 @@
 
-function [contTable,chiResults,fisherExtract] = statsFunction(group1,group2,label1,label2,tailNr,mcNemar)
+function [contTable,chiResults,fisherExtract,McNemResult] = statsFunction(group1,group2,label1,label2,tailNr,mcNemar)
 
 % this function receives 2 groups you want to compare as input, generates contingency table, conducts chi square of
 % independence. As output it returns chi square and critical value together
@@ -94,8 +94,13 @@ b = max((criticalCorrect-controlCorrect),0); % correct in the second, wrong in t
 c= max((controlCorrect - criticalCorrect),0); % correct in the first and wrong in the second, if negative turns zero
 d = min(controlIncorrect,criticalIncorrect); % number that wrong in both
 
-vector = [a,b;c,d];
-mcnemar(vector,alpha);
+vector = [a,b,c,d];
+%mcnemar(vector,alpha);
+%McNemarextest(vector,2,alpha);
+[McNemResults] = mcNemEce(vector,alpha);
+
+
+
 
 end
 
