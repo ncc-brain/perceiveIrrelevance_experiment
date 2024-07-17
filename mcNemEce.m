@@ -1,6 +1,6 @@
 
-function [McNemResults] = mcNemEce(vector,alpha)
-% this function computes mid-p McNemar test 
+function [midPvalue] = mcNemEce(vector,alpha)
+% this function computes one tailed mid-p McNemar test 
 % source : The McNemar test for binary matched-pairs data (Fagerland et
 % al., 2013) - additional material (How to calculate the McNemar mid-p
 % test)
@@ -29,7 +29,11 @@ function [McNemResults] = mcNemEce(vector,alpha)
 
 % start with exact conditional test 
 
-% get the discordant pairs 
+% get the discordant pairs (mcNem test does not care about concordant
+% pairs)
+
+b = vector(2);
+c = vector(3);
 
 discordantTotal = b+c; 
 p = 0.5; % one sided exact conditional p value is probability of at least b succeses out of
@@ -47,5 +51,18 @@ elseif b == c
 end
 
 midPvalue = exactPvalue-0.5*binopdf(b,discordantTotal,p);
+
+% significance check 
+
+if midPvalue < alpha
+   
+    disp('groups are significantly different - McNem');
+    disp(midPvalue);
+
+elseif midPvalue > alpha 
+
+    disp('groups are not significantly different, _McNem');
+    disp(midPvalue);
+end
 
 

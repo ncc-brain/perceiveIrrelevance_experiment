@@ -95,10 +95,14 @@ c= max((controlCorrect - criticalCorrect),0); % correct in the first and wrong i
 d = min(controlIncorrect,criticalIncorrect); % number that wrong in both
 
 vector = [a,b,c,d];
+
 %mcnemar(vector,alpha);
 %McNemarextest(vector,2,alpha);
-[McNemResults] = mcNemEce(vector,alpha);
 
+[midpValue] = mcNemEce(vector,alpha);
+
+
+McNemResult = {vector,midpValue};
 
 
 
