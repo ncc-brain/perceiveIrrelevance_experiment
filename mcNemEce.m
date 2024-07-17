@@ -50,7 +50,7 @@ elseif b == c
 
 elseif b > c
 
-    disp('change the order of the comparison groups')
+    disp(' ERROR : change the order of the comparison groups');
 
 end
 
