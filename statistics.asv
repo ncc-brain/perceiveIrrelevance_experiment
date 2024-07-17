@@ -72,8 +72,15 @@ objectIndexDuration= strcmp(durationCombined.group,'object');
 
 %% stats for comparing critical & post-surprise (within subject) - McNemar's test
 
-[contFaceOrientation ,~ ,~ ,McNemfaceOrientation] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'critical','control',2,1); % give the data ensuring b > c (if not b = c) and check whether b+c>10 for power 
-[contFaceDuration,~,~,McNemfaceDuration] = statsFunction(durationCombined.test(faceIndexDuration),durationCombined.accuracy(faceIndexDuration))
+[contFaceOrientation ,~ ,~ ,McNemfaceOrientation] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'critical','control',2,1); % give the data ensuring b < c (if not b = c) and check whether b+c>10 for power 
+[contFaceDuration,~,~,McNemfaceDuration] = statsFunction(durationCombined.test(faceIndexDuration),durationCombined.accuracy(faceIndexDuration),'critical','control',2,1);
+[contObjectOrientation,~,~,McNemobjectOrientation]= statsFunction(orientationCombined.test(objectIndexOrientation),orientationCombined.accuracy(objectIndexOrientation),'control','critical',2,1);
+[contObjectDuration,~,~,McNemobjectDuration] = statsFunction(durationCombined.test(objectIndexDuration),durationCombined.accuracy(objectIndexDuration),'critical','control',2,1);
+
+faceOrientationStats = {array2table(contFaceOrientation),array2table(McNemfaceOrientation)};
+faceDurationStats = {array2table(contFaceDuration),array2table(McNemfaceDuration)};
+objectOrientationStats = {array2table(contObjectOrientation),array2table(McNemobjectOrientation)};
+objectDurationStats = {array2table(contObjectDuration),array2table(McNemobjectDuration)};
 
 %% stats for comparing order effect (within subject) - fisher's exact test 
 
@@ -110,6 +117,8 @@ pilot1Stats.orientationGroupComp = orientationStats;
 pilot1Stats.orientationPostGroupComp = postOrientationStats;
 pilot1Stats.durationGroupComp= durationStats;
 pilot1Stats.durationPostGroupComp=postDurationStats;
+pilot1Stats.faceOrientation =
+pilot1Stats.
 
 %pilot1StatsName = 'pilot1CombinedStats.mat';
 %save(fullfile(processedDataComb,pilot1StatsName),'pilot1Stats');
