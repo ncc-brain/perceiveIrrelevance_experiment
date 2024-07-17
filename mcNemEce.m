@@ -48,6 +48,10 @@ elseif b == c
 
     exactPvalue = 1;
 
+elseif b > c
+
+    disp('change the order of the comparison groups')
+
 end
 
 midPvalue = exactPvalue-0.5*binopdf(b,discordantTotal,p);
