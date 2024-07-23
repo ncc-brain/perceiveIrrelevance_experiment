@@ -1,7 +1,16 @@
-% Load the critical table:
 
-load('P:\2023-0383-PerceiveIrrelevance\03data\perceivedIrrelevance\derivatives\criticalTable.mat')
+% clean and open the correct file 
 
+clear
+clc
+addpath('./')
+configIrrelevant;
+
+cd(processedDataComb)
+addpath(genpath(processedDataComb));
+
+%% Load the critical table:
+load('criticalTable.mat')
 %% Format the table:
 y = zeros(height(criticalTable) * 2, 1);
 cate = cell(height(criticalTable) * 2, 1);
