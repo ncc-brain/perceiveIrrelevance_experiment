@@ -70,10 +70,9 @@ genderData = cellfun(@(x) x{1}, genderData, 'UniformOutput', false);
 %% 
 %for the online experiment replace the age of 38 with 35 
 for i = 1:numel(ageData)
-    
-    if ageData(i) == 38
-        ageData(i) = 35;
-    end
+
+    c
+
 end
 
 %% 
