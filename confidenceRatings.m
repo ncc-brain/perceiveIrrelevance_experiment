@@ -8,8 +8,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataLab)
-addpath(genpath(processedDataLab)); 
+cd(processedDataComb)
+addpath(genpath(processedDataComb)); 
 
 %load the data 
 
@@ -422,13 +422,14 @@ confidenceMindWanderingPilot1.mindWanderingObject = mindWanderingObject;
 
 %confidence files 
 
-criticalConfFile = 'criticalConfidenceTable.mat';
-save(fullfile(processedDataLab,criticalConfFile),'criticalConfidence');
+criticalConfFile = 'criticalConfidenceTableComb.mat';
+save(fullfile(processedDataComb,criticalConfFile),'criticalConfidence');
 
-postConfFile = 'postConfidenceTable.mat';
-save(fullfile(processedDataLab,postConfFile),'postConfidenceTable');
+postConfFile = 'postConfidenceTableComb.mat';
+save(fullfile(processedDataComb,postConfFile),'postConfidenceTable');
+
 %mindWanderingFile
-tabulateFile = 'confidenceMindWanderingPilot1Lab.mat';
-save(fullfile(processedDataLab,tabulateFile),'confidenceMindWanderingPilot1');
+tabulateFile = 'confidenceMindWanderingPilot1Comb.mat';
+save(fullfile(processedDataComb,tabulateFile),'confidenceMindWanderingPilot1');
 
 
