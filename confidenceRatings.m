@@ -8,8 +8,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataComb)
-addpath(genpath(processedDataComb)); 
+cd(processedDataLab)
+addpath(genpath(processedDataLab)); 
 
 %load the data 
 
@@ -21,6 +21,12 @@ load('postTable.mat');
 
 faceRows = strcmp(criticalTable.groupName, 'face');
 objectRows = strcmp(criticalTable.groupName,'object');
+
+faceOrientationAccuracy = criticalTable.orientationPerformance(faceRows);
+faceDurationAccuracy = criticalTable.durationPerformance(faceRows);
+
+objectOrientationAccuracy = criticalTable.orientationPerformance(objectRows);
+objectDurationAccuracy = criticalTable.durationPerformance(objectRows);
 
 faceOrientationConf = criticalTable.orientationConfidence(faceRows);
 faceDurationConf = criticalTable.durationConfidence(faceRows);
@@ -43,6 +49,14 @@ objectOrientationPercentage = objectOrientation(:,3)';
 objectDurationPercentage = objectDuration(:,3)';
 
 confidenceCounts = [faceOrientationPercentage;faceDurationPercentage;objectOrientationPercentage;objectDurationPercentage];
+
+%critical confidence tables 
+
+criticalConfidence = table(faceOrientationAccuracy,faceOrientationConf,faceDurationAccuracy,faceDurationConf,objectOrientationAccuracy,objectOrientationConf,...
+    objectDurationAccuracy,objectDurationConf,'VariableNames',...
+    {'faceOrientationPerf','faceOrientationConf','faceDurationPerf','faceDurationConf','objectOrientationPerf','objectOrientationConf','objectDurationPerf','objectDurationConf' ...
+    });
+
 %% plot confidence surprise
 
 figure;
@@ -71,6 +85,11 @@ facePostDurationConfidence = [];
 objectPostOrientationConfidence =[];
 objectPostDurationConfidence=[];
 
+facePostOrientationPerf =[];
+facePostDurationPerf =[];
+objectPostOrientationPerf =[];
+objecPostDurationPerf =[];
+
 postHighConfidenceOrientation ={};
 postLowConfidenceOrientation = {};
 
@@ -92,12 +111,17 @@ for i= 1: numel(participantID)
         
         facePostOrientationConfidence(end+1) = firstControl.orientationConfidence;
         facePostDurationConfidence(end+1)= firstControl.durationConfidence;
+        
+        facePostOrientationPerf(end+1)= firstControl.orientationAccuracy;
+        facePostDurationPerf(end+1)= firstControl.durationAccuracy;
     
     elseif strcmp(firstControl.groupName,'object')
 
         objectPostOrientationConfidence(end+1) = firstControl.orientationConfidence;
         objectPostDurationConfidence(end+1)=firstControl.durationConfidence;
-    
+
+        objectPostOrientationPerf(end+1) = firstControl.orientationAccuracy;
+        objecPostDurationPerf(end+1)= firstControl.durationAccuracy;    
     end
 
     % confidence and accuracy data 
@@ -126,6 +150,26 @@ end
 postOrientationConfidence = [facePostOrientationConfidence,objectPostOrientationConfidence];
 postDurationConfidence = [facePostDurationConfidence,objectPostDurationConfidence];
 
+
+%% seperate performance & confidence file 
+postFaceOrientationPerf = facePostOrientationPerf';
+postFaceDurationPerf = facePostDurationPerf';
+
+postObjectOrientationPerf = objectPostOrientationPerf';
+postObjectDurationPerf = objecPostDurationPerf';
+
+postFaceOrientationConf= facePostOrientationConfidence';
+postFaceDurationConf= facePostDurationConfidence';
+
+postObjectOrientationConf=objectPostOrientationConfidence';
+postObjectDurationConf= objectPostDurationConfidence';
+
+
+%confidenceTable 
+
+postConfidenceTable = table(postFaceOrientationPerf,postFaceOrientationConf,postFaceDurationPerf,postFaceDurationConf,...
+  postObjectOrientationPerf,postObjectOrientationConf,postObjectDurationPerf,postObjectDurationConf,'VariableNames',{'postFaceOrientationPerf','postFaceOrientationConf','postFaceDurationPerf','postFaceDurationConf',...
+  'postObjectOrientationPerf','postObjectOrientationConf','postObjectDurationPerf','postObjectDurationConf'});
 %%
 
 %tabulate post 
@@ -374,7 +418,17 @@ confidenceMindWanderingPilot1.postDurationConfidence = PostDurationConfidence;
 confidenceMindWanderingPilot1.mindWanderingFace = mindWanderingFace;
 confidenceMindWanderingPilot1.mindWanderingObject = mindWanderingObject;
 
-tabulateFile = 'confidenceMindWanderingPilotCombined.mat';
-save(fullfile(processedDataComb,tabulateFile),'confidenceMindWanderingPilot1');
+%% save files
+
+%confidence files 
+
+criticalConfFile = 'criticalConfidenceTable.mat';
+save(fullfile(processedDataLab,criticalConfFile),'criticalConfidence');
+
+postConfFile = 'postConfidenceTable.mat';
+save(fullfile(processedDataLab,postConfFile),'postConfidenceTable');
+%mindWanderingFile
+tabulateFile = 'confidenceMindWanderingPilot1Lab.mat';
+save(fullfile(processedDataLab,tabulateFile),'confidenceMindWanderingPilot1');
 
 
