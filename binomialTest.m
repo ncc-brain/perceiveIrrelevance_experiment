@@ -101,6 +101,6 @@ binomialTables = [binoOrientation,binoPostOrientation1,binoPostOrientation2,bino
    binoPostObjectOrientation2,binoPostObjectDuration2,binoPostObjectOrientation3,binoPostObjectDuration3,binoPostObjectOrientation4,binoPostObjectDuration4,binoFaceOrientation,binoFaceDuration,binoPostFaceOrientation1,binoPostFaceDuration1,...
    binoPostFaceOrientation2,binoPostFaceDuration2,binoPostFaceOrientation3,binoPostFaceDuration3,binoPostFaceOrientation4,binoPostFaceDuration4,accuracyOrientationFirst,accuracyOrientationSecond,accuracyDurationFirst,accuracyDurationSecond];
 
-binomialTableFile = 'binomialTables.mat';
-save(fullfile(processedDataComb,binomialTableFile),'binomialTables');
+%binomialTableFile = 'binomialTables.mat';
+%save(fullfile(processedDataComb,binomialTableFile),'binomialTables');
 

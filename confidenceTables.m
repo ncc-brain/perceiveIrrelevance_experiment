@@ -6,11 +6,11 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataLab)
-addpath(genpath(processedDataLab)); 
+cd(processedDataOnline)
+addpath(genpath(processedDataOnline)); 
 
-load("criticalConfidenceTable.mat");
-load("postConfidenceTable.mat");
+load("criticalConfidenceTableOnline.mat");
+load("postConfidenceTableOnline.mat");
 
 confidenceLevels = (1:5)';
 
@@ -106,50 +106,32 @@ end
 % critical confidence tables
 
 criticalConfidenceTable = table(confidenceLevels, faceOrientationAccuracy', objectOrientationAccuracy',faceOrientationConfCount',objectOrientationConfCount',...
-    faceDurationAccuracy',objectDurationAccuracy',faceDurationConfCount',objectDurationConfCount','VariableNames',{'Confidence Rating','Face Accurate Orientation','Object Accurate Orientation',...
-    'Face Orientation Confidence Count','Object Orientation Confidence Counts','Face Accurate Duration','Object Accurate Duration','Face Duration Confidence Count','Object Duration Confidence Count'});
+    faceDurationAccuracy',objectDurationAccuracy',faceDurationConfCount',objectDurationConfCount','VariableNames',{'Confidence Rating','Face Orientation Accuracy','Object Orientation Accuracy',...
+    'Face Orientation Confidence Count','Object Orientation Confidence Count','Face Duration Accuracy','Object Duration Accuracy','Face Duration Confidence Count','Object Duration Confidence Count'});
+
 %save table as excel format 
 
-criticalExcelFile = 'criticalConfidenceTable.xlsx';
+criticalExcelFile = 'criticalConfidenceTableOnline.xlsx';
 
-filePath = fullfile(processedDataLab, criticalExcelFile);
+filePath = fullfile(processedDataOnline, criticalExcelFile);
 
 writetable(criticalConfidenceTable,filePath);
 
-%%
-postFaceConfidenceTable = table(confidenceLevels, PostfaceOrientationAccurate', PostfaceOrientationInaccurate', PostfaceDurationAccurate', PostfaceDurationInaccurate', ...
-    'VariableNames', {'Confidence Score', 'Orientation Accurate', 'Orientation Inaccurate', 'Duration Accurate', 'Duration Inaccurate'});
+%% post Table 
+
+controlConfidenceTable = table(confidenceLevels, PostfaceOrientationAccuracy', PostobjectOrientationAccuracy',facePostOrientationConfCount',objectPostOrientationConfCount',...
+    PostfaceDurationAccuracy',PostobjectDurationAccuracy',facePostDurationConfCount',objectPostDurationConfCount','VariableNames',{'Confidence Rating','Face Orientation Accuracy','Object Orientation Accuracy',...
+    'Face Orientation Confidence Count','Object Orientation Confidence Count','Face Duration Accuracy','Object Duration Accuracy','Face Duration Confidence Count','Object Duration Confidence Count'});
+
+controlExcelFile = 'controlConfidenceTableOnline.xlsx';
+
+filePath = fullfile(processedDataOnline, controlExcelFile);
+
+writetable(controlConfidenceTable,filePath);
 
 
-%object confidence tables
-objectConfidenceTable = table(confidenceLevels, objectOrientationAccurate', objectOrientationInaccurate', objectDurationAccurate', objectDurationInaccurate', ...
-    'VariableNames', {'Confidence Score', 'Orientation Accurate', 'Orientation Inaccurate', 'Duration Accurate', 'Duration Inaccurate'});
-
-
-postObjectConfidenceTable = table(confidenceLevels, PostobjectOrientationAccurate', PostobjectOrientationInaccurate', PostobjectDurationAccurate', PostobjectDurationInaccurate', ...
-    'VariableNames', {'Confidence Score', 'Orientation Accurate', 'Orientation Inaccurate', 'Duration Accurate', 'Duration Inaccurate'});
-
-
-
-%face figure 
-figure('Name', 'Face Confidence and Accuracy', 'Position', [100, 100, 1000, 300]); % Position [left, bottom, width, height]
-uitable('Data', faceConfidenceTable{:,:}, 'ColumnName', faceConfidenceTable.Properties.VariableNames, ...
-    'RowName', [], 'Units', 'normalized', 'Position', [0, 0, 1, 1]); % Adjust the size to fit the figure
-
-%post face figure
-
-figure('Name', 'Post Face Confidence and Accuracy', 'Position', [100, 100, 1000, 300]); % Position [left, bottom, width, height]
-uitable('Data', postFaceConfidenceTable{:,:}, 'ColumnName', postFaceConfidenceTable.Properties.VariableNames, ...
-    'RowName', [], 'Units', 'normalized', 'Position', [0, 0, 1, 1]); % Adjust the size to fit the figure
-
-%object figure 
-figure('Name', 'Object Confidence and Accuracy', 'Position', [100, 100, 1000, 300]); % Position [left, bottom, width, height]
-uitable('Data', objectConfidenceTable{:,:}, 'ColumnName', objectConfidenceTable.Properties.VariableNames, ...
-    'RowName', [], 'Units', 'normalized', 'Position', [0, 0, 1, 1]); % Adjust the size to fit the figure
-
-%post object figure 
-
-figure('Name', 'Post Object Confidence and Accuracy', 'Position', [100, 100, 1000, 300]); % Position [left, bottom, width, height]
-uitable('Data', postObjectConfidenceTable{:,:}, 'ColumnName', postObjectConfidenceTable.Properties.VariableNames, ...
-    'RowName', [], 'Units', 'normalized', 'Position', [0, 0, 1, 1]); % Adjust the size to fit the figure
+%%table as figure example
+%figure('Name', 'Face Confidence and Accuracy', 'Position', [100, 100, 1000, 300]); % Position [left, bottom, width, height]
+%uitable('Data', faceConfidenceTable{:,:}, 'ColumnName', faceConfidenceTable.Properties.VariableNames, ...
+    %'RowName', [], 'Units', 'normalized', 'Position', [0, 0, 1, 1]); % Adjust the size to fit the figure
 
