@@ -113,9 +113,8 @@ xlabel('Sex','FontWeight','bold','FontSize',14);
 ylabel('Count','FontWeight','bold','FontSize',14);
 xticklabels({'Female','Male'});
 title('Sex Distribution','FontSize',16);
-ylim([0,30]);
-set(gca, 'YTick', 0:2:30);
-%yticks= (0:2:30);
+ylim([0,(countFemale+countMale)]);
+yticks= ([0 countFemale+countMale+10]);
 
 % add the numbers 
 ytips = b.YData; % get the coordinates of the bar
@@ -129,7 +128,7 @@ figure;
 histogram(ageData,'FaceColor',DescriptiveAgeColor);
 xlabel('Age','FontWeight','bold','FontSize',14);
 ylabel('Count','FontWeight','bold','Fontsize',14);
-ylim([0 7]);
+ylim([0 10]);
 title('Age distribution','FontSize',16);
 
 

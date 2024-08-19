@@ -5,14 +5,14 @@
 %processedDataIrrelevant = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/derivatives');
 
 
-rawDataOnline = ('/Volumes/Projects-1/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/onlineExperiment/rawData');
-processedDataOnline = ('/Volumes/Projects-1/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/onlineExperiment/derivatives');
+rawDataOnline = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/onlineExperiment/rawData');
+processedDataOnline = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/onlineExperiment/derivatives');
 
 rawDataLab = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/labExperiment /rawDataLab');
-processedDataLab= ('/Volumes/Projects-1/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/labExperiment /derivativesLab');
+processedDataLab= ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/labExperiment /derivativesLab');
 
 rawDataComb = ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/combined/combinedRaw');
-processedDataComb= ('/Volumes/Projects-1/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/combined/combinedDerivatives');
+processedDataComb= ('/Volumes/Projects/2023-0383-PerceiveIrrelevance/03data/perceivedIrrelevance/combined/combinedDerivatives');
 
 DescriptiveGenderColour = [0.7686, 0.8392, 0.6902];
 DescriptiveAgeColor = [0.6902, 0.7176, 0.8392];

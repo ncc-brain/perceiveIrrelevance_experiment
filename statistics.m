@@ -11,8 +11,8 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(processedDataComb)
-addpath(genpath(processedDataComb)); 
+cd(processedDataOnline)
+addpath(genpath(processedDataOnline)); 
 
 % load files
 
@@ -120,8 +120,8 @@ pilot1Stats.faceDuration = faceDurationStats;
 pilot1Stats.objectOrientation = objectOrientationStats;
 pilot1Stats.objectDuration = objectDurationStats;
 
-pilot1StatsName = 'pilot1CombStats.mat';
-save(fullfile(processedDataComb,pilot1StatsName),'pilot1Stats');
+pilot1StatsName = 'pilot1OnlineStats.mat';
+save(fullfile(processedDataOnline,pilot1StatsName),'pilot1Stats');
 
 
 
