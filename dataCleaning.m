@@ -875,23 +875,28 @@ numTrials = 4; % each post-suprise has 4 trials.
 
 orientationGroups = cell(1, numTrials);
 durationGroups = cell(1,numTrials);
+congruencyTable = []; % I added this to save congruency and each participants orientation and duration scores for the first control
 
 for i = 1:numel(uniqueParticipants) 
 
      currentParticipant = uniqueParticipants(i); % get the current participant
 
          participantData=postTable(postTable.ParticipantID == currentParticipant,:); %combined Data 
-    
-          
+     
      for j = 1:numTrials
 
          orientationGroups{i,j} = participantData.orientationAccuracy(j); % get orientation for 4 trials
          
-         durationGroups{i,j} =  participantData.durationAccuracy(j); % get duration for 4 trials 
-        
-         
+         durationGroups{i,j} =  participantData.durationAccuracy(j); % get duration for 4 trials          
          
      end
+
+      % congruency Table 
+        
+         congruencyRow = table(participantData.congruency(1),participantData.groupName(1),participantData.orientationAccuracy(1),participantData.durationAccuracy(1),'VariableNames',{'congruency','group','orientationAccuracy','durationAccuracy'});
+
+         congruencyTable = vertcat(congruencyTable, congruencyRow);
+          
         
         groupNames{i} = participantData.groupName{1};
 end
@@ -947,10 +952,11 @@ end
         
         falseObjectDuration = array2table(sum((durationGroup{:,1:end-1} == 0) & strcmp(durationGroup.durationGroup5, 'object')));
         falseObjectDuration.Properties.VariableNames = variableNames; 
-        
 
+        
         postAccuracyTable = rows2vars([correctOrientation;correctDuration;falseOrientation;falseDuration;correctFaceOrientation;correctFaceDuration;falseFaceOrientation;falseFaceDuration;correctObjectOrientation;...
             correctObjectDuration;falseObjectOrientation;falseObjectDuration]);
+      
 
         colNames = {'controlGroups','correctOrientation','correctDuration','falseOrientation','falseDuration','correctFaceOrientation','correctFaceDuration','falseFaceOrientation','falseFaceDuration','correctObjectOrientation',...
            'correctObjectDuration','falseObjectOrientation','falseObjectDuration'};      
@@ -979,7 +985,8 @@ end
    durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
 
 
-   % if it is not same size, replace empty cells with NaN 
+   % if it is not same size, replace empty cells with NaN (I added this to
+   % test while the full dataset is not collected.
 
    maxLength = max([length(orientationFirst), length(durationFirst), length(orientationSecond), length(durationSecond)]);
 
@@ -991,8 +998,12 @@ end
   
    %save the order effect results 
    orderEffect = table(orientationFirst',durationFirst',orientationSecond',durationSecond','VariableNames',{'orientationFirst','durationFirst','orientationSecond','durationSecond'});
-   
-        
+  
+   %congruency control 
+
+
+
+
 %Save the files '
 %pre-surprise file
 facePreSurprise = 'facePreSurprise.mat';
@@ -1018,6 +1029,12 @@ save(fullfile(processedDataComb,postAccuracyTableFile),'postAccuracyTable');
 %orderEffect
 orderEffectName = 'orderEffect.mat';
    save(fullfile(processedDataComb,orderEffectName),'orderEffect');
+
+%congruencyTable
+
+congruencyTableName = 'congruencyControl';
+  save(fullfile(processedDataComb,congruencyTableName),'congruencyTable');
+
 
 
 

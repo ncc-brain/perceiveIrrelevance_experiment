@@ -401,15 +401,14 @@ for j = 1: numel(faceFolders) % iterares over face files %
     probeOrder = postTrialData.probeOrder; % probe order for the post surprise (orientation or duration first)
 
 
-    % get the congruency of the first control --> only for the first
-    % control
+    % only for the first control is what we are interested in  
 
-   if postSurpriseTask.congruencyCheck(1) == 1
+   if postTrialData.congruencyCheck == 1
 
         controlCongruency = 1;
 
    else
-       controlCongruency = 0;
+        controlCongruency = 0;
 
    end
 
@@ -701,7 +700,7 @@ end
 
    % get the probe order
 
-   if postSurpriseTask.congruencyCheck(1) == 1
+   if postTrialData.congruencyCheck == 1
 
         controlCongruency = 1;
 
@@ -710,8 +709,8 @@ end
 
    end
 
-    trialTable = table(OrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
-       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
+    trialTable = table(OrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,controlCongruency,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
+       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder','congruency'});
     
     onePostSurpriseTrial = [onePostSurpriseTrial;trialTable]; % each post-surprise consists of 4 trials. Save them here
 
@@ -877,12 +876,19 @@ numTrials = 4; % each post-suprise has 4 trials.
 orientationGroups = cell(1, numTrials);
 durationGroups = cell(1,numTrials);
 
+congruencyTable = []; % I added this to save congruency and each participants orientation and duration scores for the first control
+
 for i = 1:numel(uniqueParticipants) 
 
      currentParticipant = uniqueParticipants(i); % get the current participant
 
          participantData=postTable(postTable.ParticipantID == currentParticipant,:); %combined Data 
-    
+     
+         % congruency Table 
+        
+         congruencyTable = table(participantData.congruency(1),participantData.orientationAccuracy(1),participantData.durationAccuracy(1),'VariableNames',{'congruency','orientationAccuracy','durationAccuracy'});
+
+          congruencyTable = vertcat(congruencyTable, newTableRow);
           
      for j = 1:numTrials
 
@@ -948,10 +954,11 @@ end
         
         falseObjectDuration = array2table(sum((durationGroup{:,1:end-1} == 0) & strcmp(durationGroup.durationGroup5, 'object')));
         falseObjectDuration.Properties.VariableNames = variableNames; 
-        
 
+        
         postAccuracyTable = rows2vars([correctOrientation;correctDuration;falseOrientation;falseDuration;correctFaceOrientation;correctFaceDuration;falseFaceOrientation;falseFaceDuration;correctObjectOrientation;...
             correctObjectDuration;falseObjectOrientation;falseObjectDuration]);
+      
 
         colNames = {'controlGroups','correctOrientation','correctDuration','falseOrientation','falseDuration','correctFaceOrientation','correctFaceDuration','falseFaceOrientation','falseFaceDuration','correctObjectOrientation',...
            'correctObjectDuration','falseObjectOrientation','falseObjectDuration'};      
@@ -980,7 +987,8 @@ end
    durationSecond = (criticalTable.durationPerformance(orientationFirstRow))'; 
 
 
-   % if it is not same size, replace empty cells with NaN 
+   % if it is not same size, replace empty cells with NaN (I added this to
+   % test while the full dataset is not collected.
 
    maxLength = max([length(orientationFirst), length(durationFirst), length(orientationSecond), length(durationSecond)]);
 
@@ -992,8 +1000,12 @@ end
   
    %save the order effect results 
    orderEffect = table(orientationFirst',durationFirst',orientationSecond',durationSecond','VariableNames',{'orientationFirst','durationFirst','orientationSecond','durationSecond'});
-   
-        
+  
+   %congruency control 
+
+
+
+
 %Save the files '
 %pre-surprise file
 facePreSurprise = 'facePreSurprise.mat';
