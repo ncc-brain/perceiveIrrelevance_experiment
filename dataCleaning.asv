@@ -6,10 +6,10 @@ clc
 addpath('./')
 configIrrelevant;
 
-cd(rawDataOnline);
-addpath(genpath(rawDataOnline)); 
+cd(rawDataComb);
+addpath(genpath(rawDataComb)); 
 
-participantFolders = dir(rawDataOnline); % open participant files
+participantFolders = dir(rawDataComb); % open participant files
 participantFolders = participantFolders([participantFolders.isdir] & ~startsWith({participantFolders.name}, '.')); % remove hidden files
 
 
@@ -89,7 +89,7 @@ PostSurpriseCols = {'confidenceDurationPostt','confidenceDurationRT','confidence
 for i = 1:numel(participantFolders)
 
 
-    currentSubject = fullfile(rawDataOnline,participantFolders(i).name);
+    currentSubject = fullfile(rawDataComb,participantFolders(i).name);
     subjectFileContent = dir(currentSubject);
     subjectSessionFile = fullfile(currentSubject,'sessions.csv');
     sessionData = readtable(subjectSessionFile);
@@ -125,7 +125,7 @@ for j = 1: numel(faceFolders) % iterares over face files %
      %lab experiment
      
      participantID = participantIDtable.Exp_Subject_Id;   % this added specifically for online experiment    
-  
+     disp (participantIDtable.Subject_Nr_Per_Group);
      % Pre-surprise face
 
   % seperate the data for the pre-surprise trials 
@@ -268,8 +268,6 @@ for j = 1: numel(faceFolders) % iterares over face files %
     faceCriticalTrial{j} = criticalPerformanceFace; 
     faceCriticalTrial{j}.ParticipantID = repmat((participantID), height(faceCriticalTrial{j}), 1);
    
-
-
     %post surprise face 
 
      postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:); % get the current post surprisr 
@@ -402,8 +400,21 @@ for j = 1: numel(faceFolders) % iterares over face files %
     postDurationConfRT = postTrialData.confidenceDurationRT - postTrialData.durationConfidenceOnset; % rt when participant gave a confidence rating 
     probeOrder = postTrialData.probeOrder; % probe order for the post surprise (orientation or duration first)
 
-    trialTable = table(FaceOrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,FacedurationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
-       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
+
+    % get the congruency of the first control --> only for the first
+    % control
+
+   if postSurpriseTask.congruencyCheck(1) == 1
+
+        controlCongruency = 1;
+
+   else
+       controlCongruency = 0;
+
+   end
+
+    trialTable = table(FaceOrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,FacedurationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,controlCongruency,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
+       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder','congruency'});
     
     onePostSurpriseTrial = [onePostSurpriseTrial;trialTable];
 
@@ -426,7 +437,7 @@ end
      %lab experiment 
 
      participantID = participantIDtable.Exp_Subject_Id;
-       
+     disp(participantIDtable.Subject_Nr_Per_Group);  
     % get the pre-surprise trials 
      preSurpriseTask = currentObjectTrial(strcmp(currentObjectTrial.Task_Name,'objectPre-surprise'),:);
      objectPreSurpriseTrials{j} = preSurpriseTask(:,ObjectPreSurpriseCols);
@@ -687,6 +698,17 @@ end
     postDurationConfidence = postTrialData.confidenceDurationPostt;
     postDurationConfRT = postTrialData.confidenceDurationRT - postTrialData.durationConfidenceOnset;
     probeOrder = postTrialData.probeOrder;
+
+   % get the probe order
+
+   if postSurpriseTask.congruencyCheck(1) == 1
+
+        controlCongruency = 1;
+
+   else
+       controlCongruency = 0;
+
+   end
 
     trialTable = table(OrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
        'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
@@ -975,28 +997,28 @@ end
 %Save the files '
 %pre-surprise file
 facePreSurprise = 'facePreSurprise.mat';
-save(fullfile(processedDataOnline,facePreSurprise),'facePreSurpriseTrials');
+save(fullfile(processedDataComb,facePreSurprise),'facePreSurpriseTrials');
 objectPreSurprise = 'objectPreSurprise.mat';
-save(fullfile(processedDataOnline,objectPreSurprise),'objectPreSurpriseTrials');
+save(fullfile(processedDataComb,objectPreSurprise),'objectPreSurpriseTrials');
 
 %critical file
 criticalTableName = 'criticalTable.mat';
-save(fullfile(processedDataOnline,criticalTableName),'criticalTable');
+save(fullfile(processedDataComb,criticalTableName),'criticalTable');
 
 %post surprise file 
 postTableName = 'postTable.mat';
-save(fullfile(processedDataOnline,postTableName),'postTable');
+save(fullfile(processedDataComb,postTableName),'postTable');
 
 %accuracy files 
 criticalAccuracyTableFile = 'criticalAccuracyTable.mat';
-save(fullfile(processedDataLab,criticalAccuracyTableFile),'criticalAccuracyTable');
+save(fullfile(processedDataComb,criticalAccuracyTableFile),'criticalAccuracyTable');
 
 postAccuracyTableFile= 'postAccuracyTable.mat';
-save(fullfile(processedDataLab,postAccuracyTableFile),'postAccuracyTable');
+save(fullfile(processedDataComb,postAccuracyTableFile),'postAccuracyTable');
 
 %orderEffect
 orderEffectName = 'orderEffect.mat';
-   save(fullfile(processedDataLab,orderEffectName),'orderEffect');
+   save(fullfile(processedDataComb,orderEffectName),'orderEffect');
 
 
 

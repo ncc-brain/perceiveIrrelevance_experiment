@@ -268,8 +268,6 @@ for j = 1: numel(faceFolders) % iterares over face files %
     faceCriticalTrial{j} = criticalPerformanceFace; 
     faceCriticalTrial{j}.ParticipantID = repmat((participantID), height(faceCriticalTrial{j}), 1);
    
-
-
     %post surprise face 
 
      postSurpriseTask = currentFaceTrial(strcmp(currentFaceTrial.Task_Name,'facePostSurprise'),:); % get the current post surprisr 
@@ -402,8 +400,20 @@ for j = 1: numel(faceFolders) % iterares over face files %
     postDurationConfRT = postTrialData.confidenceDurationRT - postTrialData.durationConfidenceOnset; % rt when participant gave a confidence rating 
     probeOrder = postTrialData.probeOrder; % probe order for the post surprise (orientation or duration first)
 
-    trialTable = table(FaceOrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,FacedurationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
-       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
+
+    % only for the first control is what we are interested in  
+
+   if postTrialData.congruencyCheck == 1
+
+        controlCongruency = 1;
+
+   else
+        controlCongruency = 0;
+
+   end
+
+    trialTable = table(FaceOrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,FacedurationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,controlCongruency,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
+       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder','congruency'});
     
     onePostSurpriseTrial = [onePostSurpriseTrial;trialTable];
 
@@ -688,8 +698,19 @@ end
     postDurationConfRT = postTrialData.confidenceDurationRT - postTrialData.durationConfidenceOnset;
     probeOrder = postTrialData.probeOrder;
 
-    trialTable = table(OrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
-       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder'});
+   % get the probe order
+
+   if postTrialData.congruencyCheck == 1
+
+        controlCongruency = 1;
+
+   else
+       controlCongruency = 0;
+
+   end
+
+    trialTable = table(OrientationAccuracyPost(k),postOrientationRT,postOrientationConfidence, postOrientationConfRT,durationAccuracyPost(k),postDurationRT,postDurationConfidence,postDurationConfRT,probeOrder,controlCongruency,'VariableNames',{'orientationAccuracy','orientationRT','orientationConfidence','orientationConfidenceRT',...
+       'durationAccuracy','durationRT','durationConfidence','durationConfidenceRT','probeOrder','congruency'});
     
     onePostSurpriseTrial = [onePostSurpriseTrial;trialTable]; % each post-surprise consists of 4 trials. Save them here
 
