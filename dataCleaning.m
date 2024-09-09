@@ -893,7 +893,7 @@ for i = 1:numel(uniqueParticipants)
 
       % congruency Table 
         
-         congruencyRow = table(participantData.congruency(1),participantData.groupName(1),participantData.orientationAccuracy(1),participantData.durationAccuracy(1),'VariableNames',{'congruency','group','orientationAccuracy','durationAccuracy'});
+         congruencyRow = table(participantData.congruency(1),participantData.groupName(1),participantData.orientationAccuracy(1),participantData.durationAccuracy(1),participantData.ParticipantID(1),'VariableNames',{'congruency','group','orientationControlAccuracy','durationControlAccuracy','ParticipantID'});
 
          congruencyTable = vertcat(congruencyTable, congruencyRow);
           
@@ -998,8 +998,7 @@ end
   
    %save the order effect results 
    orderEffect = table(orientationFirst',durationFirst',orientationSecond',durationSecond','VariableNames',{'orientationFirst','durationFirst','orientationSecond','durationSecond'});
-  
-   %congruency control 
+ 
 
 
 
@@ -1033,7 +1032,7 @@ orderEffectName = 'orderEffect.mat';
 %congruencyTable
 
 congruencyTableName = 'congruencyControl';
-  save(fullfile(processedDataComb,congruencyTableName),'congruencyTable');
+  save(fullfile(processedDataComb,congruencyTableName),'');
 
 
 

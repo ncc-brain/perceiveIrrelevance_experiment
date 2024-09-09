@@ -41,3 +41,8 @@ lowConfidence = [0.5765, 0.7098, 0.7765];
 
 falseOrientation = [0.3529, 0.2863, 0.4];
 falseDuration = [0.8941, 0.5725, 0.4510];
+
+
+criticalColor = [0.9882, 0.4706, 0.5412];
+congruentColor = [0.87, 0.73, 0.84];
+incongruentColor = [0.82, 0.88, 0.83];
