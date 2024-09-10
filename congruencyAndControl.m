@@ -363,5 +363,24 @@ legend('Critical', 'First Control', 'Location', 'northeast', 'Position', [0.22, 
 
 hold off;
 
+%% stats 
 
+% compare face congruent and face incongruent for orientation (whether
+% performance changed or not) 
+ 
+congruentFaceIndexO = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1;
+incongruentFaceIndexO = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0;
+
+congruentFaceIndexD = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1;
+incongruentFaceIndexD = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0;
+
+congruentObjectIndexO = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1;
+incongruentObjectIndexO = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0;
+
+congruentObjectIndexD = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1;
+incongruentObjectIndexD = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0;
+
+% congruentFaceOrientation 
+
+[contFaceOrientation ,~ ,~ ,McNemfaceOrientation] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'critical','control',2,1); % give the data ensuring b < c (if not b = c) and check whether b+c>10 for power 
 

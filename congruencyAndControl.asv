@@ -324,12 +324,12 @@ BarColors = [repmat(congruentColor, 2, 1); repmat(incongruentColor, 2, 1)];
 
 figure; % figure for the subplots 
 
-faceDurationPlot = bar(faceDurationAccuracy, 'grouped');
+objectDurationPlot = bar(objectDurationAccuracy, 'grouped');
 
 hold on;
 
-faceDurationPlot(1).FaceColor = criticalColor; 
-faceDurationPlot(2).FaceColor = controlColor;
+objectDurationPlot(1).FaceColor = criticalColor; 
+objectDurationPlot(2).FaceColor = controlColor;
 
 yline(ChanceLevel, '--k'); % add the line to the chance level 
 yticks([0, 0.5, 1]);
@@ -337,7 +337,7 @@ ylim([0,1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
 xlabel('Congruency','FontWeight','bold','FontSize', 14);
-title('Face Duration Report Performance','FontSize', 16);
+title('Object Duration Report Performance','FontSize', 16);
 
 ax = gca; % Get the current axes
 ax.XTickLabel = {'Congruent', 'Incongruent'}; % Set the xticklabels
@@ -347,21 +347,26 @@ ax.FontName = 'Times New Roman';
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
 
-for i = 1:numel(faceCongruentDurationAccuracy) % number of values are same for the object and face
+for i = 1:numel(objectCongruentDurationAccuracy) % number of values are same for the object and face
     % object P value 
     
-    if faceCongruentDurationPValues(i) < PValue
-        text(i-0.05 - Astoffset, faceCongruentDurationAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if objectCongruentDurationPValues(i) < PValue
+        text(i-0.05 - Astoffset, objectCongruentDurationAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
     % face p-value
-    if faceIncongruentDurationPValues(i) < PValue
-        text(i+0.25 - Astoffset, faceIncongruentDurationAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if objectIncongruentDurationPValues(i) < PValue
+        text(i+0.25 - Astoffset, objectIncongruentDurationAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
 end
 
-legend('Critical', 'First Control', 'Location', 'northeast', 'Position', [0.80, 0.85, 0.03, 0.05]);
+legend('Critical', 'First Control', 'Location', 'northeast', 'Position', [0.22, 0.85, 0.03, 0.05]);
 
 hold off;
 
+%% stats 
 
+% compare face congruent and face incongruent for orientation (whether
+% performance changed or not) 
+
+faceOrientationMatch = congruencyCritical.orientationCritical(strcmp(congruencyCritical.group,'face') & )
 
