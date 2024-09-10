@@ -16,275 +16,352 @@ load("binomialTables.mat");
 load('criticalTable.mat')
 
 
-%congruent Face Group 
+% first combine the critical performance with control performance using
+% participant ID 
 
-%sum performance for control 
+critical = table(criticalTable.orientationPerformance,criticalTable.durationPerformance,criticalTable.ParticipantID,'VariableNames',{'orientationCritical','durationCritical','ParticipantID'});
 
-faceOrientationCongruent = sum(congruencyTable.orientationAccuracy(congruencyTable.congruency==1 & strcmp(congruencyTable.group,'face')));  
-faceDurationCongruent = sum(congruencyTable.durationAccuracy(congruencyTable.congruency==1 & strcmp(congruencyTable.group,'face')));  
+congruencyCritical = innerjoin(critical,congruencyTable,'Keys','ParticipantID'); % combine the tables by matching the participant ID
 
-%sum performance for critical 
+%% performance seperated for each group and probe 
+% congruent face
 
-faceOrientationCritical = criticalTable.orientationPerformance(criticalTable)
-faceDurationCritical = 
+% sum performance for control 
 
-%Incongruent Face Group 
+faceOrientationCongruent = sum(congruencyCritical.orientationControlAccuracy(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'face')));  
+faceDurationCongruent = sum(congruencyCritical.durationControlAccuracy(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'face')));  
 
+% sum performance for critical 
 
-%congruent Object Group 
+faceOrientationCongruentCritical = sum(congruencyCritical.orientationCritical(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'face')));
+faceDurationCongruentCritical = sum(congruencyCritical.durationCritical(congruencyCritical.congruency == 1 & strcmp(congruencyCritical.group,'face')));
 
+% incongruent face
 
-%Incongruent Object Group 
+% sum performance for control
 
+faceOrientationInCongruent = sum(congruencyCritical.orientationControlAccuracy(congruencyCritical.congruency==0 & strcmp(congruencyCritical.group,'face')));  
+faceDurationInCongruent = sum(congruencyCritical.durationControlAccuracy(congruencyCritical.congruency==0 & strcmp(congruencyCritical.group,'face')));  
 
+% sum performance for critical 
 
-% face and congruecy (seperate control performance by congruency)
+faceOrientationInCongruentCritical = sum(congruencyCritical.orientationCritical(congruencyCritical.congruency==0 & strcmp(congruencyCritical.group,'face')));
+faceDurationInCongruentCritical = sum(congruencyCritical.durationCritical(congruencyCritical.congruency == 0 & strcmp(congruencyCritical.group,'face')));
 
+% congruent object
 
+% sum performance for control 
 
-faceOrientationIncongruent = sum(congruencyTable.orientationAccuracy(congruencyTable.congruency==0 & strcmp(congruencyTable.group,'face')));  
-faceDurationIncongruent = sum(congruencyTable.durationAccuracy(congruencyTable.congruency==0 & strcmp(congruencyTable.group,'face')));  
+objectOrientationCongruent = sum(congruencyCritical.orientationControlAccuracy(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'object')));  
+objectDurationCongruent = sum(congruencyCritical.durationControlAccuracy(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'object')));  
 
+% sum performance for critical 
 
-%object and congruency (seperate control performance by congruency)
+objectOrientationCongruentCritical = sum(congruencyCritical.orientationCritical(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'object')));
+objectDurationCongruentCritical = sum(congruencyCritical.durationCritical(congruencyCritical.congruency == 1 & strcmp(congruencyCritical.group,'object')));
 
-objectOrientationCongruent = sum(congruencyTable.orientationAccuracy(congruencyTable.congruency==1 & strcmp(congruencyTable.group,'object')));  
-objectDurationCongruent = sum(congruencyTable.durationAccuracy(congruencyTable.congruency==1 & strcmp(congruencyTable.group,'object')));  
+% Incongruent object 
 
-objectOrientationIncongruent = sum(congruencyTable.orientationAccuracy(congruencyTable.congruency==0 & strcmp(congruencyTable.group,'object')));  
-objectDurationIncongruent = sum(congruencyTable.durationAccuracy(congruencyTable.congruency==0 & strcmp(congruencyTable.group,'object')));  
+objectOrientationInCongruent = sum(congruencyCritical.orientationControlAccuracy(congruencyCritical.congruency==0 & strcmp(congruencyCritical.group,'object')));  
+objectDurationInCongruent = sum(congruencyCritical.durationControlAccuracy(congruencyCritical.congruency==0 & strcmp(congruencyCritical.group,'object')));  
 
-%congruencyBinomial 
+% sum performance for critical 
 
-congruentSum = numel(congruencyTable.orientationAccuracy(congruencyTable.congruency==1 & strcmp(congruencyTable.group,'face')));
+objectOrientationInCongruentCritical = sum(congruencyCritical.orientationCritical(congruencyCritical.congruency==0 & strcmp(congruencyCritical.group,'object')));
+objectDurationInCongruentCritical = sum(congruencyCritical.durationCritical(congruencyCritical.congruency == 0 & strcmp(congruencyCritical.group,'object')));
+
+%% congruencyBinomial 
+
+congruentSum = numel(congruencyCritical.orientationControlAccuracy(congruencyCritical.congruency==1 & strcmp(congruencyCritical.group,'face')));
 % congruentSum is equal to incongruent sum and same for faces and objects
 
 %face orientation
 binoCongruentFaceOrientation = binomialFunction(congruentSum,faceOrientationCongruent,'faceOrientationCongruent');
-binoIncongruentFaceOrientation = binomialFunction(congruentSum,faceOrientationIncongruent,'faceOrientationInCongruent');
+binoInCongruentFaceOrientation = binomialFunction(congruentSum,faceOrientationInCongruent,'faceOrientationInCongruent');
+
+binoCriticalCongruentFaceOrientation = binomialFunction(congruentSum,faceOrientationCongruentCritical,'faceOrientationCriticalCongruent');
+binoCriticalInCongruentFaceOrientation = binomialFunction(congruentSum,faceOrientationInCongruentCritical,'faceOrientationCriticalInCongruent');
 
 %object orientation
 binoCongruentObjectOrientation = binomialFunction(congruentSum,objectOrientationCongruent,'objectOrientationCongruent');
-binoInCongruentObjectOrientation = binomialFunction(congruentSum,objectOrientationIncongruent,'objectOrientationInCongruent');
+binoInCongruentObjectOrientation = binomialFunction(congruentSum,objectOrientationInCongruent,'objectOrientationInCongruent');
+
+binoCriticalCongruentObjectOrientation = binomialFunction(congruentSum,objectOrientationCongruentCritical,'objectOrientationCriticalCongruent');
+binoCriticalInCongruentObjectOrientation = binomialFunction(congruentSum,objectOrientationInCongruentCritical,'objectOrientationCriticalInCongruent');
 
 %face duration 
 binoCongruentFaceDuration = binomialFunction(congruentSum,faceDurationCongruent,'faceDurationCongruent');
-binoInCongruentFaceDuration = binomialFunction(congruentSum,faceDurationIncongruent,'faceDurationInCongruent');
+binoInCongruentFaceDuration = binomialFunction(congruentSum,faceDurationInCongruent,'faceDurationInCongruent');
+
+binoCriticalCongruentFaceDuration = binomialFunction(congruentSum,faceDurationCongruentCritical,'faceDurationCriticalCongruent');
+binoCriticalInCongruentFaceDuration = binomialFunction(congruentSum,faceDurationInCongruentCritical,'faceDurationCriticalInCongruent');
 
 %object duration 
 binoCongruentObjectDuration = binomialFunction(congruentSum,objectDurationCongruent,'objectDurationCongruent');
-binoInCongruentObjectDuration = binomialFunction(congruentSum,objectOrientationIncongruent,'objectDurationInCongruent');
+binoInCongruentObjectDuration = binomialFunction(congruentSum,objectOrientationInCongruent,'objectDurationInCongruent');
+
+binoCriticalCongruentObjectDuration = binomialFunction(congruentSum,objectDurationCongruentCritical,'objectDurationCriticalCongruent');
+binoCriticalInCongruentObjectDuration = binomialFunction(congruentSum,objectDurationInCongruentCritical,'objectDurationCriticalInCongruent');
 
 % congruency Table 
 
-congruencyTable = [binomialTables(:,'criticalFaceOrientation'),binoCongruentFaceOrientation,binoIncongruentFaceOrientation,binomialTables(:,'criticalFaceDuration'),binoCongruentFaceDuration,binoInCongruentFaceDuration,...
-   binomialTables(:,'criticalObjectOrientation'),binoCongruentObjectOrientation,binoInCongruentObjectOrientation,binomialTables(:,'criticalObjectDuration'),binoCongruentObjectDuration,binoInCongruentObjectDuration];
+congruencyBinom = [binoCriticalCongruentFaceOrientation,binoCriticalInCongruentFaceOrientation,binoCongruentFaceOrientation,binoInCongruentFaceOrientation,binoCriticalCongruentFaceDuration,binoCriticalInCongruentFaceDuration,binoCongruentFaceDuration,binoInCongruentFaceDuration,...
+   binoCriticalCongruentObjectOrientation,binoCriticalInCongruentObjectOrientation,binoCongruentObjectOrientation,binoInCongruentObjectOrientation,binoCriticalCongruentObjectDuration,binoCriticalInCongruentObjectDuration,binoCongruentObjectDuration,binoInCongruentObjectDuration];
 
 %save the congruenyTable
 
-congruencyTableFile = 'congruencyTable.mat';
-save(fullfile(processedDataComb,congruencyTableFile),'congruencyTable');
+congruencyBinomFile = 'congruencyBinom.mat';
+save(fullfile(processedDataComb,congruencyBinomFile),'congruencyBinom');
 
-
-% get the performance in critical trial by congruency
-
-
-
-
-congruencyCritical = table((1:72)',congruencyTable.congruency,criticalTable.orientationPerformance,criticalTable.durationPerformance,criticalTable.groupName,'VariableNames',{'participant Nr','congruency','orientation','duration','groupName'});
-
-
+%% face orientation plots
 
 %plot the binomials 
 
 ChanceLevel = 0.5;
 PValue = 0.05;
 
-%face group Orientation
+% face congruent orientation  
 
-faceOrientationAccuracy = [congruencyTable.criticalFaceOrientation(1),congruencyTable.faceOrientationCongruent(1),congruencyTable.faceOrientationInCongruent(1)]; % first value is the accuracy 
-faceOrientationPValue = [congruencyTable.criticalFaceOrientation(4),congruencyTable.faceOrientationCongruent(4),congruencyTable.faceOrientationInCongruent(4)]; %forth value is the P value 
+faceCongruentAccuracy = [congruencyBinom.faceOrientationCriticalCongruent(1),congruencyBinom.faceOrientationCongruent(1)];
+faceCongruentPValues = [congruencyBinom.faceOrientationCriticalCongruent(4),congruencyBinom.faceOrientationCongruent(4)];
 
-%object group Orientation
+% face incongruent orientation  
 
-objectOrientationAccuracy = [congruencyTable.criticalObjectOrientation(1),congruencyTable.objectOrientationCongruent(1),congruencyTable.objectOrientationInCongruent(1)]; % first value is the accuracy 
-objectOrientationPValue = [congruencyTable.criticalObjectOrientation(4),congruencyTable.objectOrientationCongruent(4),congruencyTable.objectOrientationInCongruent(4)]; %forth value is the P value 
+faceIncongruentAccuracy = [congruencyBinom.faceOrientationCriticalInCongruent(1),congruencyBinom.faceOrientationInCongruent(1)];
+faceIncongruentPValues = [congruencyBinom.faceOrientationCriticalInCongruent(4),congruencyBinom.faceOrientationInCongruent(4)];
 
+faceOrientationAccuracy = [faceCongruentAccuracy; faceIncongruentAccuracy];
 
-%face group duration 
+BarColors = [repmat(congruentColor, 2, 1); repmat(incongruentColor, 2, 1)];
 
-faceDurationAccuracy = [congruencyTable.criticalFaceDuration(1),congruencyTable.faceDurationCongruent(1),congruencyTable.faceDurationInCongruent(1)];
-faceDurationPValue = [congruencyTable.criticalFaceDuration(4),congruencyTable.faceDurationCongruent(4),congruencyTable.faceDurationInCongruent(4)];
+figure; % figure for the subplots 
 
-%object group duration
-
-objectDurationAccuracy =[congruencyTable.criticalObjectDuration(1),congruencyTable.objectDurationCongruent(1),congruencyTable.objectDurationInCongruent(1)];
-objectDurationPValue = [congruencyTable.criticalObjectDuration(4),congruencyTable.objectDurationCongruent(4),congruencyTable.objectDurationInCongruent(4)];
-
-% face orientation bar
-
-figure;
-
-faceBars = bar(faceOrientationAccuracy,'FaceColor','flat'); % plot the facebars
-
-barColors = [criticalColor;congruentColor;incongruentColor];
-
-faceBars.CData = barColors; % add the colors for the color code
+faceOrientationPlot = bar(faceOrientationAccuracy, 'grouped');
 
 hold on;
 
+faceOrientationPlot(1).FaceColor = criticalColor; 
+faceOrientationPlot(2).FaceColor = controlColor;
+
 yline(ChanceLevel, '--k'); % add the line to the chance level 
-ylim([0 1]);
 yticks([0, 0.5, 1]);
+ylim([0,1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
-xlabel('Trial Category','FontWeight','bold','FontSize', 14);
+xlabel('Congruency','FontWeight','bold','FontSize', 14);
 title('Face Orientation Report Performance','FontSize', 16);
 
 ax = gca; % Get the current axes
-ax.XTickLabel = {'Critical', 'Congruent Control', 'Incongruent Control'}; % Set the xticklabels
+ax.XTickLabel = {'Congruent', 'Incongruent'}; % Set the xticklabels
 ax.FontSize = 12; % Adjust the font size as needed
-ax.FontName = 'Times New Roman'; % Set the font name 
+ax.FontName = 'Times New Roman'; 
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
-%add the starts for the statistical testing
 
-for i = 1:numel(faceOrientationAccuracy) 
+for i = 1:numel(faceCongruentAccuracy) % number of values are same for the object and face
+    % object P value 
     
-    if faceOrientationPValue(i) < PValue
-        text(i-0.05 - Astoffset,  faceOrientationAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if faceCongruentPValues(i) < PValue
+        text(i-0.05 - Astoffset, faceCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if faceIncongruentPValues(i) < PValue
+        text(i+0.25 - Astoffset, faceIncongruentAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
 end
+
+legend('Critical', 'First Control', 'Location', 'northeast', 'Position', [0.80, 0.85, 0.03, 0.05]);
 
 hold off;
 
 
-% object orientation bar
+%% object orientation plots 
 
+%plot the binomials 
 
-figure;
+ChanceLevel = 0.5;
+PValue = 0.05;
 
-objectBars = bar(objectOrientationAccuracy,'FaceColor','flat'); % plot the facebars
+% object congruent orientation  
 
-objectBars.CData = barColors; % add the colors for the color code
+objectCongruentAccuracy = [congruencyBinom.objectOrientationCriticalCongruent(1),congruencyBinom.objectOrientationCongruent(1)];
+objectCongruentPValues = [congruencyBinom.objectOrientationCriticalCongruent(4),congruencyBinom.objectOrientationCongruent(4)];
+
+% object incongruent orientation  
+
+objectIncongruentAccuracy = [congruencyBinom.objectOrientationCriticalInCongruent(1),congruencyBinom.objectOrientationInCongruent(1)];
+objectIncongruentPValues = [congruencyBinom.objectOrientationCriticalInCongruent(4),congruencyBinom.objectOrientationInCongruent(4)];
+
+objectOrientationAccuracy = [objectCongruentAccuracy; objectIncongruentAccuracy];
+
+BarColors = [repmat(congruentColor, 2, 1); repmat(incongruentColor, 2, 1)];
+
+figure; % figure for the subplots 
+
+objectOrientationPlot = bar(objectOrientationAccuracy, 'grouped');
 
 hold on;
 
+objectOrientationPlot(1).FaceColor = criticalColor; 
+objectOrientationPlot(2).FaceColor = controlColor;
+
 yline(ChanceLevel, '--k'); % add the line to the chance level 
-ylim([0 1]);
 yticks([0, 0.5, 1]);
+ylim([0,1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
-xlabel('Trial Category','FontWeight','bold','FontSize', 14);
+xlabel('Congruency','FontWeight','bold','FontSize', 14);
 title('Object Orientation Report Performance','FontSize', 16);
 
 ax = gca; % Get the current axes
-ax.XTickLabel = {'Critical', 'Congruent Control', 'Incongruent Control'}; % Set the xticklabels
+ax.XTickLabel = {'Congruent', 'Incongruent'}; % Set the xticklabels
 ax.FontSize = 12; % Adjust the font size as needed
-ax.FontName = 'Times New Roman'; % Set the font name 
+ax.FontName = 'Times New Roman'; 
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
-%add the starts for the statistical testing
 
-for i = 1:numel(objectOrientationAccuracy) 
+for i = 1:numel(objectCongruentAccuracy) % number of values are same for the object and face
+    % object P value 
     
-    if objectOrientationPValue(i) < PValue
-        text(i-0.05 - Astoffset,  objectOrientationAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if objectCongruentPValues(i) < PValue
+        text(i-0.05 - Astoffset, objectCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if objectIncongruentPValues(i) < PValue
+        text(i+0.25 - Astoffset, objectIncongruentAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
 end
 
+legend('Critical', 'First Control', 'Location', 'northwest', 'Position',[0.22, 0.85, 0.03, 0.05]);
+
 hold off;
 
-% duration bars
 
-%face
+%% face duration 
 
-figure;
+%plot the binomials 
 
-faceDurationBars = bar(faceDurationAccuracy,'FaceColor','flat'); % plot the facebars
+ChanceLevel = 0.5;
+PValue = 0.05;
 
-barColors = [criticalColor;congruentColor;incongruentColor];
+% face congruent duration 
 
-faceDurationBars.CData = barColors; % add the colors for the color code
+faceCongruentDurationAccuracy = [congruencyBinom.faceDurationCriticalCongruent(1),congruencyBinom.faceDurationCongruent(1)];
+faceCongruentDurationPValues = [congruencyBinom.faceDurationCriticalCongruent(4),congruencyBinom.faceDurationCongruent(4)];
+
+% face incongruent duration 
+
+faceIncongruentDurationAccuracy = [congruencyBinom.faceDurationCriticalInCongruent(1),congruencyBinom.faceDurationInCongruent(1)];
+faceIncongruentDurationPValues = [congruencyBinom.faceDurationCriticalInCongruent(4),congruencyBinom.faceDurationInCongruent(4)];
+
+faceDurationAccuracy = [faceCongruentDurationAccuracy; faceIncongruentDurationAccuracy];
+
+BarColors = [repmat(congruentColor, 2, 1); repmat(incongruentColor, 2, 1)];
+
+figure; % figure for the subplots 
+
+faceDurationPlot = bar(faceDurationAccuracy, 'grouped');
 
 hold on;
 
+faceDurationPlot(1).FaceColor = criticalColor; 
+faceDurationPlot(2).FaceColor = controlColor;
+
 yline(ChanceLevel, '--k'); % add the line to the chance level 
-ylim([0 1]);
 yticks([0, 0.5, 1]);
+ylim([0,1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
-xlabel('Trial Category','FontWeight','bold','FontSize', 14);
+xlabel('Congruency','FontWeight','bold','FontSize', 14);
 title('Face Duration Report Performance','FontSize', 16);
 
 ax = gca; % Get the current axes
-ax.XTickLabel = {'Critical', 'Congruent Control', 'Incongruent Control'}; % Set the xticklabels
+ax.XTickLabel = {'Congruent', 'Incongruent'}; % Set the xticklabels
 ax.FontSize = 12; % Adjust the font size as needed
-ax.FontName = 'Times New Roman'; % Set the font name 
+ax.FontName = 'Times New Roman'; 
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
-%add the starts for the statistical testing
 
-for i = 1:numel(faceDurationAccuracy) 
+for i = 1:numel(faceCongruentDurationAccuracy) % number of values are same for the object and face
+    % object P value 
     
-    if faceDurationPValue(i) < PValue
-        text(i-0.05 - Astoffset,  faceDurationAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if faceCongruentDurationPValues(i) < PValue
+        text(i-0.05 - Astoffset, faceCongruentDurationAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if faceIncongruentDurationPValues(i) < PValue
+        text(i+0.25 - Astoffset, faceIncongruentDurationAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
 end
 
+legend('Critical', 'First Control', 'Location', 'northeast', 'Position', [0.80, 0.85, 0.03, 0.05]);
+
 hold off;
 
+%% object duration 
 
-%object 
+%plot the binomials 
 
+ChanceLevel = 0.5;
+PValue = 0.05;
 
-figure;
+% object congruent duration  
 
-objectDurationBars = bar(objectDurationAccuracy,'FaceColor','flat'); % plot the facebars
+objectCongruentDurationAccuracy = [congruencyBinom.objectDurationCriticalCongruent(1),congruencyBinom.objectDurationCongruent(1)];
+objectCongruentDurationPValues = [congruencyBinom.objectDurationCriticalCongruent(4),congruencyBinom.objectDurationCongruent(4)];
 
-objectDurationBars.CData = barColors; % add the colors for the color code
+% face incongruent orientation 
+
+objectIncongruentDurationAccuracy = [congruencyBinom.objectDurationCriticalInCongruent(1),congruencyBinom.objectDurationInCongruent(1)];
+objectIncongruentDurationPValues = [congruencyBinom.objectDurationCriticalInCongruent(4),congruencyBinom.objectDurationInCongruent(4)];
+
+objectDurationAccuracy = [objectCongruentDurationAccuracy; objectIncongruentDurationAccuracy];
+
+BarColors = [repmat(congruentColor, 2, 1); repmat(incongruentColor, 2, 1)];
+
+figure; % figure for the subplots 
+
+faceDurationPlot = bar(faceDurationAccuracy, 'grouped');
 
 hold on;
 
+faceDurationPlot(1).FaceColor = criticalColor; 
+faceDurationPlot(2).FaceColor = controlColor;
+
 yline(ChanceLevel, '--k'); % add the line to the chance level 
-ylim([0 1]);
 yticks([0, 0.5, 1]);
+ylim([0,1]);
 
 ylabel('Accuracy','FontWeight','bold','FontSize', 14);  % add labels and titles
-xlabel('Trial Category','FontWeight','bold','FontSize', 14);
-title('Object Duration Report Performance','FontSize', 16);
+xlabel('Congruency','FontWeight','bold','FontSize', 14);
+title('Face Duration Report Performance','FontSize', 16);
 
 ax = gca; % Get the current axes
-ax.XTickLabel = {'Critical', 'Congruent Control', 'Incongruent Control'}; % Set the xticklabels
+ax.XTickLabel = {'Congruent', 'Incongruent'}; % Set the xticklabels
 ax.FontSize = 12; % Adjust the font size as needed
-ax.FontName = 'Times New Roman'; % Set the font name 
+ax.FontName = 'Times New Roman'; 
 
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
-%add the starts for the statistical testing
 
-for i = 1:numel(objectDurationAccuracy) 
+for i = 1:numel(faceCongruentDurationAccuracy) % number of values are same for the object and face
+    % object P value 
     
-    if objectDurationPValue(i) < PValue
-        text(i-0.05 - Astoffset,  objectDurationAccuracy(i) - 0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    if faceCongruentDurationPValues(i) < PValue
+        text(i-0.05 - Astoffset, faceCongruentDurationAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+    end
+    % face p-value
+    if faceIncongruentDurationPValues(i) < PValue
+        text(i+0.25 - Astoffset, faceIncongruentDurationAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
 end
 
+legend('Critical', 'First Control', 'Location', 'northeast', 'Position', [0.80, 0.85, 0.03, 0.05]);
+
 hold off;
-
-
-%statistical testing 
-
-
-%face comparisons (within participant performance)
-
-
-
-
-
 
 
 
