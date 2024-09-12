@@ -226,7 +226,7 @@ for i = 1:numel(objectCongruentAccuracy) % number of values are same for the obj
     % object P value 
     
     if objectCongruentPValues(i) < PValue
-        text(i-0.05 - Astoffset, objectCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+        text(i-0.75 - Astoffset, objectCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
     % face p-value
     if objectIncongruentPValues(i) < PValue
@@ -368,19 +368,48 @@ hold off;
 % compare face congruent and face incongruent for orientation (whether
 % performance changed or not) 
  
-congruentFaceIndexO = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1;
-incongruentFaceIndexO = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0;
-
-congruentFaceIndexD = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1;
-incongruentFaceIndexD = strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0;
-
-congruentObjectIndexO = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1;
-incongruentObjectIndexO = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0;
-
-congruentObjectIndexD = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1;
-incongruentObjectIndexD = strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0;
-
 % congruentFaceOrientation 
 
-[contFaceOrientation ,~ ,~ ,McNemfaceOrientation] = statsFunction(orientationCombined.test(faceIndexOrientation),orientationCombined.accuracy(faceIndexOrientation),'critical','control',2,1); % give the data ensuring b < c (if not b = c) and check whether b+c>10 for power 
+congruentFaceOrientation = congruencyCritical(strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1,:);
 
+orientationFaceCritical = table(congruentFaceOrientation.orientationCritical,repmat({'critical'},height(congruentFaceOrientation),1),'VariableNames',{'accuracy','trialName'});
+orientationFaceControl = table(congruentFaceOrientation.orientationControlAccuracy,repmat({'control'},height(congruentFaceOrientation),1),'VariableNames',{'accuracy','trialName'});
+
+orientationFaceCongruent = [orientationFaceCritical;orientationFaceControl];
+
+[congFaceOrientation ,~ ,~ ,McNemCongFaceOrientation] = statsFunction(orientationFaceCongruent.trialName,orientationFaceCongruent.accuracy,'critical','control',2,1); % give the data ensuring b < c (if not b = c) and check whether b+c>10 for power 
+
+%% incongruentFaceOrientation 
+
+IncongruentFaceOrientation = congruencyCritical(strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0,:);
+
+orientationFaceCriticalInc = table(IncongruentFaceOrientation.orientationCritical,repmat({'critical'},height(IncongruentFaceOrientation),1),'VariableNames',{'accuracy','trialName'});
+orientationFaceControlInc = table(IncongruentFaceOrientation.orientationControlAccuracy,repmat({'control'},height(IncongruentFaceOrientation),1),'VariableNames',{'accuracy','trialName'});
+
+orientationFaceInCongruent = [orientationFaceCriticalInc;orientationFaceControlInc];
+
+[IncongFaceOrientation ,~ ,~ ,McNemInCongFaceOrientation] = statsFunction(orientationFaceInCongruent.trialName,orientationFaceCongruent.accuracy,'critical','control',2,1);
+
+
+%% congruent Object Orientation 
+
+
+congruentObjectOrientation = congruencyCritical(strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1,:);
+
+orientationObjectCritical = table(congruentObjectOrientation.orientationCritical,repmat({'critical'},height(congruentObjectOrientation),1),'VariableNames',{'accuracy','trialName'});
+orientationObjectControl = table(congruentObjectOrientation.orientationControlAccuracy,repmat({'control'},height(congruentObjectOrientation),1),'VariableNames',{'accuracy','trialName'});
+
+orientationObjectCongruent = [orientationObjectCritical;orientationObjectControl];
+
+[congObjectOrientation ,~ ,~ ,McNemCongObjectOrientation] = statsFunction(orientationObjectCongruent.trialName,orientationObjectCongruent.accuracy,'control','critical',2,1);
+
+%% Incongruent Object Orientation 
+
+IncongruentObjectOrientation = congruencyCritical(strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0,:);
+
+orientationObjectCriticalInc = table(IncongruentObjectOrientation.orientationCritical,repmat({'critical'},height(IncongruentObjectOrientation),1),'VariableNames',{'accuracy','trialName'});
+orientationObjectControlInc = table(IncongruentObjectOrientation.orientationControlAccuracy,repmat({'control'},height(IncongruentObjectOrientation),1),'VariableNames',{'accuracy','trialName'});
+
+orientationObjectInCongruent = [orientationObjectCriticalInc;orientationObjectControlInc];
+
+[IncongObjectOrientation ,~ ,~ ,McNemInCongObjectOrientation] = statsFunction(orientationObjectInCongruent.trialName,orientationObjectCongruent.accuracy,'control','critical',2,1);
