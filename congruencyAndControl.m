@@ -388,7 +388,7 @@ orientationFaceControlInc = table(IncongruentFaceOrientation.orientationControlA
 
 orientationFaceInCongruent = [orientationFaceCriticalInc;orientationFaceControlInc];
 
-[IncongFaceOrientation ,~ ,~ ,McNemInCongFaceOrientation] = statsFunction(orientationFaceInCongruent.trialName,orientationFaceCongruent.accuracy,'critical','control',2,1);
+[IncongFaceOrientation ,~ ,~ ,McNemInCongFaceOrientation] = statsFunction(orientationFaceInCongruent.trialName,orientationFaceInCongruent.accuracy,'critical','control',2,1);
 
 
 %% congruent Object Orientation 
@@ -412,4 +412,4 @@ orientationObjectControlInc = table(IncongruentObjectOrientation.orientationCont
 
 orientationObjectInCongruent = [orientationObjectCriticalInc;orientationObjectControlInc];
 
-[IncongObjectOrientation ,~ ,~ ,McNemInCongObjectOrientation] = statsFunction(orientationObjectInCongruent.trialName,orientationObjectCongruent.accuracy,'control','critical',2,1);
+[IncongObjectOrientation ,~ ,~ ,McNemInCongObjectOrientation] = statsFunction(orientationObjectInCongruent.trialName,orientationObjectInCongruent.accuracy,'control','critical',2,1);

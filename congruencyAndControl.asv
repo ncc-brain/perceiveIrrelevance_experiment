@@ -226,7 +226,7 @@ for i = 1:numel(objectCongruentAccuracy) % number of values are same for the obj
     % object P value 
     
     if objectCongruentPValues(i) < PValue
-        text(i-0.05 - Astoffset, objectCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
+        text(i-0.75 - Astoffset, objectCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
     % face p-value
     if objectIncongruentPValues(i) < PValue
@@ -388,7 +388,7 @@ orientationFaceControlInc = table(IncongruentFaceOrientation.orientationControlA
 
 orientationFaceInCongruent = [orientationFaceCriticalInc;orientationFaceControlInc];
 
-[IncongFaceOrientation ,~ ,~ ,McNemInCongFaceOrientation] = statsFunction(orientationFaceInCongruent.trialName,orientationFaceCongruent.accuracy,'critical','control',2,1);
+[IncongFaceOrientation ,~ ,~ ,McNemInCongFaceOrientation] = statsFunction(orientationFaceInCongruent.trialName,orientationFaceInCongruent.accuracy,'critical','control',2,1);
 
 
 %% congruent Object Orientation 
@@ -410,6 +410,6 @@ IncongruentObjectOrientation = congruencyCritical(strcmp(congruencyCritical.grou
 orientationObjectCriticalInc = table(IncongruentObjectOrientation.orientationCritical,repmat({'critical'},height(IncongruentObjectOrientation),1),'VariableNames',{'accuracy','trialName'});
 orientationObjectControlInc = table(IncongruentObjectOrientation.orientationControlAccuracy,repmat({'control'},height(IncongruentObjectOrientation),1),'VariableNames',{'accuracy','trialName'});
 
-orientationObjectInCongruent = [orientationObjectCriticalInc;orientationFaceControlInc];
+orientationObjectInCongruent = [orientationObjectCriticalInc;orientationObjectControlInc];
 
-[IncongFaceOrientation ,~ ,~ ,McNemInCongFaceOrientation] = statsFunction(orientationFaceInCongruent.trialName,orientationFaceCongruent.accuracy,'critical','control',2,1);
+[IncongObjectOrientation ,~ ,~ ,McNemInCongObjectOrientation] = statsFunction(orientationObjectInCongruent.trialName,orientationObjectInCongruent.accuracy,'control','critical',2,1);
