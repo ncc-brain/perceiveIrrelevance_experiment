@@ -98,7 +98,7 @@ binoCriticalInCongruentFaceDuration = binomialFunction(congruentSum,faceDuration
 
 %object duration 
 binoCongruentObjectDuration = binomialFunction(congruentSum,objectDurationCongruent,'objectDurationCongruent');
-binoInCongruentObjectDuration = binomialFunction(congruentSum,objectOrientationInCongruent,'objectDurationInCongruent');
+binoInCongruentObjectDuration = binomialFunction(congruentSum,objectDurationInCongruent,'objectDurationInCongruent');
 
 binoCriticalCongruentObjectDuration = binomialFunction(congruentSum,objectDurationCongruentCritical,'objectDurationCriticalCongruent');
 binoCriticalInCongruentObjectDuration = binomialFunction(congruentSum,objectDurationInCongruentCritical,'objectDurationCriticalInCongruent');
@@ -159,13 +159,12 @@ ax.FontName = 'Times New Roman';
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
 
-for i = 1:numel(faceCongruentAccuracy) % number of values are same for the object and face
-    % object P value 
-    
+for i = 1:numel(faceCongruentAccuracy) 
+
     if faceCongruentPValues(i) < PValue
         text(i-0.05 - Astoffset, faceCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    % face p-value
+   
     if faceIncongruentPValues(i) < PValue
         text(i+0.25 - Astoffset, faceIncongruentAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
@@ -222,13 +221,12 @@ ax.FontName = 'Times New Roman';
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
 
-for i = 1:numel(objectCongruentAccuracy) % number of values are same for the object and face
-    % object P value 
+for i = 1:numel(objectCongruentAccuracy) 
     
     if objectCongruentPValues(i) < PValue
         text(i-0.75 - Astoffset, objectCongruentAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    % face p-value
+    
     if objectIncongruentPValues(i) < PValue
         text(i+0.25 - Astoffset, objectIncongruentAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
@@ -285,13 +283,12 @@ ax.FontName = 'Times New Roman';
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
 
-for i = 1:numel(faceCongruentDurationAccuracy) % number of values are same for the object and face
-    % object P value 
+for i = 1:numel(faceCongruentDurationAccuracy) 
     
     if faceCongruentDurationPValues(i) < PValue
         text(i-0.05 - Astoffset, faceCongruentDurationAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    % face p-value
+
     if faceIncongruentDurationPValues(i) < PValue
         text(i+0.25 - Astoffset, faceIncongruentDurationAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
@@ -313,7 +310,7 @@ PValue = 0.05;
 objectCongruentDurationAccuracy = [congruencyBinom.objectDurationCriticalCongruent(1),congruencyBinom.objectDurationCongruent(1)];
 objectCongruentDurationPValues = [congruencyBinom.objectDurationCriticalCongruent(4),congruencyBinom.objectDurationCongruent(4)];
 
-% face incongruent orientation 
+% object incongruent orientation 
 
 objectIncongruentDurationAccuracy = [congruencyBinom.objectDurationCriticalInCongruent(1),congruencyBinom.objectDurationInCongruent(1)];
 objectIncongruentDurationPValues = [congruencyBinom.objectDurationCriticalInCongruent(4),congruencyBinom.objectDurationInCongruent(4)];
@@ -347,13 +344,12 @@ ax.FontName = 'Times New Roman';
 Astoffset = 0.1; % asterisks ofset to decide the placement of it 
 
 
-for i = 1:numel(objectCongruentDurationAccuracy) % number of values are same for the object and face
-    % object P value 
+for i = 1:numel(objectCongruentDurationAccuracy) 
     
     if objectCongruentDurationPValues(i) < PValue
         text(i-0.05 - Astoffset, objectCongruentDurationAccuracy(i) -0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
-    % face p-value
+
     if objectIncongruentDurationPValues(i) < PValue
         text(i+0.25 - Astoffset, objectIncongruentDurationAccuracy(i)-0.05, '*', 'FontSize', 25, 'HorizontalAlignment', 'center');
     end
@@ -413,3 +409,51 @@ orientationObjectControlInc = table(IncongruentObjectOrientation.orientationCont
 orientationObjectInCongruent = [orientationObjectCriticalInc;orientationObjectControlInc];
 
 [IncongObjectOrientation ,~ ,~ ,McNemInCongObjectOrientation] = statsFunction(orientationObjectInCongruent.trialName,orientationObjectInCongruent.accuracy,'control','critical',2,1);
+
+%% congruent Face Duration
+
+congruentFaceDuration = congruencyCritical(strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1,:);
+
+durationFaceCritical = table(congruentFaceDuration.durationCritical,repmat({'critical'},height(congruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+durationFaceControl = table(congruentFaceDuration.durationControlAccuracy,repmat({'control'},height(congruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationFaceCongruent = [durationFaceCritical;durationFaceControl];
+
+[congFaceDuration ,~ ,~ ,McNemCongFaceDuration] = statsFunction(durationFaceCongruent.trialName,durationFaceCongruent.accuracy,'control','critical',2,1); 
+
+%% incongruent Face Duration 
+
+IncongruentFaceDuration = congruencyCritical(strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0,:);
+
+durationFaceCriticalInc = table(IncongruentFaceDuration.durationCritical,repmat({'critical'},height(IncongruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+durationFaceControlInc = table(IncongruentFaceDuration.durationControlAccuracy,repmat({'control'},height(IncongruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationFaceInCongruent = [durationFaceCriticalInc;durationFaceControlInc];
+
+[IncongFaceDuration ,~ ,~ ,McNemInCongFaceDuration] = statsFunction(durationFaceInCongruent.trialName,durationFaceInCongruent.accuracy,'critical','control',2,1); 
+
+%% congruent Object Duration 
+
+congruentObjectDuration = congruencyCritical(strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1,:);
+
+durationObjectCritical = table(congruentObjectDuration.durationCritical,repmat({'critical'},height(congruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+durationObjectControl = table(congruentObjectDuration.durationControlAccuracy,repmat({'control'},height(congruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationObjectCongruent = [durationObjectCritical;durationObjectControl];
+
+[congObjectDuration ,~ ,~ ,McNemCongObjectDuration] = statsFunction(durationObjectCongruent.trialName,durationObjectCongruent.accuracy,'critical','control',2,1); 
+
+
+%% Incongruent Object Duration 
+
+IncongruentObjectDuration = congruencyCritical(strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0,:);
+
+durationObjectCriticalInc = table(IncongruentObjectDuration.durationCritical,repmat({'critical'},height(IncongruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+durationObjectControlInc = table(IncongruentObjectDuration.durationControlAccuracy,repmat({'control'},height(IncongruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationObjectInCongruent = [durationObjectCriticalInc;durationObjectControlInc];
+
+[IncongObjectDuration ,~ ,~ ,McNemInCongObjectDuration] = statsFunction(durationObjectInCongruent.trialName,durationObjectInCongruent.accuracy,'critical','control',2,1); 
+
+
+

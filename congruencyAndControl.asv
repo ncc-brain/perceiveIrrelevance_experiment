@@ -413,3 +413,51 @@ orientationObjectControlInc = table(IncongruentObjectOrientation.orientationCont
 orientationObjectInCongruent = [orientationObjectCriticalInc;orientationObjectControlInc];
 
 [IncongObjectOrientation ,~ ,~ ,McNemInCongObjectOrientation] = statsFunction(orientationObjectInCongruent.trialName,orientationObjectInCongruent.accuracy,'control','critical',2,1);
+
+%% congruent Face Duration
+
+congruentFaceDuration = congruencyCritical(strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 1,:);
+
+durationFaceCritical = table(congruentFaceDuration.durationCritical,repmat({'critical'},height(congruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+durationFaceControl = table(congruentFaceDuration.durationControlAccuracy,repmat({'control'},height(congruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationFaceCongruent = [durationFaceCritical;durationFaceControl];
+
+[congFaceDuration ,~ ,~ ,McNemCongFaceDuration] = statsFunction(durationFaceCongruent.trialName,durationFaceCongruent.accuracy,'control','critical',2,1); 
+
+%% incongruent Face Duration 
+
+IncongruentFaceDuration = congruencyCritical(strcmp(congruencyCritical.group,'face') & congruencyCritical.congruency == 0,:);
+
+durationFaceCriticalInc = table(IncongruentFaceDuration.durationCritical,repmat({'critical'},height(IncongruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+durationFaceControlInc = table(IncongruentFaceDuration.durationControlAccuracy,repmat({'control'},height(IncongruentFaceDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationFaceInCongruent = [durationFaceCriticalInc;durationFaceControlInc];
+
+[IncongFaceDuration ,~ ,~ ,McNemInCongFaceDuration] = statsFunction(durationFaceInCongruent.trialName,durationFaceInCongruent.accuracy,'critical','control',2,1); 
+
+%% congruent Object Duration 
+
+congruentObjectDuration = congruencyCritical(strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 1,:);
+
+durationObjectCritical = table(congruentObjectDuration.durationCritical,repmat({'critical'},height(congruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+durationObjectControl = table(congruentObjectDuration.durationControlAccuracy,repmat({'control'},height(congruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationObjectCongruent = [durationObjectCritical;durationObjectControl];
+
+[congObjectDuration ,~ ,~ ,McNemCongObjectDuration] = statsFunction(durationObjectCongruent.trialName,durationObjectCongruent.accuracy,'critical','control',2,1); 
+
+
+%% Incongruent Object Duration 
+
+IncongruentObjectDuration = congruencyCritical(strcmp(congruencyCritical.group,'object') & congruencyCritical.congruency == 0,:);
+
+durationObjectCriticalInc = table(IncongruentObjectDuration.durationCritical,repmat({'critical'},height(IncongruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+durationObjectControlInc = table(IncongruentObjectDuration.durationControlAccuracy,repmat({'control'},height(IncongruentObjectDuration),1),'VariableNames',{'accuracy','trialName'});
+
+durationObjectInCongruent = [durationObjectCriticalInc;durationObjectControlInc];
+
+[IncongObjectDuration ,~ ,~ ,McNemInCongObjectDuration] = statsFunction(durationObjectInCongruent.trialName,durationObjectInCongruent.accuracy,'critical','control',2,1); 
+
+
+
