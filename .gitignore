@@ -1,2 +1,4 @@
 env/
+bids/
 *.asv
+**__pycache__**
