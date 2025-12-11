@@ -3,3 +3,5 @@ bids/
 *.asv
 **__pycache__**
 _build/
+.venv/
+python/venv/

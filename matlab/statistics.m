@@ -5,19 +5,19 @@
 
 % in this experiment we will compare 2 probes (orientation & duration) and performance in surprise %
 % first control 
-
-clear
-clc
-addpath('./')
-configIrrelevant;
-
-cd(processedDataOnline)
-addpath(genpath(processedDataOnline)); 
+% 
+% clear
+% clc
+% addpath('./')
+% configIrrelevant;
+% 
+% cd(processedDataOnline)
+% addpath(genpath(processedDataOnline)); 
 
 % load files
 
-load('criticalTable.mat'); 
-load('postTable.mat');
+load('P:\2023-0383-PerceiveIrrelevance\03data\perceivedIrrelevance\combined\combinedDerivatives\criticalTable.mat'); 
+load('P:\2023-0383-PerceiveIrrelevance\03data\perceivedIrrelevance\combined\combinedDerivatives\postTable.mat');
 
 %% Groups to compare 
 

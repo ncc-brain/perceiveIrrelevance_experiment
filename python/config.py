@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-source_root = r'P:\2023-0383-PerceiveIrrelevance\03data\perceivedIrrelevance'
+source_root = r'C:\Users\alexander.lepauvre\Downloads\data_1764319316945'
 bids_root = r'C:\Users\alexander.lepauvre\Documents\GitHub\perceiveIrrelevance_experiment\bids'
 
 colors = {

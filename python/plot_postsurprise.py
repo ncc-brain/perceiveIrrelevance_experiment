@@ -1,0 +1,111 @@
+
+# Convert the data to BIDS
+from config import source_root, bids_root, colors
+from pathlib import Path
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import binomtest, fisher_exact
+from statsmodels.stats.contingency_tables import mcnemar
+
+from bids_conversion import beh_cleanup, get_demo, get_subjects_list, dataframe2bids, exclusion_criterion, count_trailing_zeros_after_decimal
+import pylustrator
+bar_width = 0.9
+# Specify the name of the task:
+task = 'PerceivedIrrelevance'
+# Save the participants table:
+file_name_demo = "participants.tsv"
+file_path_demo = Path(bids_root, file_name_demo)
+# Load the demographic data:
+participants_demo = pd.read_csv(file_path_demo, sep='\t')
+participants_demo.head()
+
+# Load the data of all subjects:
+subjects_df = []
+for sub in participants_demo['participant_id'].to_list():
+    if participants_demo.loc[participants_demo['participant_id'] == sub, 'excluded'].values[0]:
+        print(f'Subject {sub} excluded')
+        continue
+    # Load the events.tsv:
+    file_path = Path(bids_root, sub, 'beh', f'{sub}_task-{task}_events.tsv')
+    subject_df = pd.read_csv(file_path, sep='\t')
+    # Add wheter the subject was collected in the lab or not for later reference:
+    subject_df['online'] = participants_demo.loc[participants_demo['participant_id'] == sub, 'online'].values[0]
+    # Add subject id for later reference:
+    subject_df['participant_id'] = sub
+    subjects_df.append(subject_df)
+subjects_df = pd.concat(subjects_df, ignore_index=True)
+
+# Extract the results of the surprise probe for orientation and duration separately:
+surprise_probe_data = subjects_df[(subjects_df['block_type'] == 'surprise') & 
+                                  ((subjects_df['event_type'] == 'probe_duration') | 
+                                   (subjects_df['event_type'] == 'probe_orientation'))].reset_index(drop=True)
+# Extract first post-surprise trials probe duration and orientation:
+first_post_surprise = subjects_df[(subjects_df['block_type'] == 'post-surprise') & 
+                                  (subjects_df['event_type'].isin(['probe_duration', 'probe_orientation']))].reset_index().groupby(['participant_id', 'event_type']).first().reset_index()
+# Extract the subsequent memory trials:
+post_surprise_trials = first_post_surprise
+post_surprise_trials['nth'] = 1
+for i in [1, 2, 3]:
+    nth_post_surprise = subjects_df[(subjects_df['block_type'] == 'post-surprise') & 
+                                  (subjects_df['event_type'].isin(['probe_duration', 'probe_orientation']))].reset_index().groupby(['participant_id', 'event_type']).nth(i).reset_index()
+    nth_post_surprise['nth'] = i + 1
+    post_surprise_trials = pd.concat([post_surprise_trials, nth_post_surprise], ignore_index=True)
+
+# Plot the surprise vs. post surprise:
+# Investigate the order effect:
+
+pylustrator.start()
+fig, ax = plt.subplots(3, figsize=(20, 12))
+
+# Block types:
+nth_post = ['surprise', 1, 2, 3, 4]
+markers = ['', '*', '\\', 'o', '.']
+legends = ['surprise', '1st post', '2nd post', '3rd post', '4th post']
+
+for i, ord in enumerate(['First', 'Second']):
+    ctr = 0
+    for ii, grp in enumerate(['Face', 'Object']):
+        for iii, prb in enumerate(['probe_orientation', 'probe_duration']):
+            ctr += 1
+            for iiii, nth in enumerate(nth_post):
+                if nth == 'surprise':
+                    df = surprise_probe_data[(surprise_probe_data['event_type'] == prb) &
+                            (surprise_probe_data['category'] == grp.lower())]
+                    extra_width = 1
+                else:
+                    df = post_surprise_trials[(post_surprise_trials['event_type'] == prb) &
+                            (post_surprise_trials['nth'] == nth) &
+                            (post_surprise_trials['category'] == grp.lower())]
+                    extra_width = 0
+                # Extract probed first:
+                if prb == 'probe_orientation':
+                    if ord == 'First':
+                        df = df[df['probe_order'] == 'orientationFirst']
+                    else:
+                        df = df[df['probe_order'] == 'durationFirst']
+                    data = df['orientation'].to_numpy() == df['response'].to_numpy()
+                else:
+                    if ord == 'First':
+                        df = df[df['probe_order'] == 'durationFirst']
+                    else:
+                        df = df[df['probe_order'] == 'orientationFirst']
+                    data = df['duration_str'].to_numpy() == df['response'].to_numpy()
+                # Plot the results:
+                bar_height = np.sum(data) / data.shape[0]
+                clr_fct = 1.1 if ord == 'First' else 0.9
+                ax[i].bar(ctr, bar_height, color=[ch * clr_fct if ch * clr_fct < 1 else 1 for ch in colors[grp.lower()]], alpha=1 if ord == 'First' else 0.8, 
+                          width=bar_width + extra_width, hatch=markers[iiii], label=legends[iiii] if ctr <= 6 else "")
+                ctr += 1 + np.max([extra_width-0.5, 0])
+    ax[i].set_xticks([3.5, 10, 16.5, 23])
+    ax[i].set_xticklabels(['Face Ori', 'Face Dur', 'Object Ori', 'Object Dur'])
+    ax[i].spines[['right', 'top']].set_visible(False)
+    # Set y-axis limits and ticks, with a dashed line at 0.5
+    ax[i].set_ylim(0, 1.2)
+    ax[i].set_yticks([0, 0.5, 1])
+    ax[i].axhline(0.5, color='gray', linestyle='--', linewidth=0.8)
+    ax[i].legend()
+    ax[i].set_title(ord)
+plt.tight_layout()
+plt.show()
+

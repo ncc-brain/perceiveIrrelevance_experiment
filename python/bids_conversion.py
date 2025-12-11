@@ -363,6 +363,10 @@ def beh_cleanup(source_root, subject_id):
     # Add the probes order:
     events_tbl['probe_order'] = 'orientationFirst' if 'orientation' in trial['probeOrder'] else 'durationFirst'
 
+    # Extract the category of the first surprise trial:
+    first_post_surprise_cate = events_tbl[(events_tbl['block_type'] == 'post-surprise') & (events_tbl['event_type'] == 'stimulus')].iloc[0]['category']
+    events_tbl['congruency'] = 'congruent' if first_post_surprise_cate.lower() == target_group.lower() else 'incongruent'
+
     return events_tbl
 
 
@@ -396,7 +400,7 @@ def validate_sidecar(df, sidecar):
     return missing_columns
 
 
-def dataframe2bids(df, bids_root, subject, task, data_type='beh', json_sidecar=None):
+def dataframe2bids(df, bids_root, subject, task, data_type='beh', json_sidecar=None, verbose=False):
     """
     Saves a DataFrame to a BIDS-compatible folder structure.
     
@@ -426,7 +430,8 @@ def dataframe2bids(df, bids_root, subject, task, data_type='beh', json_sidecar=N
 
     # Handle JSON sidecar loading and validation
     if json_sidecar is None:
-        warnings.warn("A JSON sidecar is recommended but was not provided.")
+        if verbose:
+            warnings.warn("A JSON sidecar is recommended but was not provided.")
     else:
         if isinstance(json_sidecar, dict):
             sidecar_data = json_sidecar
